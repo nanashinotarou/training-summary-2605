@@ -127,7 +127,7 @@
             border-radius: 10px; font-weight: 900;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             font-family: "Teko", sans-serif; letter-spacing: 1px;
-            animation: bounce-badge 2s infinite;
+            animation: bounce-badge 2s infinite; pointer-events: none;
         }
         .c-item.is-today-list {
             border-color: #d97706; background: #fffbeb;
@@ -169,11 +169,11 @@
                 <div class="cal-cell"><span class="date-num">4</span></div>
                 <div class="cal-cell"><span class="date-num">5</span></div>
                 <div class="cal-cell"><span class="date-num">6</span></div>
-                <div class="cal-cell has-event" data-day="d01" onclick="window.location.href='vol01-1.html'">
+                <a href="vol01-1.html" class="cal-cell has-event" data-day="d01" style="text-decoration: none; display: block; color: inherit;">
                     <span class="date-num">7</span>
                     <span class="ev-pill">DAY 01</span>
                     <div class="cal-popup">Day 1<br>簿記の基本概念</div>
-                </div>
+                </a>
                 <div class="cal-cell has-event" data-day="d02" onclick="window.location.href='vol02-1.html'">
                     <span class="date-num">8</span><span class="ev-pill">DAY 02</span>
                     <div class="cal-popup">Vol.2 仕訳の基礎</div>
