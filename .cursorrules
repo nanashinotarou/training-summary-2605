@@ -1,0 +1,40 @@
+# プロジェクトルール (.cursorrules)
+
+Cursor は本ファイルを必ず読み込むこと。
+
+## 0. 必読：プロジェクト背景コンテキスト
+
+**`CONTEXT.md`** を必ず読むこと。研修事業の背景・目的・ユーザー（H.K）のポジション・教材の設計思想が記載されている。
+
+## 1. 実装計画の参照
+
+実装時は必ず **`Today_Plan.md`** を読み、そこに記載された指示に従うこと。計画にない独自の判断は最小限にとどめる。
+
+## 2. 一時ファイルの運用ルール
+
+- 使い捨てスクリプト（.py / .js）はプロジェクトルートに置かない。必要なら `scratch/` に格納し、不要になったら削除
+- YouTube文字起こし(VTT)は実装完了後に必ず削除
+- 引き継ぎメモは `Today_Plan.md` に統合。別ファイルを作らない
+
+## 3. YouTube動画の埋め込み（Facade パターン厳守）
+
+**`GEMINI.md` §1** に記載されたFacadeパターンを必ず使用すること。`<iframe>` の直書きは禁止。
+
+要点：
+- `<div class="vc-thumb" data-video-id="...">` + 背景画像（maxresdefault → hqdefault フォールバック）
+- Vanilla JS の `once:true` クリックハンドラで `<iframe>` に差し替え
+- 動画コンテナは `.video-grid` でラップ（Sticky Video 対応）
+
+## 4. モバイルレスポンシブ対応
+
+**`GEMINI.md` §2** のテンプレートを必ず適用すること。
+
+## 5. 桜テーマの維持
+
+- CSSの `:root` 変数（`--accent: #d81b60` 系）を上書きしない
+- 差し色（青・紫等）は特定セクションのみに限定し、ページ全体を侵食しない
+
+## 6. 禁止事項
+
+- `.git/config` への `[extensions] worktreeConfig = true` の書き込み禁止（Antigravityが動作不能になる）
+- GEMINI.md / CLAUDE.md / CONTEXT.md の内容を勝手に変更しない

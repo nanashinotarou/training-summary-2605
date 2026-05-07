@@ -1,0 +1,76 @@
+5月　簿記コース
+
+1. 簿記の基本概念
+2. 仕訳の基礎と勘定科目の理解
+3. 複式簿記と帳簿の種類
+4. 現金・預金の管理と処理
+5. 商品売買と売掛金・買掛金の処理
+6. 固定資産と減価償却の基礎
+7. 試算表の作成と活用
+8. 決算整理仕訳と財務諸表の作成
+9. 税金の基礎と消費税の処理
+10. 帳簿の締め切りと財務分析
+11. 過去問題演習と解説
+12. AIを活用した学習の最終チェック
+13. 簿記3級オンラインテスト
+https://nsboki-cbt.net-school.co.jp/
+
+第1回
+コース目標：簿記3級のオンラインテスト（https://nsboki-cbt.net-school.co.jp/）に合格する（AI利用可）
+研修内容：簿記の基本概念
+研修目的：簿記の意義と役割を理解し、AIを活用した学習方法を知る。
+前半　
+https://youtu.be/xfwiwOtNn-I?si=P77HCuugRgY5Z-sT
+https://youtu.be/PSpM8snrOz4?si=tqqFVVBww_peyzFU
+https://youtu.be/1INqlD-Hw78?si=yUdHM0jOOBbeOYWW
+
+実習：Gemini「ノートブック」機能と、NotebookLMを使ってみよう
+
+🎯 実習の目的
+Geminiの色々な使い方を体験する
+
+🧰 事前準備
+✅ Googleアカウントの準備
+ブラウザでGemini（　https://gemini.google.com　）を開いて、Googleアカウントでサインイン。
+まだ実習用Googleアカウントを持っていない方は新規作成する。
+
+✅ 参考動画
+🎥　https://www.youtube.com/watch?v=1INqlD-Hw78
+
+💡 実習の流れ
+動画を見ながら、Geminiの「ノートブック」機能を試してみましょう。
+
+Gemini　https://gemini.google.com/
+
+NotebookLM　https://notebooklm.google.com/
+
+後半
+https://youtu.be/pQrxmzrDR1c?si=aBaV7URePQa1zctM
+https://youtu.be/ydenauRwjS0?si=UWfT0oqjJOQA-ODJ
+https://youtu.be/ohBnhlh5vMY?si=9pCBpy8_PIru7c4d
+
+実習：NotebookLM を活用した DX・経理基礎テストの自動生成
+
+🎯 実習の目的
+NotebookLMを使い、複数の動画からテストを自動生成する方法を身につける
+AIによる情報整理と業務効率化を体感する
+
+💡 実習の流れ
+① ソースを読み込む
+NotebookLMにアクセスして新しいノートブックを作成し、「ソースを追加」から下記 2 本のYouTube動画URLを入力します。
+
+　https://youtu.be/pQrxmzrDR1c
+
+　https://youtu.be/ydenauRwjS0
+
+② プロンプトを入力してテストを生成する
+チャット欄に以下のようなプロンプトを入力し、実行します。
+
+読み込んだ2つの動画の内容に基づいて、簿記の基礎知識に関する確認テストを5問作成してください。形式は選択式とし、最後に解答と解説も出力してください。
+
+③ 内容を確認し、追加指示で仕上げる
+生成されたテストの難易度・表現が適切かどうか確認します。調整が必要な場合は、そのままチャットで追加指示を出してブラッシュアップしましょう。
+
+追加指示の例：
+「新人経理担当者向けに、もう少し難易度を下げてください」
+「問題文をより実務に近い表現に変えてください」
