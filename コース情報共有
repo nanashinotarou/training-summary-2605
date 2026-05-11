@@ -74,3 +74,44 @@ NotebookLMにアクセスして新しいノートブックを作成し、「ソ�
 追加指示の例：
 「新人経理担当者向けに、もう少し難易度を下げてください」
 「問題文をより実務に近い表現に変えてください」
+
+Day2
+コース目標：簿記3級のオンラインテスト（https://nsboki-cbt.net-school.co.jp/）に合格する（AI利用可）
+研修内容：仕訳の基礎と勘定科目の理解
+研修目的：仕訳の基本ルールと、勘定科目の役割を理解する。
+
+前半
+https://youtu.be/nRds9qeaLiM?si=R1UXJbZO46mSwU_B
+https://youtu.be/uumr0BVAJE4?si=Tb2g6lU7gYEHD4Gv
+
+実習：Canvaの使い方を覚えよう
+📌 目的：Canvaの操作や機能を身につける
+💡 実習の内容
+参考動画を見ながら、CANVAの機能を使ってみましょう。
+※ 作ったデザインは、必ずファイル名に自分の名前をつけてから、自分のフォルダの中に格納しましょう。
+🎥 参考動画
+①　https://www.youtube.com/watch?v=nRds9qeaLiM
+②　https://www.youtube.com/watch?v=uumr0BVAJE4
+
+後半
+https://youtu.be/pQrxmzrDR1c?si=afK4LU0bSFpy0GJV
+https://youtu.be/ydenauRwjS0?si=d4BjCjdGlAhi9aof
+https://youtu.be/ohBnhlh5vMY?si=dZm6JEeh_EwHwy_e
+
+実習：NotebookLM を活用した DX・経理基礎テストの自動生成
+🎯 実習の目的
+NotebookLMを使い、複数の動画からテストを自動生成する方法を身につける
+AIによる情報整理と業務効率化を体感する
+💡 実習の流れ
+① ソースを読み込む
+NotebookLMにアクセスして新しいノートブックを作成し、「ソースを追加」から下記 2 本のYouTube動画URLを入力します。
+　https://youtu.be/pQrxmzrDR1c
+　https://youtu.be/ydenauRwjS0
+② プロンプトを入力してテストを生成する
+チャット欄に以下のようなプロンプトを入力し、実行します。
+読み込んだ2つの動画の内容に基づいて、簿記の基礎知識に関する確認テストを5問作成してください。形式は選択式とし、最後に解答と解説も出力してください。
+③ 内容を確認し、追加指示で仕上げる
+生成されたテストの難易度・表現が適切かどうか確認します。調整が必要な場合は、そのままチャットで追加指示を出してブラッシュアップしましょう。
+追加指示の例：
+「新人経理担当者向けに、もう少し難易度を下げてください」
+「問題文をより実務に近い表現に変えてください」

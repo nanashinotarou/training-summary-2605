@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Day 1 | 簿記�E基本概念</title>
+    <title>Day 1 | 簿記の基本概念</title>
     <!-- フォントとアイコン -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Teko:wght@600&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* 簿記コースチE�Eマ！Eresh Green & Warm Gold�E�E*/
+            /* 簿記コーステーマ（Fresh Green & Warm Gold） */
             --bg-body: #f0fdf4;
             --bg-card: rgba(255, 255, 255, 0.85);
             --bg-card-solid: #ffffff;
@@ -40,7 +40,7 @@
             padding: 40px 20px;
         }
 
-        /* フローチE��ングHomeボタン */
+        /* フローティングHomeボタン */
         .home-btn {
             position: fixed; bottom: 30px; right: 30px;
             width: 60px; height: 60px;
@@ -53,7 +53,7 @@
         }
         .home-btn:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 15px 30px rgba(5, 150, 105, 0.5); background: #047857; }
 
-        /* メインコンチE�� (Glassmorphism) */
+        /* メインコンテナ (Glassmorphism) */
         .container {
             width: 100%; max-width: 900px;
             background: var(--bg-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -84,18 +84,18 @@
             background: var(--accent-green); border-radius: 3px 3px 0 0;
         }
 
-        /* タブコンチE��チE��域 */
+        /* タブコンテンツ領域 */
         .tab-content { display: none; padding: 40px; background: var(--bg-card-solid); min-height: 500px; animation: fadeInTab 0.4s ease-out; }
         .tab-content.active { display: block; }
         @keyframes fadeInTab { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* 見�Eしスタイル設宁E*/
+        /* 見出しスタイル設定 */
         h2 { font-size: 1.6rem; color: var(--text-main); border-left: 5px solid var(--accent-gold); padding-left: 15px; margin: 30px 0 20px; }
         h2:first-child { margin-top: 0; }
         h3 { font-size: 1.3rem; color: var(--accent-green); margin: 25px 0 15px; display: flex; align-items: center; gap: 10px; }
         p { line-height: 1.8; margin-bottom: 20px; color: #555; font-size: 1.05rem; max-width: 1000px; }
 
-        /* Course Goals タブ向け特別レイアウチE*/
+        /* Course Goals タブ向け特別レイアウト */
         .goal-box {
             background: linear-gradient(135deg, var(--accent-light), #fff);
             border: 1px solid var(--accent-green); border-radius: var(--radius-medium);
@@ -105,7 +105,7 @@
         .goal-box h3 { justify-content: center; font-size: 1.5rem; margin-top: 0; }
         .goal-box p { font-size: 1.15rem; font-weight: 500; margin-bottom: 0; color: var(--text-main); }
 
-        /* 学習カードレイアウチE(Horizontal) */
+        /* 学習カードレイアウト (Horizontal) */
         .learning-card {
             display: flex; flex-direction: row; background: rgba(255, 255, 255, 0.9);
             border-radius: var(--radius-medium); border: var(--glass-border); overflow: hidden;
@@ -130,7 +130,7 @@
         .vc-thumb:hover::before { background: rgba(0, 0, 0, 0.2); }
         .vc-thumb-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 3rem; color: rgba(255, 255, 255, 0.9); text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4); transition: transform 0.3s ease, color 0.3s ease; pointer-events: none; }
         .vc-thumb:hover .vc-thumb-play { transform: translate(-50%, -50%) scale(1.1); color: #ff0000; }
-        .vc-tag { font-size: 0.75rem; background: #f5f5f5; color: #888; padding: 3px 8px; border-radius: 4px; align-self: flex-start; margin-top: auto; }
+        .vc-tag { font-size: 0.75rem; background: var(--accent-light); color: var(--accent-green); font-weight: 700; padding: 3px 10px; border-radius: 20px; border: 1px solid rgba(5,150,105,0.25); display: inline-block; margin-bottom: 8px; }
 
         /* Instructor's Note (Alert Box) */
         .instructor-note { background: #fffaf0; border-left: 6px solid #d97706; border-radius: 0 var(--radius-small) var(--radius-small) 0; padding: 25px; margin: 30px 0; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05); }
@@ -142,12 +142,108 @@
         .tool-link-btn { display: inline-flex; align-items: center; gap: 10px; background: #059669; color: white; padding: 12px 24px; border-radius: 30px; text-decoration: none; font-weight: bold; transition: 0.3s; margin-bottom: 20px; }
         .tool-link-btn:hover { background: #047857; transform: translateY(-2px); }
         
-        /* スチE��プリスチE*/
+        /* ステップリスト */
         .step-list { list-style: none; padding-left: 0; }
         .step-list li { position: relative; padding-left: 40px; margin-bottom: 15px; font-size: 1.05rem; }
         .step-list li::before { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; left: 0; top: 2px; width: 25px; height: 25px; background: var(--accent-green); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; }
 
-        /* チャチE��バブルプロンプトUI */
+        /* まとめタブ */
+        .summary-lead {
+            background: linear-gradient(135deg, #ecfdf5, #fff7ed);
+            border: 1px solid #d1fae5;
+            border-radius: var(--radius-medium);
+            padding: 26px;
+            margin-bottom: 30px;
+        }
+        .summary-lead p { margin-bottom: 0; color: var(--text-main); }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+            margin: 25px 0 35px;
+        }
+        .summary-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: var(--radius-medium);
+            padding: 24px;
+            box-shadow: var(--shadow-soft);
+        }
+        .summary-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent-light);
+            color: var(--accent-green);
+            font-size: 1.25rem;
+            margin-bottom: 14px;
+        }
+        .summary-card h3 {
+            margin: 0 0 10px;
+            color: var(--text-main);
+            font-size: 1.1rem;
+        }
+        .summary-card p {
+            margin-bottom: 0;
+            font-size: 0.96rem;
+            line-height: 1.75;
+        }
+        .term-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            margin: 18px 0 30px;
+        }
+        .term-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 16px;
+        }
+        .term-card strong {
+            display: block;
+            color: var(--accent-green);
+            margin-bottom: 6px;
+            font-size: 1rem;
+        }
+        .term-card span {
+            display: block;
+            color: #475569;
+            font-size: 0.9rem;
+            line-height: 1.55;
+        }
+        .check-panel {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-left: 6px solid var(--accent-gold);
+            border-radius: var(--radius-medium);
+            padding: 26px;
+            margin: 28px 0;
+        }
+        .check-panel h3 { color: #b45309; margin-top: 0; }
+        .check-list {
+            margin: 0;
+            padding-left: 1.4rem;
+        }
+        .check-list li {
+            margin-bottom: 12px;
+            line-height: 1.7;
+            color: #44403c;
+        }
+        .next-work {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--radius-medium);
+            padding: 26px;
+            margin-top: 30px;
+        }
+        .next-work h3 { margin-top: 0; }
+        .next-work .chat-prompt-container { margin-bottom: 0; }
+
+        /* チャットバブルプロンプトUI */
         .chat-prompt-container { display: flex; flex-direction: column; gap: 15px; margin: 20px auto; max-width: 1000px; background: #fff; padding: 25px; border-radius: var(--radius-large); box-shadow: inset 0 2px 10px rgba(0,0,0,0.02); border: 1px solid #eee; }
         .chat-bubble { display: flex; align-items: center; justify-content: space-between; background: #f1f5f9; padding: 12px 20px; border-radius: 20px 20px 20px 0; max-width: 95%; align-self: flex-start; gap: 15px; transition: all 0.2s; border: 1px solid transparent; }
         .chat-bubble:hover { border-color: #cbd5e1; background: #e2e8f0; }
@@ -156,11 +252,110 @@
         .copy-btn:hover { background: #f8fafc; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .copy-btn.copied { background: #d1fae5; border-color: #a7f3d0; color: #047857; }
 
+        /* === AGI レベル表 === */
+        .level-table { display: flex; flex-direction: column; gap: 6px; }
+        .level-row {
+            display: flex; align-items: center; gap: 12px;
+            background: #f8fafc; border-radius: 10px; padding: 10px 14px;
+            border: 1px solid #e2e8f0;
+        }
+        .level-row.level-current { background: #ecfdf5; border-color: rgba(5,150,105,0.3); }
+        .level-badge {
+            flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%;
+            background: var(--accent-green); color: #fff;
+            font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 0.8rem;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .level-badge.lv-future { background: #94a3b8; }
+        .level-info { display: flex; flex-direction: column; gap: 2px; }
+        .level-info strong { font-size: 0.92rem; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+        .level-info span { font-size: 0.82rem; color: var(--text-sub); line-height: 1.5; }
+        .now-badge {
+            background: var(--accent-gold); color: #fff;
+            font-size: 0.65rem; padding: 1px 7px; border-radius: 10px; font-weight: 700;
+        }
+
+        /* === 簿記一巡フロー図 === */
+        .boki-flow { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; }
+        .boki-flow-inner { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; }
+        .bf-step {
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            background: #fff; border: 1px solid #e2e8f0; border-radius: 10px;
+            padding: 10px 12px; min-width: 60px; text-align: center;
+        }
+        .bf-step i { font-size: 1.1rem; color: var(--accent-green); }
+        .bf-step span { font-size: 0.75rem; font-weight: 700; color: var(--text-main); white-space: nowrap; }
+        .bf-step--goal { background: var(--accent-light); border-color: var(--accent-green); }
+        .bf-step--goal i, .bf-step--goal span { color: var(--accent-green); }
+        .bf-arrow { color: #cbd5e1; font-size: 0.8rem; }
+
+        /* === B/S・P/L 構造カード === */
+        .fs-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; }
+        .fs-card-title {
+            background: #1e293b; color: #fff; font-size: 0.8rem; font-weight: 700;
+            padding: 8px 12px; display: flex; flex-direction: column; gap: 2px;
+        }
+        .fs-card-title small { font-weight: 400; color: #94a3b8; font-size: 0.72rem; }
+        .fs-tshape { display: flex; border-top: 2px solid #334155; }
+        .fs-left, .fs-right { flex: 1; display: flex; flex-direction: column; }
+        .fs-left { border-right: 2px solid #334155; }
+        .fs-cell {
+            flex: 1; padding: 10px 8px; font-size: 0.78rem; font-weight: 700;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; gap: 2px;
+        }
+        .fs-cell small { font-size: 0.65rem; font-weight: 400; color: var(--text-sub); }
+        .fs-cell + .fs-cell { border-top: 1px solid #e2e8f0; }
+        .fs-asset { color: #1d4ed8; background: #eff6ff; }
+        .fs-liability { color: #b91c1c; background: #fef2f2; }
+        .fs-equity { color: #15803d; background: #f0fdf4; }
+        .fs-expense { color: #b45309; background: #fffbeb; }
+        .fs-revenue { color: #1d4ed8; background: #eff6ff; }
+        .fs-profit { color: #15803d; background: #f0fdf4; font-size: 0.72rem; }
+
+        /* === 確認クイズ === */
+        .quiz-panel {
+            background: #fafafa; border: 1px solid #e2e8f0; border-radius: var(--radius-medium);
+            padding: 28px; margin: 28px 0;
+        }
+        .quiz-q {
+            background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
+            padding: 20px; margin-bottom: 20px;
+        }
+        .quiz-q-text { font-size: 1rem; font-weight: 700; color: var(--text-main); margin-bottom: 14px; }
+        .quiz-q-num { font-size: 0.78rem; color: var(--accent-gold); font-weight: 700; margin-bottom: 6px; }
+        .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+        .quiz-opt {
+            display: flex; align-items: center; gap: 12px;
+            background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 10px;
+            padding: 12px 16px; cursor: pointer; transition: 0.2s;
+            font-size: 0.95rem; color: var(--text-main); text-align: left;
+        }
+        .quiz-opt:hover { background: var(--accent-light); border-color: var(--accent-green); }
+        .quiz-opt.correct { background: #ecfdf5; border-color: #059669; color: #065f46; }
+        .quiz-opt.wrong { background: #fef2f2; border-color: #ef4444; color: #991b1b; }
+        .quiz-opt.disabled { cursor: default; }
+        .quiz-opt-icon { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #cbd5e1; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
+        .quiz-feedback { margin-top: 12px; padding: 10px 14px; border-radius: 8px; font-size: 0.88rem; line-height: 1.6; display: none; }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct-fb { background: #ecfdf5; color: #065f46; border-left: 4px solid #059669; }
+        .quiz-feedback.wrong-fb { background: #fef2f2; color: #991b1b; border-left: 4px solid #ef4444; }
+        #quiz-result.pass { background: #ecfdf5; border: 2px solid #059669; }
+        #quiz-result.fail { background: #fff7ed; border: 2px solid #d97706; }
+
         @media (max-width: 768px) {
             body { padding: 10px 5px; } .container { width: 100%; border-radius: var(--radius-medium); margin: 0 auto; }
             .header { padding: 30px 20px 15px; } .header h1 { font-size: 1.6rem; }
             .tab-btn { padding: 15px; font-size: 0.9rem; } .tab-content { padding: 20px 15px; }
             h2 { font-size: 1.4rem; margin: 20px 0 15px; } .goal-box { padding: 20px 15px; }
+            .summary-grid, .term-grid { grid-template-columns: 1fr; }
+            .summary-card, .summary-lead, .check-panel, .next-work { padding: 20px; }
+            .level-row { flex-direction: row; }
+            .level-badge { width: 36px; height: 36px; font-size: 0.72rem; }
+            .boki-flow-inner { gap: 3px; }
+            .bf-step { padding: 8px; min-width: 50px; }
+            .bf-step span { font-size: 0.65rem; }
+            .fs-cards { grid-template-columns: 1fr !important; }
             .chat-bubble { flex-direction: column; align-items: flex-start; gap: 10px; border-radius: 12px; } .copy-btn { align-self: flex-end; }
         }
 
@@ -171,38 +366,38 @@
 
 <body>
 
-    <a href="./index.html" class="home-btn" title="ホ�Eムに戻めE>
+    <a href="./index.html" class="home-btn" title="ホームに戻る">
         <i class="fa-solid fa-house"></i>
     </a>
 
     <div class="container">
         <header class="header">
             <span class="header-tag">DAY 01</span>
-            <h1>簿記�E基本概念</h1>
+            <h1>簿記の基本概念</h1>
             <p style="margin:0; color:var(--text-sub);">May 2026 - Bookkeeping Course</p>
         </header>
 
         <nav class="tabs">
-            <button class="tab-btn active" onclick="openTab('goal')"><i class="fa-solid fa-bullseye"></i> 本日の目樁E/button>
+            <button class="tab-btn active" onclick="openTab('goal')"><i class="fa-solid fa-bullseye"></i> 本日の目標</button>
             <button class="tab-btn" onclick="openTab('first')"><i class="fa-solid fa-sun"></i> 前半 (First Half)</button>
             <button class="tab-btn" onclick="openTab('second')"><i class="fa-solid fa-moon"></i> 後半 (Second Half)</button>
-            <button class="tab-btn" onclick="openTab('summary')"><i class="fa-solid fa-list-check"></i> まとめE/button>
+            <button class="tab-btn" onclick="openTab('summary')"><i class="fa-solid fa-list-check"></i> まとめ</button>
         </nav>
 
-        <!-- 本日の目樁EタチE-->
+        <!-- 本日の目標 タブ -->
         <div id="goal" class="tab-content active">
             <div class="goal-box">
                 <i class="fa-solid fa-scale-balanced"></i>
-                <h3>AI時代の「簿記」�E本質を掴み、管琁E��E�E視点を持つ</h3>
-                <p>AIが仕訳めE��算を代行してくれる時代において、Ebr>人間が簿記を学ぶ本当�E琁E��「財務データを読んで意思決定する力」を養います、E/p>
+                <h3>AI時代の「簿記」の本質を掴み、管理者の視点を持つ</h3>
+                <p>AIが仕訳や計算を代行してくれる時代において、<br>人間が簿記を学ぶ本当の理由「財務データを読んで意思決定する力」を養います。</p>
             </div>
-            <h2>今月の目標（簿訁E級合格�E�への繋がめE/h2>
-            <p>今月の最終目標�E<b>「オンラインで簿訁E級試験を受験し、合格すること、E/b>です。今日学ぶ「AIの進化が簿記に与える影響」と、Ei class="fa-solid fa-robot"></i> Gemini・NotebookLMの使ぁE��」�E、ただの知識ではありません、E/p>
-            <p>これら�E、AIを活用して難解な簿記�E概念を圧倒的なスピ�Eドで琁E��し、単なる作業老E��はなぁEb>「財務を琁E��するマネージャー、E/b>として成長するための、強力な土台�E�武器�E�となります、E/p>
+            <h2>今月の目標（簿記3級合格）への繋がり</h2>
+            <p>今月の最終目標は<b>「オンラインで簿記3級試験を受験し、合格すること」</b>です。今日学ぶ「AIの進化が簿記に与える影響」と「<i class="fa-solid fa-robot"></i> Gemini・NotebookLMの使い方」は、ただの知識ではありません。</p>
+            <p>これらは、AIを活用して難解な簿記の概念を圧倒的なスピードで理解し、単なる作業者ではなく<b>「財務を理解するマネージャー」</b>として成長するための、強力な土台（武器）となります。</p>
 
             <div style="background: #f0fdf4; padding: 25px 30px; border-radius: 12px; margin: 35px 0 20px 0; border-left: 6px solid #059669;">
-                <h4 style="color: #047857; margin: 0 0 10px 0; font-size: 1.15rem;"><i class="fa-solid fa-brain"></i> 本日の裏テーマ：「AIに奪われる仕事」から抜け�EぁE/h4>
-                <p style="margin: 0; font-size: 0.95rem; color: #333; line-height: 1.6;">本研修の後半では、指示を受けてチE��ストを老E��るだけ�EAIから、�E律的に作業をこなす「AGI�E�汎用人工知能�E�」への進化につぁE��学びます。単純な仕訳入力�EAIの仕事となり、私たちは「結果を判断し、次にどぁE��るかを老E��る」上流工程へとスチE��プアチE�Eする忁E��があります、E/p>
+                <h4 style="color: #047857; margin: 0 0 10px 0; font-size: 1.15rem;"><i class="fa-solid fa-brain"></i> 本日の裏テーマ：「AIに奪われる仕事」から抜け出す</h4>
+                <p style="margin: 0; font-size: 0.95rem; color: #333; line-height: 1.6;">本研修の後半では、指示を受けてテキストを考えるだけのAIから、自律的に作業をこなす「AGI（汎用人工知能）」への進化について学びます。単純な仕訳入力はAIの仕事となり、私たちは「結果を判断し、次にどうするかを考える」上流工程へとステップアップする必要があります。</p>
             </div>
 
             <div style="text-align: center; margin-top: 30px;">
@@ -212,10 +407,10 @@
             </div>
         </div>
 
-        <!-- 前半 タチE-->
+        <!-- 前半 タブ -->
         <div id="first" class="tab-content">
-            <h2>セクション1�E�AIと簿記�E未来・AIチE�Eルの基礁E/h2>
-            <p>まず�E、AIの進化が「簿記�E経理」とぁE��職種にどのような影響を与える�Eかを整琁E��、AI時代のキャリアの本質を掴みましょぁE��以下�E動画は、最新のAIトレンドを解説する厳選リストです、E/p>
+            <h2>セクション1：AIと簿記の未来・AIツールの基礎</h2>
+            <p>まずは、AIの進化が「簿記・経理」という職種にどのような影響を与えるのかを整理し、AI時代のキャリアの本質を掴みましょう。以下の動画は、最新のAIトレンドを解説する厳選リストです。</p>
 
             <!-- Learning Card 1: 動画① -->
             <div class="learning-card">
@@ -226,16 +421,54 @@
                 </div>
                 <div class="lc-content">
                     <div class="lc-header">
-                        <span class="vc-tag">AIトレンチE/span>
-                        <h3 class="lc-title">【カウントダウン】人類最後�E発明「AGI�E�汎用人工知能�E�」�E正体とは�E�E/h3>
+                        <span class="vc-tag">AIトレンド</span>
+                        <h3 class="lc-title">【カウントダウン】人類最後の発明「AGI（汎用人工知能）」の正体とは？</h3>
                     </div>
                     <div class="lc-body">
-                        <h4><i class="fa-solid fa-book-open"></i> 学習�EポインチE/h4>
-                        <p>AGI�E�汎用人工知能�E�とは、特定�Eタスクだけでなく、人間と同等かそれ以上�E知皁E��作業をすべてこなせるAIのことです。現在AIは「推論」�Eレベルに達しつつあります、E/p>
+                        <h4><i class="fa-solid fa-book-open"></i> 学習のポイント</h4>
+                        <p>AGI（汎用人工知能）とは、特定のタスクだけでなく、人間と同等かそれ以上の知的な作業をすべてこなせるAIのことです。現在AIは「推論」のレベルに達しつつあります。</p>
                         <ul class="lc-list">
-                            <li>OpenAIが定義するAI進化�E5つのレベル</li>
-                            <li>「作業をAIに任せ、人間がAIをどぁE��ぁE��なすか」が今後�E鍵となる理由</li>
+                            <li>OpenAIが定義するAI進化の5つのレベル</li>
+                            <li>「作業をAIに任せ、人間がAIをどう使いこなすか」が今後の鍵となる理由</li>
                         </ul>
+                        <!-- AGI 5段階レベル表 -->
+                        <div class="level-table" style="margin-top: 16px;">
+                            <div class="level-row level-current">
+                                <div class="level-badge">Lv.1</div>
+                                <div class="level-info">
+                                    <strong>チャットボット</strong>
+                                    <span>自然な会話ができる。単語予測ベース。（例: 初期のChatGPT）</span>
+                                </div>
+                            </div>
+                            <div class="level-row level-current">
+                                <div class="level-badge">Lv.2</div>
+                                <div class="level-info">
+                                    <strong>推論AI <span class="now-badge">← 現在</span></strong>
+                                    <span>複雑な論理パズルや数学的推論が可能。（例: o1, o3）</span>
+                                </div>
+                            </div>
+                            <div class="level-row">
+                                <div class="level-badge lv-future">Lv.3</div>
+                                <div class="level-info">
+                                    <strong>エージェント</strong>
+                                    <span>人間の代わりに数日間のタスクを自律実行する。メール送信・予約も行動する。</span>
+                                </div>
+                            </div>
+                            <div class="level-row">
+                                <div class="level-badge lv-future">Lv.4</div>
+                                <div class="level-info">
+                                    <strong>イノベーター</strong>
+                                    <span>既存知識の組み合わせではなく、新しい科学的知識・技術を自ら「発明」する。</span>
+                                </div>
+                            </div>
+                            <div class="level-row">
+                                <div class="level-badge lv-future">Lv.5</div>
+                                <div class="level-info">
+                                    <strong>組織（AGI完成形）</strong>
+                                    <span>経営判断・人事・部門調整まで組織運営全体を全自動で行う。2030年以降。</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -249,16 +482,24 @@
                 </div>
                 <div class="lc-content">
                     <div class="lc-header">
-                        <span class="vc-tag">キャリア諁E/span>
-                        <h3 class="lc-title">【驚�E】AI�E�人工知能�E��E発達により簿記�E不要になるか�E�E/h3>
+                        <span class="vc-tag">キャリア論</span>
+                        <h3 class="lc-title">【驚愕】AI（人工知能）の発達により簿記は不要になるか？</h3>
                     </div>
                     <div class="lc-body">
                         <div class="instructor-note" style="margin: 0; box-shadow: none; border: 1px solid #fef3c7; border-left: 6px solid #d97706; background: #fffbeb; border-radius: var(--radius-small);">
                             <div class="instructor-note-title" style="color: #b45309;">
-                                <i class="fa-solid fa-lightbulb"></i> Instructor's Note : 「簿記が不要」�E真意
+                                <i class="fa-solid fa-lightbulb"></i> Instructor's Note : 「簿記が不要」の真意
                             </div>
-                            <p style="margin-bottom:10px;">「AIが発達すれ�E簿記�E不要になる」とぁE��意見がありますが、正確には、Eb>単純な仕訳入力などの『作業』が不要になめE/b>」とぁE��ことです、E/p>
-                            <p style="margin-bottom:12px;">AIが作�Eした財務データの正当性を判断し、その数字をもとに経営の意思決定を行うのは人間�E役割です。つまり、単なる作業老E��しての簿記スキルではなく、財務状況を読み解き�Eロジェクトを動かす「管琁E��E�EチE��レクター」としての簿記知識が、これまで以上に求められます、E/p>
+                            <p style="margin-bottom:10px;">「AIが発達すれば簿記は不要になる」という意見がありますが、正確には「<b>単純な仕訳入力などの『作業』が不要になる</b>」ということです。</p>
+                            <p style="margin-bottom:12px;">AIが作成した財務データの正当性を判断し、その数字をもとに経営の意思決定を行うのは人間の役割です。つまり、単なる作業者としての簿記スキルではなく、財務状況を読み解きプロジェクトを動かす「管理者・ディレクター」としての簿記知識が、これまで以上に求められます。</p>
+                            <p style="margin-bottom: 8px; font-weight: 700; color: #92400e;">📌 AIに代替されない5つの理由</p>
+                            <ol style="margin: 0; padding-left: 1.4rem; color: #78350f; font-size: 0.95rem; line-height: 1.8;">
+                                <li><strong>柔軟な判断力</strong> — 取引の背景・会社の実情に応じた個別判断はAIに苦手</li>
+                                <li><strong>法律・会計基準への対応</strong> — 頻繁に改正される税法・会計基準の微妙なニュアンスを人間が判断</li>
+                                <li><strong>経営者とのコミュニケーション</strong> — 数字をもとに状況に応じたアドバイスを提供するのは人間の役割</li>
+                                <li><strong>データの正確性チェック</strong> — AIの処理ミス・エラーを検知し、財務データの整合性を保つ監視役</li>
+                                <li><strong>倫理的・社会的判断</strong> — 不正会計の発見、架空伝票への疑念など「常識的おかしい」を察知する力</li>
+                            </ol>
                         </div>
                     </div>
                 </div>
@@ -273,15 +514,15 @@
                 </div>
                 <div class="lc-content">
                     <div class="lc-header">
-                        <span class="vc-tag">AIチE�Eル活用</span>
-                        <h3 class="lc-title">【趁E��化‼�E�】Google 「Gemini、E「NotebookLM」に神アプデ�E�徹底解説</h3>
+                        <span class="vc-tag">AIツール活用</span>
+                        <h3 class="lc-title">【超進化‼️】Google 「Gemini」&「NotebookLM」に神アプデ！徹底解説</h3>
                     </div>
                     <div class="lc-body">
-                        <h4><i class="fa-solid fa-book-open"></i> 学習�EポインチE/h4>
-                        <p>Googleの生�EAI「Gemini」と、大量�E賁E��を読み込ませて刁E��できる「NotebookLM」�E基礎を解説します。これらを活用することで、E��解な簿記�E概念も飛躍的に琁E��しやすくなります、E/p>
+                        <h4><i class="fa-solid fa-book-open"></i> 学習のポイント</h4>
+                        <p>Googleの生成AI「Gemini」と、大量の資料を読み込ませて分析できる「NotebookLM」の基礎を解説します。これらを活用することで、難解な簿記の概念も飛躍的に理解しやすくなります。</p>
                         <ul class="lc-list">
-                            <li>Gemini: 日常皁E��疑問解決めE��イチE��出しに優れる</li>
-                            <li>NotebookLM: PDFめE��画をソースとして読み込ませ、正確な回答を生�Eさせる学習ツール</li>
+                            <li>Gemini: 日常的な疑問解決やアイデア出しに優れる</li>
+                            <li>NotebookLM: PDFや動画をソースとして読み込ませ、正確な回答を生成させる学習ツール</li>
                         </ul>
                     </div>
                 </div>
@@ -289,29 +530,44 @@
 
             <hr style="border:0; border-top:1px dashed #ccc; margin: 40px 0;">
 
-            <h2>セクション2�E�実践・Gemini & NotebookLMを使ってみよう</h2>
-            <p>2つのAIチE�Eルに実際に触れ、「AIに質問する」「賁E��を読み込ませて学ぶ」とぁE��体験をします。今後�E簿記学習で毎日活用するチE�Eルです、E/p>
+            <h2>セクション2：実践・Gemini & NotebookLMを使ってみよう</h2>
+            <p>2つのAIツールに実際に触れ、「AIに質問する」「資料を読み込ませて学ぶ」という体験をします。今後の簿記学習で毎日活用するツールです。</p>
 
             <div class="practice-area">
-                <h3 style="color:#059669;"><i class="fa-solid fa-comments"></i> 💡 実習�E流れ�E�ワンクリチE��・プロンプトコピ�E�E�E/h3>
-                <p>以下�E質問例をクリチE��してコピ�Eし、Geminiに投げかけてみてください、E/p>
+                <!-- NotebookLM ソース追加手順 -->
+                <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:12px; padding:20px; margin-bottom:24px;">
+                    <h4 style="color:#b45309; margin:0 0 12px; display:flex; align-items:center; gap:8px;">
+                        <i class="fa-solid fa-book"></i> NotebookLM へのソース追加手順
+                    </h4>
+                    <ol style="margin:0; padding-left:1.4rem; font-size:0.92rem; line-height:1.9; color:#78350f;">
+                        <li><strong>notebooklm.google.com</strong> にアクセスし「新しいノートブック」を作成</li>
+                        <li>画面左の「ソースを追加」をクリック →「YouTube」または「URL」を選択</li>
+                        <li>動画①のURL <code style="background:#fff; padding:1px 6px; border-radius:4px;">https://www.youtube.com/watch?v=xfwiwOtNn-I</code> を貼り付けて追加</li>
+                        <li>同様に動画②のURL <code style="background:#fff; padding:1px 6px; border-radius:4px;">https://www.youtube.com/watch?v=PSpM8snrOz4</code> も追加</li>
+                        <li>追加完了後、右側のチャット欄に下のプロンプトをコピーして送信する</li>
+                    </ol>
+                </div>
+                <h3 style="color:#059669;"><i class="fa-solid fa-comments"></i> 💡 実習の流れ（ワンクリック・プロンプトコピー）</h3>
+                <p>以下の質問例をクリックしてコピーし、Geminiに投げかけてみてください。</p>
 
                 <div class="chat-prompt-container">
                     <div class="chat-bubble">
-                        <div class="chat-text"><span class="prompt-text">簿記�E仕事�EAIに奪われますか�E�封E��も価値のある簿記スキルとは何か、�E忁E��E��もわかるように教えてください、E/span></div>
-                        <button class="copy-btn" title="プロンプトをコピ�E"><i class="fa-regular fa-copy"></i> コピ�E</button>
+                        <div class="chat-text"><span class="prompt-text">簿記の仕事はAIに奪われますか？将来も価値のある簿記スキルとは何か、初心者にもわかるように教えてください。</span></div>
+                        <button class="copy-btn" title="プロンプトをコピー"><i class="fa-regular fa-copy"></i> コピー</button>
                     </div>
                     <div class="chat-bubble">
-                        <div class="chat-text"><span class="prompt-text">読み込んだ2つの動画の冁E��に基づぁE��、「AIが得意な経理業務」と「人間でなければできなぁE��理業務」をそれぞれ3つずつ挙げてください、E/span></div>
-                        <button class="copy-btn" title="プロンプトをコピ�E"><i class="fa-regular fa-copy"></i> コピ�E</button>
+                        <div class="chat-text"><span class="prompt-text">読み込んだ2つの動画の内容に基づいて、「AIが得意な経理業務」と「人間でなければできない経理業務」をそれぞれ3つずつ挙げてください。</span></div>
+                        <button class="copy-btn" title="プロンプトをコピー"><i class="fa-regular fa-copy"></i> コピー</button>
                     </div>
                 </div>
 
                 <div style="display:flex; justify-content:center; gap:20px; margin-top:35px; flex-wrap:wrap;">
                     <a href="https://gemini.google.com/" target="_blank" class="tool-link-btn" style="background:linear-gradient(135deg, #059669, #34d399); font-size:1.1rem; padding:15px 35px; box-shadow:0 8px 20px rgba(5,150,105,0.3);">
-                        <i class="fa-solid fa-robot"></i> Gemini を開ぁE                    </a>
+                        <i class="fa-solid fa-robot"></i> Gemini を開く
+                    </a>
                     <a href="https://notebooklm.google.com/" target="_blank" class="tool-link-btn" style="background:linear-gradient(135deg, #d97706, #f59e0b); font-size:1.1rem; padding:15px 35px; box-shadow:0 8px 20px rgba(217,119,6,0.3);">
-                        <i class="fa-solid fa-book"></i> NotebookLM を開ぁE                    </a>
+                        <i class="fa-solid fa-book"></i> NotebookLM を開く
+                    </a>
                 </div>
             </div>
 
@@ -322,10 +578,10 @@
             </div>
         </div>
 
-        <!-- 後半 タチE-->
+        <!-- 後半 タブ -->
         <div id="second" class="tab-content">
-            <h2>セクション3�E�簿記�E基本概念・AI業務効玁E��</h2>
-            <p>ここからは、いよいよ簿記�E本質皁E��概念に触れてぁE��ます。「簿記�E一巡の手続き」と「財務三表」�E役割を掴みましょぁE��E/p>
+            <h2>セクション3：簿記の基本概念・AI業務効率化</h2>
+            <p>ここからは、いよいよ簿記の本質的な概念に触れていきます。「簿記の一巡の手続き」と「財務三表」の役割を掴みましょう。</p>
 
             <div class="learning-card">
                 <div class="lc-video">
@@ -335,16 +591,35 @@
                 </div>
                 <div class="lc-content">
                     <div class="lc-header">
-                        <span class="vc-tag">簿記�E基礁E/span>
-                        <h3 class="lc-title">【簿訁E級】簿記�E目皁E��全体�E流れめE5刁E��解説</h3>
+                        <span class="vc-tag">簿記の基礎</span>
+                        <h3 class="lc-title">【簿記3級】簿記の目的と全体の流れを15分で解説</h3>
                     </div>
                     <div class="lc-body">
-                        <h4><i class="fa-solid fa-book-open"></i> 学習�EポインチE/h4>
-                        <p>簿記�E最終目皁E�E、企業に「いくら財産があるか�E�貸借対照表�E�」と「いくら儲かったか�E�損益計算書�E�」を明らかにし、利害関係老E��報告することです、E/p>
+                        <h4><i class="fa-solid fa-book-open"></i> 学習のポイント</h4>
+                        <p>簿記の最終目的は、企業に「いくら財産があるか（貸借対照表）」と「いくら儲かったか（損益計算書）」を明らかにし、利害関係者に報告することです。</p>
                         <ul class="lc-list">
-                            <li>日、E�E取引を「仕訳」し「総勘定�E帳」へ転記すめE/li>
-                            <li>「試算表」を作�Eし、最終的に「決算」を行って財務諸表を作る</li>
+                            <li>日々の取引を「仕訳」し「総勘定元帳」へ転記する</li>
+                            <li>「試算表」を作成し、最終的に「決算」を行って財務諸表を作る</li>
                         </ul>
+                        <!-- 簿記の一巡フロー図 -->
+                        <div class="boki-flow" style="margin-top: 16px;">
+                            <div class="boki-flow-inner">
+                                <div class="bf-step"><i class="fa-solid fa-handshake"></i><span>取引</span></div>
+                                <div class="bf-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                                <div class="bf-step"><i class="fa-solid fa-pen"></i><span>仕訳</span></div>
+                                <div class="bf-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                                <div class="bf-step"><i class="fa-solid fa-book"></i><span>総勘定元帳</span></div>
+                                <div class="bf-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                                <div class="bf-step"><i class="fa-solid fa-table"></i><span>試算表</span></div>
+                                <div class="bf-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                                <div class="bf-step"><i class="fa-solid fa-calculator"></i><span>決算</span></div>
+                                <div class="bf-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                                <div class="bf-step bf-step--goal"><i class="fa-solid fa-chart-pie"></i><span>財務諸表</span></div>
+                            </div>
+                            <p style="text-align:center; font-size:0.78rem; color:var(--text-sub); margin: 8px 0 0;">
+                                ↑ この流れが「簿記の一巡の手続き」。Day2以降で各ステップを順番に学ぶ。
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -358,40 +633,92 @@
                 <div class="lc-content">
                     <div class="lc-header">
                         <span class="vc-tag">財務三表</span>
-                        <h3 class="lc-title">【簿訁E級】簿記シリーズ開始！財務三表の趁E��礁E/h3>
+                        <h3 class="lc-title">【簿記3級】簿記シリーズ開始！財務三表の超基礎</h3>
                     </div>
                     <div class="lc-body">
-                        <h4><i class="fa-solid fa-book-open"></i> 学習�EポインチE/h4>
-                        <p>財務三表とは、貸借対照表�E�E/S�E�、損益計算書�E�E/L�E�、キャチE��ュフロー計算書�E�E/F�E��Eことです。簿訁E級では主にB/SとP/Lを学びます、E/p>
+                        <h4><i class="fa-solid fa-book-open"></i> 学習のポイント</h4>
+                        <p>財務三表とは、貸借対照表（B/S）、損益計算書（P/L）、キャッシュフロー計算書（C/F）のことです。簿記3級では主にB/SとP/Lを学びます。</p>
                         <ul class="lc-list">
-                            <li>B/S�E�ある時点の財産状態（賁E��・負債・純賁E���E�E/li>
-                            <li>P/L�E�ある期間�E経営成績�E�収益�E費用・利益！E/li>
+                            <li>B/S：ある時点の財産状態（資産・負債・純資産）</li>
+                            <li>P/L：ある期間の経営成績（収益・費用・利益）</li>
+                        </ul>
+                        <!-- B/S・P/L 構造ビジュアル -->
+                        <div class="fs-cards" style="margin-top: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div class="fs-card">
+                                <div class="fs-card-title"><i class="fa-solid fa-landmark"></i> 貸借対照表（B/S）<small>ある時点の財産状態</small></div>
+                                <div class="fs-tshape">
+                                    <div class="fs-left">
+                                        <div class="fs-cell fs-asset">資産<small>（持っているもの）</small></div>
+                                    </div>
+                                    <div class="fs-right">
+                                        <div class="fs-cell fs-liability">負債<small>（借りているもの）</small></div>
+                                        <div class="fs-cell fs-equity">純資産<small>（自己資本）</small></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fs-card">
+                                <div class="fs-card-title"><i class="fa-solid fa-chart-line"></i> 損益計算書（P/L）<small>ある期間の経営成績</small></div>
+                                <div class="fs-tshape">
+                                    <div class="fs-left">
+                                        <div class="fs-cell fs-expense">費用<small>（コスト）</small></div>
+                                        <div class="fs-cell fs-profit">当期純利益</div>
+                                    </div>
+                                    <div class="fs-right">
+                                        <div class="fs-cell fs-revenue">収益<small>（売上など）</small></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p style="font-size:0.78rem; color:var(--text-sub); margin: 8px 0 0; text-align:center;">
+                            ※ 簿記3級で扱うのは主にB/SとP/L。3つ目のC/F（キャッシュフロー計算書）は1〜2級の範囲。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learning-card">
+                <div class="lc-video">
+                    <div class="vc-thumb" data-video-id="ohBnhlh5vMY" style="background-image: url('https://img.youtube.com/vi/ohBnhlh5vMY/maxresdefault.jpg'), url('https://img.youtube.com/vi/ohBnhlh5vMY/hqdefault.jpg');">
+                        <i class="fa-brands fa-youtube vc-thumb-play"></i>
+                    </div>
+                </div>
+                <div class="lc-content">
+                    <div class="lc-header">
+                        <span class="vc-tag">AI業務効率化</span>
+                        <h3 class="lc-title">【AI業務効率化】まだ手で入力？スマホで領収書を撮るだけで会計ソフトへの入力を自動化する裏ワザ</h3>
+                    </div>
+                    <div class="lc-body">
+                        <h4><i class="fa-solid fa-book-open"></i> 学習のポイント</h4>
+                        <p>スマホで領収書を撮影し、Geminiに読み込ませることで、日付・金額・取引先を表形式に整理できます。会計ソフトへ取り込む前提で考えると、簿記知識は「入力する力」から「AIの処理結果を確認する力」へ変わっていきます。</p>
+                        <ul class="lc-list">
+                            <li>領収書や通帳をAIで読み取り、Excel・CSV化する流れ</li>
+                            <li>勘定科目、消費税、インボイス情報は人間がチェックする必要がある</li>
                         </ul>
                     </div>
                 </div>
             </div>
 
-            <!-- コミカルな結論ブロチE�� -->
+            <!-- コミカルな結論ブロック -->
             <div style="margin-top: 35px; text-align: center; padding: 30px 20px; background: #fffbeb; border: 4px dashed #fcd34d; border-radius: 16px; box-shadow: 6px 6px 0px #fde68a; transform: rotate(-1deg); position: relative; z-index: 5;">
                 <div style="position: absolute; top: -18px; left: 50%; transform: translateX(-50%) rotate(3deg); background: #d97706; color: #fff; padding: 5px 20px; font-weight: bold; border-radius: 20px; font-size: 1rem; box-shadow: 2px 2px 5px rgba(0,0,0,0.2); white-space: nowrap;">
-                    💥 本日の結諁E💥
+                    💥 本日の結論 💥
                 </div>
                 <div style="font-size: 1.4rem; font-weight: 900; color: #78350f; line-height: 1.4; letter-spacing: 1px; margin-top: 10px;">
-                    <span style="font-size: 1.2rem;">簿記�E単なる計算ドリルではなぁE/span><br>
-                    <span style="font-size: 2.3rem; background: linear-gradient(180deg, transparent 60%, #fef08a 60%); padding: 0 5px; color: #b45309; display: inline-block; margin-top: 10px; transform: scale(1.05);">”ビジネスの共通言語 E/span> 🌐📊
+                    <span style="font-size: 1.2rem;">簿記は単なる計算ドリルではなく</span><br>
+                    <span style="font-size: 2.3rem; background: linear-gradient(180deg, transparent 60%, #fef08a 60%); padding: 0 5px; color: #b45309; display: inline-block; margin-top: 10px; transform: scale(1.05);">”ビジネスの共通言語”</span> 🌐📊
                 </div>
             </div>
 
             <hr style="border:0; border-top:1px dashed #ccc; margin: 40px 0;">
 
-            <h2>セクション4�E�NotebookLMで簿記テストを作ろぁE/h2>
-            <p>NotebookLMに今日視�Eした簿記動画を読み込ませ、AIに確認テストを生�EしてもらぁE��す。「�E刁E��チE��ト問題を作らせる」とぁE��AI学習法�E基本を体験します、E/p>
+            <h2>セクション4：NotebookLMで簿記テストを作ろう</h2>
+            <p>NotebookLMに今日視聴した簿記動画を読み込ませ、AIに確認テストを生成してもらいます。「自分でテスト問題を作らせる」というAI学習法の基本を体験します。</p>
 
             <div class="practice-area">
                 <div class="chat-prompt-container">
                     <div class="chat-bubble" style="background:#fffbeb; border-color:#fde68a;">
-                        <div class="chat-text" style="color:#b45309;">🌟 実習�Eロンプト�E�Ebr><span class="prompt-text">読み込んだ動画の冁E��を�Eに、簿訁E級�E確認テスト問題を5問作ってください。選択肢ありの4択形式でお願いします。答えはすぐに表示せず、問題だけ�Eに出してください、E/span></div>
-                        <button class="copy-btn" title="プロンプトをコピ�E"><i class="fa-regular fa-copy"></i> コピ�E</button>
+                        <div class="chat-text" style="color:#b45309;">🌟 実習プロンプト：<br><span class="prompt-text">読み込んだ動画の内容を元に、簿記3級の確認テスト問題を5問作ってください。選択肢ありの4択形式でお願いします。答えはすぐに表示せず、問題だけ先に出してください。</span></div>
+                        <button class="copy-btn" title="プロンプトをコピー"><i class="fa-regular fa-copy"></i> コピー</button>
                     </div>
                 </div>
             </div>
@@ -403,26 +730,135 @@
             </div>
         </div>
 
-        <!-- まとめEタチE-->
+        <!-- まとめ タブ -->
         <div id="summary" class="tab-content">
-            <h2>DAY 1 まとめE/h2>
-            <p>本日の研修お疲れ様でした�E�以下�Eポイントを振り返りましょぁE��E/p>
+            <h2>DAY 1 まとめ</h2>
+            <div class="summary-lead">
+                <p>今日は「簿記の細かい仕訳を暗記する日」ではなく、<b>簿記を学ぶ理由と、AI時代に人間が見るべきポイント</b>を掴む日です。Day2以降で仕訳に入る前に、まずは全体像をここで固定しておきましょう。</p>
+            </div>
 
-            <ul class="step-list" style="background: #fff; padding: 30px 30px 30px 50px; border-radius: 16px; border: 1px solid #eee;">
-                <li>AI時代において、単純な仕訳作業は代替されるが「財務データを読み解く力」�E価値は高まる、E/li>
-                <li>GeminiやNotebookLMを「単なる検索チE�Eル」ではなく「思老E�E壁打ち相手」として使ぁE��なせるようになった、E/li>
-                <li>簿記�E一巡の手続き�E�取引�E仕訳→試算表→財務諸表�E��E全体像を把握できた、E/li>
-            </ul>
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-icon"><i class="fa-solid fa-robot"></i></div>
+                    <h3>AIが代替するのは「入力作業」</h3>
+                    <p>単純な仕訳入力、領収書の読み取り、帳簿データの整理はAIに置き換わっていきます。ただし、AIの処理結果が正しいかを判断するには、簿記の基礎知識が必要です。</p>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+                    <h3>簿記はビジネスの共通言語</h3>
+                    <p>簿記は、会社の財産状態と経営成績を外部に説明するためのルールです。投資家、銀行、取引先、経営者が同じ数字を読めるようにするための「翻訳ルール」と考えます。</p>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon"><i class="fa-solid fa-route"></i></div>
+                    <h3>一巡の手続きが学習の地図</h3>
+                    <p>取引、仕訳、総勘定元帳、試算表、決算、財務諸表。この流れを知っておくと、Day2以降の仕訳練習で「今どこの作業をしているのか」を見失いにくくなります。</p>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                    <h3>AIは学習の伴走役にする</h3>
+                    <p>Geminiは疑問の壁打ち、NotebookLMは動画や資料に基づく復習に向いています。わからない言葉を放置せず、その場で噛み砕かせることが合格までの時短になります。</p>
+                </div>
+            </div>
 
-            <div style="margin-top: 40px; text-align: center; padding: 20px; background: var(--accent-light); border-radius: var(--radius-small);">
-                <strong>Next Step:</strong> 明日は「Day 2 仕訳の基礎と勘定科目の琁E��」に進み、�E体的なルールを学びます、E            </div>
+            <h2>今日覚える最重要用語</h2>
+            <div class="term-grid">
+                <div class="term-card">
+                    <strong>取引</strong>
+                    <span>会社のお金や財産が動く出来事。仕訳の出発点です。</span>
+                </div>
+                <div class="term-card">
+                    <strong>仕訳</strong>
+                    <span>取引を「借方（左）・貸方（右）」に分けて記録する簿記の基本動作。</span>
+                </div>
+                <div class="term-card">
+                    <strong>総勘定元帳</strong>
+                    <span>仕訳を勘定科目ごとに集計する帳簿。すべての取引の集大成です。</span>
+                </div>
+                <div class="term-card">
+                    <strong>試算表</strong>
+                    <span>記録の合計が左右一致するか確認する表。ズレがあれば記入ミスのサイン。</span>
+                </div>
+                <div class="term-card">
+                    <strong>B/S（貸借対照表）</strong>
+                    <span>ある時点の財産状態。左に資産、右に負債＋純資産が並ぶ。</span>
+                </div>
+                <div class="term-card">
+                    <strong>P/L（損益計算書）</strong>
+                    <span>ある期間の経営成績。収益－費用＝利益の構造を示す。</span>
+                </div>
+                <div class="term-card">
+                    <strong>AGI（汎用人工知能）</strong>
+                    <span>人間があらゆる知的作業をこなせるAI。特化型AI（ANI）と対比される。</span>
+                </div>
+                <div class="term-card">
+                    <strong>借方・貸方</strong>
+                    <span>仕訳の左側が「借方」、右側が「貸方」。どの勘定科目がどちらに来るかがルール。</span>
+                </div>
+                <div class="term-card">
+                    <strong>勘定科目</strong>
+                    <span>取引の内容を分類するラベル名。現金、売上、仕入れ、給料など多数存在する。</span>
+                </div>
+                <div class="term-card">
+                    <strong>C/F（キャッシュフロー計算書）</strong>
+                    <span>財務三表の3つ目。実際の現金の動きを示す。簿記3級では範囲外。</span>
+                </div>
+                <div class="term-card">
+                    <strong>OCR（光学文字認識）</strong>
+                    <span>画像や写真から文字を自動で読み取るAI技術。領収書の自動入力に使われる。</span>
+                </div>
+                <div class="term-card">
+                    <strong>インボイス（適格請求書）</strong>
+                    <span>消費税の計算に使う法定の請求書形式。2023年10月から義務化された。</span>
+                </div>
+            </div>
+
+            <div class="check-panel">
+                <h3><i class="fa-solid fa-clipboard-check"></i> セルフチェック</h3>
+                <ol class="check-list">
+                    <li>「AIが発達すると簿記はいらない」と言い切れない理由を、自分の言葉で1つ説明できますか？</li>
+                    <li>簿記の一巡の手続きを、<b>取引 → 仕訳 → 総勘定元帳 → 試算表 → 財務諸表</b>の順で並べられますか？</li>
+                    <li>B/Sは「ある時点」、P/Lは「ある期間」を見る表だと区別できますか？</li>
+                </ol>
+            </div>
+
+            <!-- サイト内4択クイズ -->
+            <div class="quiz-panel" id="quizPanel">
+                <h3><i class="fa-solid fa-circle-question"></i> 確認クイズ（全5問）</h3>
+                <p style="color:var(--text-sub); font-size:0.9rem; margin-bottom:20px;">動画を見た人も見ていない人も、理解度を確認してみましょう。</p>
+
+                <div id="quiz-container"></div>
+
+                <div id="quiz-result" style="display:none; margin-top:24px; padding:20px; border-radius:12px; text-align:center;">
+                    <p id="quiz-score" style="font-size:1.6rem; font-weight:900; margin-bottom:8px;"></p>
+                    <p id="quiz-msg" style="font-size:0.95rem; color:var(--text-sub);"></p>
+                    <button onclick="resetQuiz()" class="tool-link-btn" style="margin-top:16px; background:var(--accent-green);">
+                        <i class="fa-solid fa-rotate-right"></i> もう一度
+                    </button>
+                </div>
+            </div>
+
+            <div class="next-work">
+                <h3><i class="fa-solid fa-person-chalkboard"></i> 明日までのミニ課題</h3>
+                <p>NotebookLMまたはGeminiに今日の内容を説明させ、理解が浅い言葉を1つ潰してからDay2へ進みましょう。</p>
+                <div class="chat-prompt-container">
+                    <div class="chat-bubble">
+                        <div class="chat-text"><span class="prompt-text">今日学んだ「簿記の一巡の手続き」と「B/S・P/Lの違い」を、簿記初心者向けに具体例つきで説明してください。最後に、理解度チェック問題を3問出してください。</span></div>
+                        <button class="copy-btn" title="プロンプトをコピー"><i class="fa-regular fa-copy"></i> コピー</button>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; text-align: center; padding: 24px; background: var(--accent-light); border-radius: var(--radius-small);">
+                <strong>Next Step:</strong> Day 2では「仕訳の基礎と勘定科目の理解」に進みます。今日の地図を見ながら、実際に借方・貸方へ分ける練習に入ります。
+            </div>
         
             <div style="text-align:center; padding: 3rem 0 2rem; display: flex; flex-direction: column; gap: 1rem; align-items: center;">
-                <button type="button" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:linear-gradient(135deg, #34d399, #059669); border:none; box-shadow: 0 10px 30px rgba(5,150,105, 0.25); cursor:pointer;" onclick="window.location.href='./vol02-1.html'">
+                <button type="button" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:linear-gradient(135deg, #34d399, #059669); border:none; box-shadow: 0 10px 30px rgba(5,150,105, 0.25); cursor:pointer;" onclick="(function(){var x=new XMLHttpRequest();x.open('HEAD','./vol02-1.html',false);try{x.send();if(x.status===200||x.status===0){window.location.href='./vol02-1.html';}else{alert('Day 2 は準備中です。もうしばらくお待ちください。');}}catch(e){alert('Day 2 は準備中です。もうしばらくお待ちください.');}})()">
                     Day 2 へ進む <i class="fa-solid fa-arrow-right"></i>
                 </button>
                 <button type="button" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:#fff; color:#4a4a4a; border:2px solid #e2e8f0; box-shadow:none; cursor:pointer;" onclick="window.location.href='./index.html'">
-                    <i class="fa-solid fa-house"></i> 学習記録をつけて Home へ戻めE                </button>
+                    <i class="fa-solid fa-house"></i> 学習記録をつけて Home へ戻る
+                </button>
             </div>
         </div>
 
@@ -471,7 +907,124 @@
                 });
             });
         });
+
+        // ===== 確認クイズ =====
+        const quizData = [
+            {
+                q: "OpenAIが定義するAI進化の「5段階」のうち、2026年現在 最も近いと言われているレベルはどれ？",
+                opts: ["Lv.1 チャットボット", "Lv.2 推論AI", "Lv.3 エージェント", "Lv.5 組織"],
+                ans: 1,
+                fb: "正解は「Lv.2 推論AI」。o1・o3などがこのレベルに該当します。Lv.3（エージェント）への移行期とも言われています。"
+            },
+            {
+                q: "「AIが発達しても簿記が不要にならない理由」として、動画で挙げられていないものはどれ？",
+                opts: ["業務ごとの柔軟な判断力", "法律・会計基準の変更への対応", "AIより計算が速い能力", "経営者とのコミュニケーション"],
+                ans: 2,
+                fb: "「AIより計算が速い能力」は不要になる理由です。正しい理由は、柔軟な判断、法律対応、コミュニケーション、データ検証、倫理的判断の5つです。"
+            },
+            {
+                q: "簿記の「一巡の手続き」の正しい順番はどれ？",
+                opts: [
+                    "仕訳 → 取引 → 試算表 → 元帳 → 決算 → 財務諸表",
+                    "取引 → 仕訳 → 総勘定元帳 → 試算表 → 決算 → 財務諸表",
+                    "取引 → 試算表 → 仕訳 → 元帳 → 財務諸表 → 決算",
+                    "仕訳 → 元帳 → 取引 → 決算 → 試算表 → 財務諸表"
+                ],
+                ans: 1,
+                fb: "取引が発生 → 仕訳で記録 → 総勘定元帳へ転記 → 試算表で確認 → 決算 → 財務諸表の完成、が正しい流れです。"
+            },
+            {
+                q: "貸借対照表（B/S）と損益計算書（P/L）の違いとして正しいのはどれ？",
+                opts: [
+                    "B/Sはある期間の成績、P/Lはある時点の財産状態を示す",
+                    "B/Sはある時点の財産状態、P/Lはある期間の経営成績を示す",
+                    "B/SもP/Lも同じ期間の情報をそれぞれ別の角度で示す",
+                    "B/Sは収益・費用、P/Lは資産・負債を示す"
+                ],
+                ans: 1,
+                fb: "B/S（貸借対照表）＝財産の「静止画」（ある時点）、P/L（損益計算書）＝経営の「動画」（ある期間）と覚えましょう。"
+            },
+            {
+                q: "GeminiとNotebookLMの使い分けとして最も適切なのはどれ？",
+                opts: [
+                    "Geminiは計算専用、NotebookLMは文章作成専用",
+                    "どちらも同じ用途で使えるため使い分け不要",
+                    "Geminiは汎用対話AI、NotebookLMは読み込んだ資料に限定した正確な回答ができる",
+                    "NotebookLMはインターネット全体を検索できる万能ツール"
+                ],
+                ans: 2,
+                fb: "Geminiは幅広い用途の対話型AI。NotebookLMは自分がソースとして追加した資料に限定して回答するため、ハルシネーションを抑えて学習に使えます。"
+            }
+        ];
+
+        let selectedAnswers = [];
+
+        function buildQuiz() {
+            const container = document.getElementById('quiz-container');
+            if (!container) return;
+
+            container.innerHTML = '';
+            selectedAnswers = new Array(quizData.length).fill(null);
+            quizData.forEach((q, qi) => {
+                const letters = ['A', 'B', 'C', 'D'];
+                const optsHtml = q.opts.map((o, oi) => `
+                    <button type="button" class="quiz-opt" onclick="answerQuiz(${qi},${oi})" id="opt-${qi}-${oi}">
+                        <span class="quiz-opt-icon">${letters[oi]}</span>${o}
+                    </button>`).join('');
+                container.innerHTML += `
+                    <div class="quiz-q" id="qq-${qi}">
+                        <div class="quiz-q-num">問${qi + 1} / ${quizData.length}</div>
+                        <div class="quiz-q-text">${q.q}</div>
+                        <div class="quiz-options">${optsHtml}</div>
+                        <div class="quiz-feedback" id="fb-${qi}"></div>
+                    </div>`;
+            });
+            document.getElementById('quiz-result').style.display = 'none';
+        }
+
+        function answerQuiz(qi, oi) {
+            if (selectedAnswers[qi] !== null) return;
+            selectedAnswers[qi] = oi;
+
+            const q = quizData[qi];
+            const isCorrect = oi === q.ans;
+            q.opts.forEach((_, i) => {
+                const btn = document.getElementById(`opt-${qi}-${i}`);
+                btn.classList.add('disabled');
+                if (i === q.ans) btn.classList.add('correct');
+                else if (i === oi && !isCorrect) btn.classList.add('wrong');
+            });
+
+            const fb = document.getElementById(`fb-${qi}`);
+            fb.textContent = (isCorrect ? '正解！ ' : '不正解。') + q.fb;
+            fb.className = `quiz-feedback show ${isCorrect ? 'correct-fb' : 'wrong-fb'}`;
+
+            if (selectedAnswers.every(answer => answer !== null)) {
+                const score = selectedAnswers.reduce((count, answer, index) => (
+                    count + (answer === quizData[index].ans ? 1 : 0)
+                ), 0);
+                showResult(score);
+            }
+        }
+
+        function showResult(score) {
+            const result = document.getElementById('quiz-result');
+            const isPassed = score >= 4;
+            result.style.display = 'block';
+            result.className = isPassed ? 'pass' : 'fail';
+            document.getElementById('quiz-score').textContent = `${score} / ${quizData.length} 正解`;
+            document.getElementById('quiz-msg').textContent = isPassed
+                ? '素晴らしい！Day1の内容をしっかり理解できています。Day2へ進みましょう。'
+                : 'もう一度ページを読み直してから再挑戦しましょう。NotebookLMに解説を頼むのもOKです。';
+            result.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function resetQuiz() {
+            buildQuiz();
+            document.getElementById('quizPanel').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        buildQuiz();
     </script>
 </body>
 </html>
-<!-- deploy-force -->
