@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 2 | 仕訳の基礎と勘定科目の理解</title>
+    <!-- フォントとアイコン -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Teko:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* 簿記コーステーマ（Fresh Green & Warm Gold） */
+            --bg-body: #f0fdf4;
+            --bg-card: rgba(255, 255, 255, 0.85);
+            --bg-card-solid: #ffffff;
+            --text-main: #1e293b;
+            --text-sub: #64748b;
+            --accent-green: #059669;
+            --accent-gold: #d97706;
+            --accent-purple: #8b5cf6; /* Canva用アクセント */
+            --accent-light: #d1fae5;
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 15px 40px rgba(5, 150, 105, 0.2);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.6);
+            --radius-large: 24px;
+            --radius-medium: 16px;
+            --radius-small: 8px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: var(--bg-body);
+            background-image:
+                radial-gradient(at 0% 0%, rgba(255, 255, 255, 0.8) 0, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(209, 250, 229, 0.8) 0, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex; justify-content: center; align-items: flex-start;
+            padding: 40px 20px;
+        }
+
+        /* フローティングHomeボタン */
+        .home-btn {
+            position: fixed; bottom: 30px; right: 30px;
+            width: 60px; height: 60px;
+            background: var(--accent-green); color: white;
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 1.5rem; text-decoration: none;
+            box-shadow: 0 10px 25px rgba(5, 150, 105, 0.4);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 1000;
+        }
+        .home-btn:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 15px 30px rgba(5, 150, 105, 0.5); background: #047857; }
+
+        /* メインコンテナ (Glassmorphism) */
+        .container {
+            width: 100%; max-width: 900px;
+            background: var(--bg-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: var(--glass-border); border-radius: var(--radius-large);
+            box-shadow: var(--shadow-soft); overflow: hidden;
+            display: flex; flex-direction: column; animation: fadeIn 0.8s ease-out;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ヘッダー */
+        .header { padding: 40px 40px 20px; border-bottom: 2px solid var(--accent-light); text-align: center; }
+        .header-tag {
+            display: inline-block; background: var(--accent-green); color: white;
+            font-weight: 700; padding: 4px 12px; border-radius: 20px;
+            font-family: 'Roboto', sans-serif; font-size: 0.85rem; letter-spacing: 1px; margin-bottom: 15px;
+        }
+        .header h1 { font-size: 2.2rem; font-weight: 900; color: var(--accent-green); margin-bottom: 10px; }
+
+        /* タブナビゲーション */
+        .tabs { display: flex; padding: 0 20px; background: rgba(255, 255, 255, 0.5); border-bottom: 1px solid #eee; overflow-x: auto; }
+        .tab-btn {
+            border: none; background: none; padding: 20px 30px; font-size: 1rem; font-weight: 700;
+            color: var(--text-sub); cursor: pointer; position: relative; transition: color 0.3s; white-space: nowrap;
+        }
+        .tab-btn:hover, .tab-btn.active { color: var(--accent-green); }
+        .tab-btn.active::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px;
+            background: var(--accent-green); border-radius: 3px 3px 0 0;
+        }
+
+        /* タブコンテンツ領域 */
+        .tab-content { display: none; padding: 40px; background: var(--bg-card-solid); min-height: 500px; animation: fadeInTab 0.4s ease-out; }
+        .tab-content.active { display: block; }
+        @keyframes fadeInTab { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 見出しスタイル設定 */
+        h2 { font-size: 1.6rem; color: var(--text-main); border-left: 5px solid var(--accent-gold); padding-left: 15px; margin: 30px 0 20px; }
+        h2:first-child { margin-top: 0; }
+        h3 { font-size: 1.3rem; color: var(--accent-green); margin: 25px 0 15px; display: flex; align-items: center; gap: 10px; }
+        p { line-height: 1.8; margin-bottom: 20px; color: #555; font-size: 1.05rem; max-width: 1000px; }
+
+        /* Goal Box */
+        .goal-box {
+            background: linear-gradient(135deg, var(--accent-light), #fff);
+            border: 1px solid var(--accent-green); border-radius: var(--radius-medium);
+            padding: 30px; margin-bottom: 30px; text-align: center;
+        }
+        .goal-box i { font-size: 3rem; color: var(--accent-green); margin-bottom: 15px; }
+        .goal-box h3 { justify-content: center; font-size: 1.5rem; margin-top: 0; }
+        .goal-box p { font-size: 1.15rem; font-weight: 500; margin-bottom: 0; color: var(--text-main); }
+
+        /* Learning Card */
+        .learning-card {
+            display: flex; flex-direction: row; background: rgba(255, 255, 255, 0.9);
+            border-radius: var(--radius-medium); border: var(--glass-border); overflow: hidden;
+            margin-bottom: 30px; box-shadow: var(--shadow-soft); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .learning-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); border-color: var(--accent-light); }
+        .lc-video { flex: 0 0 45%; background: #000; display: flex; flex-direction: column; position: relative; }
+        .lc-content { flex: 1; padding: 30px; display: flex; flex-direction: column; justify-content: center; }
+        .lc-header { border-bottom: 2px dashed var(--accent-light); padding-bottom: 15px; margin-bottom: 20px; }
+        .lc-title { font-size: 1.2rem; font-weight: 900; color: var(--text-main); margin: 10px 0 0 0; line-height: 1.4; }
+        .lc-body h4 { font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .lc-body p { font-size: 1rem; line-height: 1.7; margin-bottom: 15px; color: #555; }
+        .lc-list { list-style: none; padding-left: 0; margin-bottom: 0; background: #fdfdfd; padding: 15px; border-radius: var(--radius-small); border: 1px solid #f5f5f5; }
+        .lc-list li { position: relative; padding-left: 25px; margin-bottom: 8px; font-size: 0.95rem; color: #444; }
+        .lc-list li::before { content: '\f0da'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; left: 5px; top: 1px; color: var(--accent-gold); }
+        @media (max-width: 768px) { .learning-card { flex-direction: column; } .lc-video { width: 100%; flex: none; } .lc-content { padding: 20px; } }
+
+        /* Facade サムネイル */
+        .vc-thumb { width: 100%; aspect-ratio: 16/9; background-color: #000; background-size: cover; background-position: center; position: relative; cursor: pointer; }
+        .vc-thumb::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.1); transition: background 0.3s ease; pointer-events: none; }
+        .vc-thumb:hover::before { background: rgba(0, 0, 0, 0.2); }
+        .vc-thumb-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 3rem; color: rgba(255, 255, 255, 0.9); text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4); transition: transform 0.3s ease, color 0.3s ease; pointer-events: none; }
+        .vc-thumb:hover .vc-thumb-play { transform: translate(-50%, -50%) scale(1.1); color: #ff0000; }
+        .vc-tag { font-size: 0.75rem; background: var(--accent-light); color: var(--accent-green); font-weight: 700; padding: 3px 10px; border-radius: 20px; border: 1px solid rgba(5,150,105,0.25); display: inline-block; margin-bottom: 8px; }
+        .vc-tag.canva { background: #f3e8ff; color: var(--accent-purple); border-color: rgba(139, 92, 246, 0.25); }
+
+        /* 実習領域 */
+        .practice-area { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-medium); padding: 30px; margin-top: 30px; }
+        .tool-link-btn { display: inline-flex; align-items: center; gap: 10px; background: #059669; color: white; padding: 12px 24px; border-radius: 30px; text-decoration: none; font-weight: bold; transition: 0.3s; margin-bottom: 20px; }
+        .tool-link-btn:hover { background: #047857; transform: translateY(-2px); }
+        .tool-link-btn.canva { background: var(--accent-purple); }
+        .tool-link-btn.canva:hover { background: #7c3aed; }
+
+        /* ステップリスト */
+        .step-list { list-style: none; padding-left: 0; }
+        .step-list li { position: relative; padding-left: 40px; margin-bottom: 15px; font-size: 1.05rem; }
+        .step-list li::before { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; left: 0; top: 2px; width: 25px; height: 25px; background: var(--accent-green); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; }
+        .step-list.canva li::before { background: var(--accent-purple); }
+
+        /* Summary Cards */
+        .summary-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin: 25px 0 35px; }
+        .summary-card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: var(--radius-medium); padding: 24px; box-shadow: var(--shadow-soft); }
+        .summary-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: var(--accent-light); color: var(--accent-green); font-size: 1.25rem; margin-bottom: 14px; }
+        .summary-card h3 { margin: 0 0 10px; color: var(--text-main); font-size: 1.1rem; }
+        .summary-card p { margin-bottom: 0; font-size: 0.96rem; line-height: 1.75; }
+
+        /* Term Grid */
+        .term-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 18px 0 30px; }
+        .term-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; }
+        .term-card strong { display: block; color: var(--accent-green); margin-bottom: 6px; font-size: 1rem; }
+        .term-card span { display: block; color: #475569; font-size: 0.9rem; line-height: 1.55; }
+
+        /* Chat Prompt */
+        .chat-prompt-container { display: flex; flex-direction: column; gap: 15px; margin: 20px auto; max-width: 1000px; background: #fff; padding: 25px; border-radius: var(--radius-large); box-shadow: inset 0 2px 10px rgba(0,0,0,0.02); border: 1px solid #eee; }
+        .chat-bubble { display: flex; align-items: center; justify-content: space-between; background: #f1f5f9; padding: 12px 20px; border-radius: 20px 20px 20px 0; max-width: 95%; align-self: flex-start; gap: 15px; transition: all 0.2s; border: 1px solid transparent; }
+        .chat-bubble:hover { border-color: #cbd5e1; background: #e2e8f0; }
+        .chat-text { font-size: 1.05rem; color: #1e293b; line-height: 1.5; font-weight: 500; }
+        .copy-btn { background: #fff; border: 1px solid #cbd5e1; color: #059669; padding: 8px 15px; border-radius: 15px; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+        .copy-btn:hover { background: #f8fafc; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .copy-btn.copied { background: #d1fae5; border-color: #a7f3d0; color: #047857; }
+
+        /* T-Account Visual */
+        .t-account { width: 100%; max-width: 300px; margin: 10px auto; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .t-header { background: #1e293b; color: #fff; padding: 8px; text-align: center; font-weight: bold; font-size: 0.9rem; }
+        .t-body { display: flex; border-top: 2px solid #1e293b; min-height: 100px; }
+        .t-left, .t-right { flex: 1; padding: 10px; font-size: 0.85rem; }
+        .t-left { border-right: 2px solid #1e293b; background: #eff6ff; }
+        .t-right { background: #fef2f2; }
+        .t-label { font-size: 0.7rem; color: #64748b; margin-bottom: 5px; display: block; }
+
+        @media (max-width: 768px) {
+            .container { padding: 0 10px; margin-top: 20px; }
+            .header h1 { font-size: 1.8rem; }
+            .tab-btn { padding: 15px 10px; font-size: 0.85rem; }
+            .summary-grid, .term-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="./index.html" class="home-btn" title="ホームに戻る">
+        <i class="fa-solid fa-house"></i>
+    </a>
+
+    <div class="container">
+        <header class="header">
+            <span class="header-tag">DAY 02</span>
+            <h1>仕訳の基礎と勘定科目の理解</h1>
+            <p style="margin:0; color:var(--text-sub);">May 2026 - Bookkeeping Course</p>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" onclick="openTab('goal')"><i class="fa-solid fa-bullseye"></i> 今日の目標</button>
+            <button class="tab-btn" onclick="openTab('first')"><i class="fa-brands fa-canva"></i> 前半：Canva活用</button>
+            <button class="tab-btn" onclick="openTab('second')"><i class="fa-solid fa-calculator"></i> 後半：仕訳のルール</button>
+            <button class="tab-btn" onclick="openTab('summary')"><i class="fa-solid fa-list-check"></i> まとめ</button>
+        </nav>
+
+        <!-- 今日の目標 タブ -->
+        <div id="goal" class="tab-content active">
+            <div class="goal-box">
+                <i class="fa-solid fa-pen-nib"></i>
+                <h3>「取引を二面性で捉え、正しいラベル（勘定科目）を貼る」</h3>
+                <p>簿記の心臓部である「仕訳」のルールをマスターし、<br>同時にクリエイティブツールCanvaを使って情報を整理するスキルを養います。</p>
+            </div>
+            <h2>本日の学習マップ</h2>
+            <p>Day 2では、以下の2つの柱を学びます。</p>
+            <ol style="margin-left: 20px; line-height: 1.8;">
+                <li><strong>Canvaの活用：</strong> AI機能を含む最新のCanvaを使いこなし、教材や図解を自作できる「AIディレクター」としての基礎スキル。</li>
+                <li><strong>仕訳のルール：</strong> 簿記の5要素（資産・負債・純資産・収益・費用）と、それらが「借方（左）」と「貸方（右）」のどちらに住んでいるのかを徹底理解します。</li>
+            </ol>
+            
+            <div style="background: #fffbeb; padding: 25px 30px; border-radius: 12px; margin: 35px 0 20px 0; border-left: 6px solid var(--accent-gold);">
+                <h4 style="color: #b45309; margin: 0 0 10px 0; font-size: 1.15rem;"><i class="fa-solid fa-lightbulb"></i> AI時代の仕訳スキルとは？</h4>
+                <p style="margin: 0; font-size: 0.95rem; color: #333; line-height: 1.6;">将来、単純な入力はAIが行いますが、AIが「これは『接待交際費』ではなく『会議費』だ」と判断を誤った際、それを修正できるのはあなただけです。正しい「勘定科目（ラベル）」の知識は、AIを管理する側の必須教養となります。</p>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="tool-link-btn" onclick="openTab('first')" style="background:var(--accent-purple);">
+                    前半（Canva）へ進む <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- 前半 タブ (Canva) -->
+        <div id="first" class="tab-content">
+            <h2>セクション1：最新版Canvaを使いこなす</h2>
+            <p>資料作成やSNS発信に欠かせないCanva。最新のAI機能（マジック機能など）を含めた基本操作を学び、自分専用の学習ノートを彩る準備をしましょう。</p>
+
+            <!-- Learning Card 1: Canva基礎 -->
+            <div class="learning-card">
+                <div class="lc-video">
+                    <div class="vc-thumb" data-video-id="nRds9qeaLiM" style="background-image: url('https://img.youtube.com/vi/nRds9qeaLiM/maxresdefault.jpg'), url('https://img.youtube.com/vi/nRds9qeaLiM/hqdefault.jpg');">
+                        <i class="fa-brands fa-youtube vc-thumb-play"></i>
+                    </div>
+                </div>
+                <div class="lc-content">
+                    <div class="lc-header">
+                        <span class="vc-tag canva">Canva基礎</span>
+                        <h3 class="lc-title">【2026最新】キャンバの使い方完全ガイド！AI機能も網羅</h3>
+                    </div>
+                    <div class="lc-body">
+                        <h4><i class="fa-solid fa-book-open"></i> 学習のポイント</h4>
+                        <ul class="lc-list">
+                            <li>基本の図形・テキスト・イラストの配置方法</li>
+                            <li>AIによる「マジック作文」で文章を自動生成・リライト</li>
+                            <li>デザインに一貫性を出す「スタイルコピー」機能</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Card 2: Canva最新アプデ -->
+            <div class="learning-card">
+                <div class="lc-video">
+                    <div class="vc-thumb" data-video-id="uumr0BVAJE4" style="background-image: url('https://img.youtube.com/vi/uumr0BVAJE4/maxresdefault.jpg'), url('https://img.youtube.com/vi/uumr0BVAJE4/hqdefault.jpg');">
+                        <i class="fa-brands fa-youtube vc-thumb-play"></i>
+                    </div>
+                </div>
+                <div class="lc-content">
+                    <div class="lc-header">
+                        <span class="vc-tag canva">2026年最新アプデ</span>
+                        <h3 class="lc-title">【保存版】Canva Create 2026 最新アプデまとめ</h3>
+                    </div>
+                    <div class="lc-body">
+                        <h4><i class="fa-solid fa-wand-magic-sparkles"></i> 注目機能</h4>
+                        <ul class="lc-list">
+                            <li>マジックレイヤー：1枚の画像を各要素に分解して編集可能</li>
+                            <li>高画質化ツール：荒い画像をAIがくっきり補正</li>
+                            <li>コンポーネント機能：よく使うパーツを登録して再利用</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="practice-area">
+                <h3 style="color:var(--accent-purple);"><i class="fa-solid fa-pencil"></i> 実習：Canvaで「今日の学び」を図解しよう</h3>
+                <p>学習効率を最大化するために、自分なりの「まとめ画像」を作成してみましょう。</p>
+                <ul class="step-list canva">
+                    <li>Canvaにログインし、「Instagram投稿（正方形）」テンプレートを開く。</li>
+                    <li>図形やテキストを使い、後ほど学ぶ「簿記のご要素（5つ）」の配置を描く。</li>
+                    <li>マジック作文機能を使い、動画の要約を短いキャッチコピーに変換してみる。</li>
+                    <li>完成した画像を保存（ダウンロード）し、学習ノートに貼る。</li>
+                </ul>
+                <div style="text-align: center; margin-top: 20px;">
+                    <a href="https://www.canva.com/" target="_blank" class="tool-link-btn canva">
+                        <i class="fa-brands fa-canva"></i> Canva を開く
+                    </a>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="tool-link-btn" onclick="openTab('second')" style="background:var(--accent-green);">
+                    後半（仕訳ルール）へ進む <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- 後半 タブ (簿記) -->
+        <div id="second" class="tab-content">
+            <h2>セクション2：仕訳の「型」とホームポジション</h2>
+            <p>いよいよ本題です。すべての取引を「左右」に分けるルールの本質を学びます。これが分かれば、簿記の半分をマスターしたも同然です。</p>
+
+            <!-- Learning Card 3: ホームポジション -->
+            <div class="learning-card">
+                <div class="lc-video">
+                    <div class="vc-thumb" data-video-id="_7yZZofZnqQ" style="background-image: url('https://img.youtube.com/vi/_7yZZofZnqQ/maxresdefault.jpg'), url('https://img.youtube.com/vi/_7yZZofZnqQ/hqdefault.jpg');">
+                        <i class="fa-brands fa-youtube vc-thumb-play"></i>
+                    </div>
+                </div>
+                <div class="lc-content">
+                    <div class="lc-header">
+                        <span class="vc-tag">最重要：型</span>
+                        <h3 class="lc-title">簿記のご要素とホームポジション（住居地）を徹底理解</h3>
+                    </div>
+                    <div class="lc-body">
+                        <h4><i class="fa-solid fa-house-chimney"></i> 住居地のルール</h4>
+                        <p>5つの要素にはそれぞれ「生まれた時の定位置（ホームポジション）」があります。増えたらその場所に、減ったら反対側に記入します。</p>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+                            <!-- T-Account Assets -->
+                            <div class="t-account">
+                                <div class="t-header">資産 / 費用</div>
+                                <div class="t-body">
+                                    <div class="t-left"><span class="t-label">借方 (左)</span><strong>＋ 増える</strong></div>
+                                    <div class="t-right"><span class="t-label">貸方 (右)</span>－ 減る</div>
+                                </div>
+                            </div>
+                            <!-- T-Account Liabilities -->
+                            <div class="t-account">
+                                <div class="t-header">負債 / 純資産 / 収益</div>
+                                <div class="t-body">
+                                    <div class="t-left"><span class="t-label">借方 (左)</span>－ 減る</div>
+                                    <div class="t-right"><span class="t-label">貸方 (右)</span><strong>＋ 増える</strong></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Card 4: 二面性 -->
+            <div class="learning-card">
+                <div class="lc-video">
+                    <div class="vc-thumb" data-video-id="p2H_GistKWE" style="background-image: url('https://img.youtube.com/vi/p2H_GistKWE/maxresdefault.jpg'), url('https://img.youtube.com/vi/p2H_GistKWE/hqdefault.jpg');">
+                        <i class="fa-brands fa-youtube vc-thumb-play"></i>
+                    </div>
+                </div>
+                <div class="lc-content">
+                    <div class="lc-header">
+                        <span class="vc-tag">仕訳の実践</span>
+                        <h3 class="lc-title">取引の「二面性」：なぜ左右に書くのか？</h3>
+                    </div>
+                    <div class="lc-body">
+                        <h4><i class="fa-solid fa-code-branch"></i> 二面性（原因と結果）</h4>
+                        <p>「現金100円を払って(結果)」「お菓子を買った(原因)」。あらゆる経済現象を2つの側面で捉えます。左側の合計と右側の合計は必ず一致（バランス）します。</p>
+                        <ul class="lc-list">
+                            <li>感情ではなく、合理的・数字的に理解する。</li>
+                            <li>「引っ越し（反対側に書く）」でマイナスを表現する。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Card 5: 勘定科目 -->
+            <div class="learning-card">
+                <div class="lc-video">
+                    <div class="vc-thumb" data-video-id="w40zRfN1P0w" style="background-image: url('https://img.youtube.com/vi/w40zRfN1P0w/maxresdefault.jpg'), url('https://img.youtube.com/vi/w40zRfN1P0w/hqdefault.jpg');">
+                        <i class="fa-brands fa-youtube vc-thumb-play"></i>
+                    </div>
+                </div>
+                <div class="lc-content">
+                    <div class="lc-header">
+                        <span class="vc-tag">用語のラベル</span>
+                        <h3 class="lc-title">勘定科目（A単語）の要素を見極めるパターン</h3>
+                    </div>
+                    <div class="lc-body">
+                        <h4><i class="fa-solid fa-tags"></i> 迷わないための鉄則</h4>
+                        <ul class="lc-list">
+                            <li>「〇〇預金」はすべて <strong>資産</strong></li>
+                            <li>「未払〇〇」はすべて <strong>負債</strong></li>
+                            <li>「〇〇費」はすべて <strong>費用</strong></li>
+                            <li>売掛金（嬉しい権利）は資産、買掛金（骸骨マークの義務）は負債。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="practice-area">
+                <h3 style="color:var(--accent-gold);"><i class="fa-solid fa-robot"></i> 実習：NotebookLMで「知識の検証」</h3>
+                <p>AIを使い、今日学んだ用語が「どのグループ」に属するかテストしましょう。</p>
+                <div class="chat-prompt-container">
+                    <div class="chat-bubble">
+                        <div class="chat-text"><span class="prompt-text">「売掛金」「支払家賃」「資本金」「借入金」「受取手数料」の5つの用語について、それぞれ「資産・負債・純資産・収益・費用」のどれに分類されるか、理由とともに教えてください。</span></div>
+                        <button class="copy-btn" title="プロンプトをコピー"><i class="fa-regular fa-copy"></i> コピー</button>
+                    </div>
+                    <div class="chat-bubble">
+                        <div class="chat-text"><span class="prompt-text">読み込んだ動画の内容を元に、仕訳のホームポジションに関する3択クイズを5問出してください。</span></div>
+                        <button class="copy-btn" title="プロンプトをコピー"><i class="fa-regular fa-copy"></i> コピー</button>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <a href="https://notebooklm.google.com/" target="_blank" class="tool-link-btn" style="background:var(--accent-gold);">
+                        <i class="fa-solid fa-book"></i> NotebookLM を開く
+                    </a>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="tool-link-btn" onclick="openTab('summary')" style="background:var(--accent-green);">
+                    まとめへ進む <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- まとめ タブ -->
+        <div id="summary" class="tab-content">
+            <h2>DAY 2 まとめ</h2>
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-icon"><i class="fa-brands fa-canva"></i></div>
+                    <h3>CanvaはAIで爆速化する</h3>
+                    <p>マジック作文、マジックレイヤー、スタイルコピー。これらを使えば、デザインセンスがなくても高品質な図解が数分で完成します。自分の学びを視覚化しましょう。</p>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon"><i class="fa-solid fa-arrows-left-right"></i></div>
+                    <h3>仕訳は「二面性」のパズル</h3>
+                    <p>一方向のメモではなく、必ず「何を得て、何を失ったか」をセットで記録します。借方（左）と貸方（右）は常に天秤のように釣り合います。</p>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon"><i class="fa-solid fa-house-user"></i></div>
+                    <h3>ホームポジションを叩き込む</h3>
+                    <p>資産・費用は左(借方)。負債・純資産・収益は右(貸方)。これが「増えた時」の定位置です。減った時は逆サイドへ。これだけで簿記のロジックは完成です。</p>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon"><i class="fa-solid fa-tag"></i></div>
+                    <h3>勘定科目は「A単語」と同じ</h3>
+                    <p>仕訳を切るには単語（勘定科目）を知る必要があります。売掛・買掛などの基本単語から、少しずつ語彙を増やしていきましょう。</p>
+                </div>
+            </div>
+
+            <h2>重要用語チェック</h2>
+            <div class="term-grid">
+                <div class="term-card"><strong>借方（かりかた）</strong><span>仕訳の左側のこと。「り」が左に払うので左。</span></div>
+                <div class="term-card"><strong>貸方（かしかた）</strong><span>仕訳の右側のこと。「し」が右に払うので右。</span></div>
+                <div class="term-card"><strong>勘定科目</strong><span>取引の内容に貼るラベル。現金、仕入、売上など。</span></div>
+                <div class="term-card"><strong>資産</strong><span>現金、預金、権利（売掛金）など「持っているもの」。</span></div>
+                <div class="term-card"><strong>負債</strong><span>借入金、義務（買掛金）など「返すべきもの」。</span></div>
+                <div class="term-card"><strong>純資産</strong><span>資本金など、誰にも返さなくていい「自分の元手」。</span></div>
+                <div class="term-card"><strong>費用</strong><span>仕入、給料など「収益を得るために使ったもの」。</span></div>
+                <div class="term-card"><strong>収益</strong><span>売上、利息など「稼いだもの」。</span></div>
+                <div class="term-card"><strong>T勘定</strong><span>勘定科目ごとの増減を集計するためのT字型の図。</span></div>
+            </div>
+
+            <div style="background: #f0fdf4; padding: 25px 30px; border-radius: 12px; margin: 35px 0 20px 0; border-left: 6px solid #059669;">
+                <h4 style="color: #047857; margin: 0 0 10px 0; font-size: 1.15rem;"><i class="fa-solid fa-forward"></i> 次回予告：Day 3</h4>
+                <p style="margin: 0; font-size: 0.95rem; color: #333; line-height: 1.6;">次回は「複式簿記と帳簿」の世界へ。今日学んだ仕訳が、どのように複雑な帳簿へと流れていくのか、そのダイナミズムを学びます！</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for Tabs and Copy -->
+    <script>
+        function openTab(tabId) {
+            const tabs = document.querySelectorAll('.tab-content');
+            const buttons = document.querySelectorAll('.tab-btn');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            buttons.forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Copy functionality
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const text = button.parentElement.querySelector('.prompt-text').innerText;
+                navigator.clipboard.writeText(text).then(() => {
+                    button.classList.add('copied');
+                    button.innerHTML = '<i class="fa-solid fa-check"></i> コピーしました';
+                    setTimeout(() => {
+                        button.classList.remove('copied');
+                        button.innerHTML = '<i class="fa-regular fa-copy"></i> コピー';
+                    }, 2000);
+                });
+            });
+        });
+
+        // YouTube Facade
+        document.querySelectorAll('.vc-thumb[data-video-id]').forEach(thumb => {
+            thumb.addEventListener('click', function() {
+                const videoId = this.dataset.videoId;
+                this.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
+                this.style.backgroundImage = 'none';
+                this.style.cursor = 'default';
+                this.onclick = null;
+            }, { once: true });
+        });
+    </script>
+</body>
+</html>
