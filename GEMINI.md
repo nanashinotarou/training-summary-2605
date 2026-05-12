@@ -164,3 +164,19 @@ document.querySelectorAll('.vc-thumb[data-video-id]').forEach(thumb => {
 - **トーン**: 優しさと親しみやすさ。カジュアル層・ライト層が主な読者
 - **ただし**: 誠実さ・実直さ・真剣さは維持。ふざけすぎない
 - テキスト壁を避ける。アイコン・カード・ビジュアルで視覚的に休憩ポイントを作る
+
+## 4. デプロイ手順の標準化
+
+Cloudflare Pagesへのデプロイ時は、以下の手順を必ず実行してください。
+
+1. **資材の集約**:
+   プロジェクトルートにある `index.html` およびすべての `vol*.html` ファイルを `.deploy_tmp/` フォルダにコピーする。
+   ```powershell
+   copy index.html .deploy_tmp\
+   copy vol*.html .deploy_tmp\
+   ```
+2. **デプロイの実行**:
+   `.deploy_tmp/` をソースとしてデプロイを行う。
+   ```powershell
+   npx wrangler pages deploy .deploy_tmp --project-name=training-summary-2605
+   ```
