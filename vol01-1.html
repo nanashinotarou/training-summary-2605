@@ -343,6 +343,99 @@
         #quiz-result.pass { background: #ecfdf5; border: 2px solid #059669; }
         #quiz-result.fail { background: #fff7ed; border: 2px solid #d97706; }
 
+        /* === Bloom ナラティブ（Day1リライト） === */
+        .bloom-story {
+            background: linear-gradient(135deg, #ecfdf5 0%, #fff7ed 100%);
+            border: 2px solid var(--accent-green);
+            border-radius: var(--radius-large);
+            padding: 32px 36px;
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        .bloom-story::before {
+            content: '🌸';
+            position: absolute;
+            top: -10px; right: 20px;
+            font-size: 5rem;
+            opacity: 0.12;
+            pointer-events: none;
+        }
+        .bloom-story-label {
+            display: inline-block;
+            background: var(--accent-green); color: white;
+            font-size: 0.78rem; font-weight: 700;
+            padding: 3px 12px; border-radius: 20px;
+            margin-bottom: 14px; letter-spacing: 1px;
+        }
+        .bloom-story p {
+            font-size: 1.05rem; line-height: 2;
+            color: var(--text-main); margin-bottom: 0;
+        }
+        .bloom-story strong { color: var(--accent-green); }
+
+        .why-box {
+            background: #1e293b;
+            border-radius: var(--radius-medium);
+            padding: 24px 28px;
+            margin: 28px 0;
+            color: #f1f5f9;
+        }
+        .why-box-q {
+            font-size: 1.1rem; font-weight: 700;
+            color: #fbbf24;
+            margin-bottom: 16px;
+            display: flex; align-items: flex-start; gap: 10px;
+        }
+        .why-box-q::before { content: '❓'; font-size: 1.2rem; flex-shrink: 0; }
+        .why-box-a { font-size: 0.97rem; line-height: 1.9; color: #e2e8f0; }
+        .why-box-a strong { color: #34d399; }
+        .why-box-a .why-result {
+            background: rgba(52,211,153,0.15);
+            border-left: 3px solid #34d399;
+            border-radius: 0 8px 8px 0;
+            padding: 10px 14px;
+            margin-top: 12px;
+            font-weight: 700; color: #34d399;
+        }
+
+        .talk-scene {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--radius-medium);
+            padding: 20px 24px;
+            margin: 24px 0;
+        }
+        .talk-scene-label {
+            font-size: 0.78rem; font-weight: 700;
+            color: var(--text-sub); margin-bottom: 14px;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .talk-row {
+            display: flex; align-items: flex-start;
+            gap: 12px; margin-bottom: 12px;
+        }
+        .talk-row:last-child { margin-bottom: 0; }
+        .talk-icon {
+            width: 36px; height: 36px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; flex-shrink: 0; margin-top: 2px;
+        }
+        .talk-icon.owner { background: #d1fae5; }
+        .talk-icon.sensei { background: #fef3c7; }
+        .talk-bubble-text {
+            background: white; border: 1px solid #e2e8f0;
+            border-radius: 0 12px 12px 12px;
+            padding: 10px 14px;
+            font-size: 0.95rem; line-height: 1.7;
+            flex: 1;
+        }
+        .talk-bubble-text.sensei-text {
+            border-radius: 12px 0 12px 12px;
+            background: #fffbeb; border-color: #fde68a;
+        }
+        .talk-bubble-text strong { color: var(--accent-green); }
+
         @media (max-width: 768px) {
             body { padding: 10px 5px; } .container { width: 100%; border-radius: var(--radius-medium); margin: 0 auto; }
             .header { padding: 30px 20px 15px; } .header h1 { font-size: 1.6rem; }
@@ -357,10 +450,10 @@
             .bf-step span { font-size: 0.65rem; }
             .fs-cards { grid-template-columns: 1fr !important; }
             .chat-bubble { flex-direction: column; align-items: flex-start; gap: 10px; border-radius: 12px; } .copy-btn { align-self: flex-end; }
+            .bloom-story { padding: 22px 20px; }
+            .why-box { padding: 18px 20px; }
+            .talk-row { gap: 8px; }
         }
-
-        /* 追従要素 */
-        .lc-video { position: sticky !important; top: 75px; z-index: 50; box-shadow: 0 8px 25px rgba(0,0,0,0.08); }
     </style>
 </head>
 
@@ -374,7 +467,7 @@
         <header class="header">
             <span class="header-tag">DAY 01</span>
             <h1>簿記の基本概念</h1>
-            <p style="margin:0; color:var(--text-sub);">May 2026 - Bookkeeping Course</p>
+            <p style="margin:0; color:var(--text-sub);">May 2026 — 今月の目標：簿記3級に合格する</p>
         </header>
 
         <nav class="tabs">
@@ -386,29 +479,93 @@
 
         <!-- 本日の目標 タブ -->
         <div id="goal" class="tab-content active">
-            <div class="goal-box">
-                <i class="fa-solid fa-scale-balanced"></i>
-                <h3>AI時代の「簿記」の本質を掴み、管理者の視点を持つ</h3>
-                <p>AIが仕訳や計算を代行してくれる時代において、<br>人間が簿記を学ぶ本当の理由「財務データを読んで意思決定する力」を養います。</p>
+            <!-- Bloom 導入説明（bloom-storyの直前に追加） -->
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:16px; padding:24px 28px; margin-bottom:20px;">
+                <p style="font-size:0.85rem; font-weight:700; color:var(--accent-green); margin-bottom:10px; letter-spacing:1px;">
+                    📖 このコースの学び方について
+                </p>
+                <p style="margin-bottom:12px;">
+                    このコースでは、架空の雑貨カフェ <strong>「Bloom」</strong> を舞台に、
+                    オーナー（＝あなた）の視点で簿記を学んでいきます。
+                </p>
+                <p style="margin-bottom:0; font-size:0.95rem; color:var(--text-sub);">
+                    お店を開いたらどんな「お金の記録」が必要になるのか——<br>
+                    実際の場面を想像しながら読み進めると、ぐっと理解しやすくなります。
+                </p>
             </div>
-            <h2>今月の目標（簿記3級合格）への繋がり</h2>
-            <p>今月の最終目標は<b>「オンラインで簿記3級試験を受験し、合格すること」</b>です。今日学ぶ「AIの進化が簿記に与える影響」と「<i class="fa-solid fa-robot"></i> Gemini・NotebookLMの使い方」は、ただの知識ではありません。</p>
-            <p>これらは、AIを活用して難解な簿記の概念を圧倒的なスピードで理解し、単なる作業者ではなく<b>「財務を理解するマネージャー」</b>として成長するための、強力な土台（武器）となります。</p>
-
-            <div style="background: #f0fdf4; padding: 25px 30px; border-radius: 12px; margin: 35px 0 20px 0; border-left: 6px solid #059669;">
-                <h4 style="color: #047857; margin: 0 0 10px 0; font-size: 1.15rem;"><i class="fa-solid fa-brain"></i> 本日の裏テーマ：「AIに奪われる仕事」から抜け出す</h4>
-                <p style="margin: 0; font-size: 0.95rem; color: #333; line-height: 1.6;">本研修の後半では、指示を受けてテキストを考えるだけのAIから、自律的に作業をこなす「AGI（汎用人工知能）」への進化について学びます。単純な仕訳入力はAIの仕事となり、私たちは「結果を判断し、次にどうするかを考える」上流工程へとステップアップする必要があります。</p>
+            <div class="bloom-story">
+                <span class="bloom-story-label">📍 今日の Bloom</span>
+                <p>
+                    雑貨カフェ「<strong>Bloom</strong>」、いよいよ開業です。<br>
+                    コーヒーの準備はバッチリ。雑貨の陳列も完璧。SNS告知もした。<br><br>
+                    でも——<br><br>
+                    「<strong>帳簿をつけてください</strong>」<br><br>
+                    帳簿？ なにそれ？ おいしいの？<br>
+                    税理士さんに全部お願いしちゃダメなの？<br>
+                    てかAIがやってくれるんじゃ？<br><br>
+                    ——というわけで、今日はその答えを探しに行きます。
+                </p>
             </div>
 
-            <div style="text-align: center; margin-top: 30px;">
-                <button class="tool-link-btn" onclick="openTab('first')" style="background:var(--accent-green);">
-                    前半へ進む <i class="fa-solid fa-arrow-right"></i>
+            <div class="why-box">
+                <div class="why-box-q">簿記って、今の時代に学ぶ必要あるの？</div>
+                <div class="why-box-a">
+                    会計ソフトもAIも、仕訳から帳簿まで自動でやってくれます。本当に。<br>
+                    じゃあなぜ学ぶの？<br><br>
+                    → <strong>AIが間違えたとき、気づける人になるため。</strong><br>
+                    → 数字の「おかしい」に気づける人が、経営者に信頼される人になるから。<br>
+                    <div class="why-result">
+                        今日学ぶと：AIの出した数字を検証できる「判断できる人」になれます。
+                    </div>
+                </div>
+            </div>
+
+            <div class="talk-scene">
+                <div class="talk-scene-label">💬 こんな疑問、持ってない？</div>
+                <div class="talk-row">
+                    <div class="talk-icon owner">🧑</div>
+                    <div class="talk-bubble-text">「全部税理士さんに丸投げすれば、簿記なんて知らなくていいんじゃ？」</div>
+                </div>
+                <div class="talk-row">
+                    <div class="talk-icon sensei">👩‍🏫</div>
+                    <div class="talk-bubble-text sensei-text">
+                        丸投げは、できます。<br>
+                        でも「この数字、あってますか？」って確認できませんよね。<br>
+                        <strong>確認できない人は、間違いに気づけない。</strong><br>
+                        それが一番怖いんです。
+                    </div>
+                </div>
+            </div>
+
+            <div style="background:#f0fdf4; border:2px solid var(--accent-green); border-radius:16px; padding:28px 32px; text-align:center; margin-top:28px;">
+                <p style="font-size:1.5rem; font-weight:900; color:var(--accent-green); margin-bottom:8px;">
+                    🎯 今日のゴール
+                </p>
+                <p style="font-size:1.05rem; color:var(--text-main); margin-bottom:0; line-height:1.8;">
+                    「簿記ってなんのためにあるの？」が<strong>自分の言葉で説明できる</strong>ようになること。<br>
+                    <span style="font-size:0.9rem; color:var(--text-sub);">
+                        AGI・財務三表・帳簿の一巡——すべて今日が起点です。
+                    </span>
+                </p>
+            </div>
+
+            <div style="text-align:center; margin-top:28px;">
+                <button class="tool-link-btn" onclick="openTab('first')" style="background:var(--accent-green); font-size:1.05rem; padding:14px 32px;">
+                    前半へ進む（AI×簿記） <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </div>
         </div>
 
         <!-- 前半 タブ -->
         <div id="first" class="tab-content">
+            <div class="bloom-story" style="margin-bottom: 24px;">
+                <span class="bloom-story-label">📍 Bloom 1日目・朝</span>
+                <p>
+                    「そもそも、AIが経理を全部やってくれるなら、<br>
+                    わたしが簿記を覚える意味ってあるの？」<br><br>
+                    まずその疑問を、正面から解決しましょう。
+                </p>
+            </div>
             <h2>セクション1：AIと簿記の未来・AIツールの基礎</h2>
             <p>まずは、AIの進化が「簿記・経理」という職種にどのような影響を与えるのかを整理し、AI時代のキャリアの本質を掴みましょう。以下の動画は、最新のAIトレンドを解説する厳選リストです。</p>
 
@@ -421,12 +578,16 @@
                 </div>
                 <div class="lc-content">
                     <div class="lc-header">
-                        <span class="vc-tag">AIトレンド</span>
+                        <span class="vc-tag">🤖 AIの今</span>
                         <h3 class="lc-title">【カウントダウン】人類最後の発明「AGI（汎用人工知能）」の正体とは？</h3>
                     </div>
                     <div class="lc-body">
                         <h4><i class="fa-solid fa-book-open"></i> 学習のポイント</h4>
-                        <p>AGI（汎用人工知能）とは、特定のタスクだけでなく、人間と同等かそれ以上の知的な作業をすべてこなせるAIのことです。現在AIは「推論」のレベルに達しつつあります。</p>
+                        <p>
+                            「AIに仕事を奪われる」——よく聞きますよね。<br>
+                            では、<strong>今のAIはどのレベルにいる</strong>のでしょうか。<br>
+                            まずここを知っておくと、「自分が何を学べばいいか」が見えてきます。
+                        </p>
                         <ul class="lc-list">
                             <li>OpenAIが定義するAI進化の5つのレベル</li>
                             <li>「作業をAIに任せ、人間がAIをどう使いこなすか」が今後の鍵となる理由</li>
@@ -487,11 +648,15 @@
                     </div>
                     <div class="lc-body">
                         <div class="instructor-note" style="margin: 0; box-shadow: none; border: 1px solid #fef3c7; border-left: 6px solid #d97706; background: #fffbeb; border-radius: var(--radius-small);">
-                            <div class="instructor-note-title" style="color: #b45309;">
-                                <i class="fa-solid fa-lightbulb"></i> Instructor's Note : 「簿記が不要」の真意
+                            <div class="instructor-note-title" style="color:#b45309;">
+                                💡 「簿記はAIに奪われる」——の本当の意味
                             </div>
-                            <p style="margin-bottom:10px;">「AIが発達すれば簿記は不要になる」という意見がありますが、正確には「<b>単純な仕訳入力などの『作業』が不要になる</b>」ということです。</p>
-                            <p style="margin-bottom:12px;">AIが作成した財務データの正当性を判断し、その数字をもとに経営の意思決定を行うのは人間の役割です。つまり、単なる作業者としての簿記スキルではなく、財務状況を読み解きプロジェクトを動かす「管理者・ディレクター」としての簿記知識が、これまで以上に求められます。</p>
+                            <p style="margin-bottom:10px;">
+                                「AIが来たら簿記なんて不要」——半分正解、半分間違いです。<br>
+                                正確には、<strong>「仕訳を手で入力する作業」は不要になる</strong>。<br>
+                                でも「その数字が正しいか判断する力」は、むしろ今より必要になります。
+                            </p>
+                            <p style="margin-bottom:12px;">だからこそ、入力係じゃなくて、数字を読む人・判断する人が強い。Bloomのあなたも、その側に寄せていきましょう。</p>
                             <p style="margin-bottom: 8px; font-weight: 700; color: #92400e;">📌 AIに代替されない5つの理由</p>
                             <ol style="margin: 0; padding-left: 1.4rem; color: #78350f; font-size: 0.95rem; line-height: 1.8;">
                                 <li><strong>柔軟な判断力</strong> — 取引の背景・会社の実情に応じた個別判断はAIに苦手</li>
@@ -532,6 +697,21 @@
 
             <h2>セクション2：実践・Gemini & NotebookLMを使ってみよう</h2>
             <p>2つのAIツールに実際に触れ、「AIに質問する」「資料を読み込ませて学ぶ」という体験をします。今後の簿記学習で毎日活用するツールです。</p>
+
+            <div class="talk-scene">
+                <div class="talk-scene-label">💬 受講生の声（実際のやりとり）</div>
+                <div class="talk-row">
+                    <div class="talk-icon owner">👩</div>
+                    <div class="talk-bubble-text">「ランチで商談したら経費になるって本当？ 何費にすればいい？」</div>
+                </div>
+                <div class="talk-row">
+                    <div class="talk-icon sensei">👩‍🏫</div>
+                    <div class="talk-bubble-text sensei-text">
+                        なります！ ただし「会議費」か「接待交際費」かは、<strong>誰と食べたか</strong>で変わります。<br>
+                        こういう判断ができるのが、仕訳を知っている人の強みです。
+                    </div>
+                </div>
+            </div>
 
             <div class="practice-area">
                 <!-- NotebookLM ソース追加手順 -->
@@ -580,6 +760,14 @@
 
         <!-- 後半 タブ -->
         <div id="second" class="tab-content">
+            <div class="bloom-story" style="margin-bottom: 24px;">
+                <span class="bloom-story-label">📍 Bloom 1日目・午後</span>
+                <p>
+                    開業してお客さんが来た。現金で雑貨を売った。コーヒーも出た。<br>
+                    でも——「この売上、どこに記録するの？」「帳簿って何種類あるの？」<br><br>
+                    そのしくみを、今から一緒に見ていきましょう。
+                </p>
+            </div>
             <h2>セクション3：簿記の基本概念・AI業務効率化</h2>
             <p>ここからは、いよいよ簿記の本質的な概念に触れていきます。「簿記の一巡の手続き」と「財務三表」の役割を掴みましょう。</p>
 
@@ -616,8 +804,9 @@
                                 <div class="bf-arrow"><i class="fa-solid fa-chevron-right"></i></div>
                                 <div class="bf-step bf-step--goal"><i class="fa-solid fa-chart-pie"></i><span>財務諸表</span></div>
                             </div>
-                            <p style="text-align:center; font-size:0.78rem; color:var(--text-sub); margin: 8px 0 0;">
-                                ↑ この流れが「簿記の一巡の手続き」。Day2以降で各ステップを順番に学ぶ。
+                            <p style="text-align:center; font-size:0.82rem; color:var(--text-sub); margin:10px 0 0;">
+                                Bloomで売上が出るたびに、この流れが動いています。<br>
+                                Day 1〜10でこの各ステップを1つずつ攻略していきます。
                             </p>
                         </div>
                     </div>
@@ -642,6 +831,21 @@
                             <li>B/S：ある時点の財産状態（資産・負債・純資産）</li>
                             <li>P/L：ある期間の経営成績（収益・費用・利益）</li>
                         </ul>
+                        <div class="talk-scene" style="margin-bottom: 16px;">
+                            <div class="talk-scene-label">💬 Bloomで考えてみよう</div>
+                            <div class="talk-row">
+                                <div class="talk-icon owner">🧑</div>
+                                <div class="talk-bubble-text">「B/SとP/L、なんとなく聞いたことあるけど、違いがわからない……」</div>
+                            </div>
+                            <div class="talk-row">
+                                <div class="talk-icon sensei">👩‍🏫</div>
+                                <div class="talk-bubble-text sensei-text">
+                                    B/S = <strong>今日のBloomに何がある？</strong>（財産の写真）<br>
+                                    P/L = <strong>今月のBloomはいくら儲かった？</strong>（1ヶ月の成績表）<br>
+                                    この2枚で「お店の状態」が全部わかります。
+                                </div>
+                            </div>
+                        </div>
                         <!-- B/S・P/L 構造ビジュアル -->
                         <div class="fs-cards" style="margin-top: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                             <div class="fs-card">
@@ -732,6 +936,15 @@
 
         <!-- まとめ タブ -->
         <div id="summary" class="tab-content">
+            <div class="bloom-story" style="margin-bottom: 24px;">
+                <span class="bloom-story-label">📍 Bloom 1日目・夜</span>
+                <p>
+                    開業1日目、お疲れ様でした。<br>
+                    「帳簿ってなに？」——答えられるようになりましたか？<br><br>
+                    <strong>帳簿 = Bloomの「体重計」。</strong><br>
+                    お金の出入りを記録して、Bloomが健康かどうかを確認するものです。
+                </p>
+            </div>
             <h2>DAY 1 まとめ</h2>
             <div class="summary-lead">
                 <p>今日は「簿記の細かい仕訳を暗記する日」ではなく、<b>簿記を学ぶ理由と、AI時代に人間が見るべきポイント</b>を掴む日です。Day2以降で仕訳に入る前に、まずは全体像をここで固定しておきましょう。</p>
@@ -911,49 +1124,44 @@
         // ===== 確認クイズ =====
         const quizData = [
             {
-                q: "OpenAIが定義するAI進化の「5段階」のうち、2026年現在 最も近いと言われているレベルはどれ？",
-                opts: ["Lv.1 チャットボット", "Lv.2 推論AI", "Lv.3 エージェント", "Lv.5 組織"],
+                q: "Bloomの帳簿を見ると「資産・負債・純資産」が載っています。これは何という書類？",
+                opts: ["損益計算書（P/L）", "貸借対照表（B/S）", "試算表", "仕訳帳"],
                 ans: 1,
-                fb: "正解は「Lv.2 推論AI」。o1・o3などがこのレベルに該当します。Lv.3（エージェント）への移行期とも言われています。"
+                fb: "貸借対照表（B/S）は「ある時点での財産状態」を表す書類です。Bloomが今日時点で何を持っていて、何を借りているかが一覧でわかります。"
             },
             {
-                q: "「AIが発達しても簿記が不要にならない理由」として、動画で挙げられていないものはどれ？",
-                opts: ["業務ごとの柔軟な判断力", "法律・会計基準の変更への対応", "AIより計算が速い能力", "経営者とのコミュニケーション"],
+                q: "Bloomの今月の売上・費用・利益がまとめられた書類は？",
+                opts: ["貸借対照表（B/S）", "キャッシュフロー計算書", "損益計算書（P/L）", "総勘定元帳"],
                 ans: 2,
-                fb: "「AIより計算が速い能力」は不要になる理由です。正しい理由は、柔軟な判断、法律対応、コミュニケーション、データ検証、倫理的判断の5つです。"
+                fb: "損益計算書（P/L）は「ある期間の経営成績」を表します。Bloomが今月いくら売れて、いくら費用がかかり、いくら儲かったかがわかります。"
             },
             {
-                q: "簿記の「一巡の手続き」の正しい順番はどれ？",
+                q: "AIが仕訳を自動でやってくれる時代に、人間が簿記を学ぶ一番の理由は？",
                 opts: [
-                    "仕訳 → 取引 → 試算表 → 元帳 → 決算 → 財務諸表",
+                    "手書きで帳簿を書く訓練になるから",
+                    "AIの出した数字が正しいか判断できるようになるから",
+                    "税理士の仕事を奪えるようになるから",
+                    "Excel関数が使えるようになるから"
+                ],
+                ans: 1,
+                fb: "AIは便利ですが、間違えることもあります。「この数字、おかしくない？」と気づける人が、AIを正しく使いこなせる人です。"
+            },
+            {
+                q: "簿記の一巡の流れとして正しいものはどれ？",
+                opts: [
+                    "取引 → 試算表 → 仕訳 → 決算 → 財務諸表",
+                    "仕訳 → 取引 → 総勘定元帳 → 財務諸表",
                     "取引 → 仕訳 → 総勘定元帳 → 試算表 → 決算 → 財務諸表",
-                    "取引 → 試算表 → 仕訳 → 元帳 → 財務諸表 → 決算",
-                    "仕訳 → 元帳 → 取引 → 決算 → 試算表 → 財務諸表"
-                ],
-                ans: 1,
-                fb: "取引が発生 → 仕訳で記録 → 総勘定元帳へ転記 → 試算表で確認 → 決算 → 財務諸表の完成、が正しい流れです。"
-            },
-            {
-                q: "貸借対照表（B/S）と損益計算書（P/L）の違いとして正しいのはどれ？",
-                opts: [
-                    "B/Sはある期間の成績、P/Lはある時点の財産状態を示す",
-                    "B/Sはある時点の財産状態、P/Lはある期間の経営成績を示す",
-                    "B/SもP/Lも同じ期間の情報をそれぞれ別の角度で示す",
-                    "B/Sは収益・費用、P/Lは資産・負債を示す"
-                ],
-                ans: 1,
-                fb: "B/S（貸借対照表）＝財産の「静止画」（ある時点）、P/L（損益計算書）＝経営の「動画」（ある期間）と覚えましょう。"
-            },
-            {
-                q: "GeminiとNotebookLMの使い分けとして最も適切なのはどれ？",
-                opts: [
-                    "Geminiは計算専用、NotebookLMは文章作成専用",
-                    "どちらも同じ用途で使えるため使い分け不要",
-                    "Geminiは汎用対話AI、NotebookLMは読み込んだ資料に限定した正確な回答ができる",
-                    "NotebookLMはインターネット全体を検索できる万能ツール"
+                    "取引 → 決算 → 仕訳 → 試算表 → 財務諸表"
                 ],
                 ans: 2,
-                fb: "Geminiは幅広い用途の対話型AI。NotebookLMは自分がソースとして追加した資料に限定して回答するため、ハルシネーションを抑えて学習に使えます。"
+                fb: "簿記の一巡は「取引 → 仕訳 → 総勘定元帳への転記 → 試算表 → 決算整理 → 財務諸表」です。Bloomで何かが売れるたびに、この流れが動いています。"
+            },
+            {
+                q: "Bloomが今日コーヒー豆を仕入れました。この取引で「増える」のはどれ？",
+                opts: ["現金（資産）が増える", "仕入（費用）が増える", "売上（収益）が増える", "買掛金（負債）が減る"],
+                ans: 1,
+                fb: "仕入れをすると「仕入」という費用が発生して増えます。代金を現金で払った場合は現金が減り、掛けで買った場合は買掛金（負債）が増えます。"
             }
         ];
 
@@ -1014,7 +1222,7 @@
             result.className = isPassed ? 'pass' : 'fail';
             document.getElementById('quiz-score').textContent = `${score} / ${quizData.length} 正解`;
             document.getElementById('quiz-msg').textContent = isPassed
-                ? '素晴らしい！Day1の内容をしっかり理解できています。Day2へ進みましょう。'
+                ? '素晴らしい！Bloomの1日目、しっかりつかめています。Day2へ進みましょう。'
                 : 'もう一度ページを読み直してから再挑戦しましょう。NotebookLMに解説を頼むのもOKです。';
             result.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
@@ -1028,3 +1236,4 @@
     </script>
 </body>
 </html>
+<!-- cache-bust: 2026-05-13T12:00:00 -->

@@ -1,511 +1,645 @@
-# Day 3 実装計画：`vol03-1.html`
+# Day 5 実装計画：`vol05-1.html`（完全版）
 
-作成日: 2026-05-13  
-担当AI: Cursor (Gemini Flash / Claude Sonnet)  
-レビュー: Claude Code
-
----
-
-## 0. 作業前チェック
-
-- `CLAUDE.md` と `GEMINI.md` を必ず読み込むこと
-- テンプレート: `vol02-1.html` を複製して差し替える
-- 完成ファイルは 2 か所に保存: ① プロジェクトルート `vol03-1.html` ② `.deploy_tmp/vol03-1.html`
-- デプロイ前に `.deploy_tmp/` に `index.html` + `vol01-1.html` + `vol02-1.html` + `vol03-1.html` が揃っていることを確認
+作成日: 2026-05-14（Claude Code によるレビュー補完版）  
+方針: Bloom設定（A）＋Whyファースト（B）＋あるある疑問（C）＋ビジュアルフロー（D）  
+担当: Cursor で実装・Claude Code でレビュー
 
 ---
 
-## 1. ページ基本情報
-
-| 項目 | 値 |
-|------|-----|
-| ファイル名 | `vol03-1.html` |
-| `<title>` | `Day 3 | 複式簿記・帳簿体系の基礎` |
-| ヘッダータグ | `DAY 3` |
-| ヘッダーh1 | `複式簿記と帳簿体系の基礎` |
-| ヘッダーサブ | `T字勘定・天記・総勘定元帳から帳簿の種類まで` |
-
----
-
-## 2. 構造の変更点（vol02 との差分）
-
-| 比較項目 | vol02 | vol03 |
-|----------|-------|-------|
-| 前半動画数 | 2本 (Canva+簿記) | **3本**（すべて簿記） |
-| 後半動画数 | 3本 (簿記3本) | **2本**（簿記） |
-| Canva実習 | 前半に1箇所 | **なし** |
-| NotebookLM実習 | 後半のみ | **前半・後半の両方** |
-| テスト問題数（NotebookLM） | 5問プロンプト | **20問プロンプト** |
-| Canva注意書き | あり | **なし** |
-| Day 2 に戻るリンク | なし | **あり**（`./vol02-1.html`） |
-
----
-
-## 3. タブ構成
+## 0. Day 5 の位置づけ
 
 ```
-[前半（全体像と仕訳の流れ）] [後半（帳簿体系と補助簿）] [テスト]
+雑貨カフェ「Bloom」
+Day 5：5日目。取引が「現金」から「ツケ（掛取引）」や「カード」に広がる日。
+        商品を売買する際の様々なパターン（返品・諸掛）を学び、
+        在庫管理の基本である「商品有高帳」をマスターする。
+前半：分記法（基礎概念）、売掛金・買掛金、仕訳の3ステップ
+後半：返品と諸掛、商品有高帳（先入先出法）、クレジット売掛金
 ```
 
-- タブID: `first`, `second`, `quiz`
-- デフォルト表示: `first`
+### 使用動画（6本・全ての transcript 取得済み）
+- 前半①: `BboEGZR2XV8`（分記法：資産と利益を分ける）
+- 前半②: `qHPXHWv8xws`（売掛金・買掛金の基本：権利と義務）
+- 前半③: `NCw9voGKR74`（仕訳の3ステップ：迷わないためのルール）
+- 後半①: `8YeucmRVqbw`（返品と諸掛：仕入原価に含めるルール）
+- 後半②: `fai9jxaXIho`（商品有高帳：先入先出法のロジック）
+- 後半③: `wmihafdKezA`（クレジット売掛金：キャッシュレス対応）
 
 ---
 
-## 4. 前半タブ（`id="first"`）
+## 1. テンプレートの複製
 
-### セクションタイトル
+**最新の `vol04-1.html` を `vol05-1.html` としてコピーして作業を開始する。**  
+（Bloom CSS コンポーネント・レスポンシブ設定を継承するため）
+
+変更が必要な固定値：
+- `<title>Day 4 | 現金・預金の管理</title>` → `<title>Day 5 | 商品売買と掛取引</title>`
+- `<span class="header-tag">DAY 04</span>` → `<span class="header-tag">DAY 05</span>`
+- `<h1>現金・預金の管理</h1>` → `<h1>商品売買と掛取引</h1>`
+- プログレスバー: `width: 31%` → `width: 38%`（5/13コース進捗）
+- cache-bust: `<!-- cache-bust: 2026-05-14T09:00:00 -->`
+
+---
+
+## 2. タブ構成
+
 ```
-<h2>セクション1：複式簿記の仕組みとT字勘定</h2>
-<p>「なぜ左右に分けて書くのか？」「仕訳はどこへ行くのか？」今日は複式簿記の心臓部を学びます。</p>
+今日の目標（goal）
+前半：掛取引と仕訳の基本（first）
+後半：返品・在庫・カード決済（second）
+まとめ（summary）
 ```
 
 ---
 
-### Learning Card 1（前半①）
+## 3. goalタブ
 
 ```html
-<!-- Learning Card 1: 簿記の5要素と全体像 -->
-<div class="learning-card">
-  <div class="lc-video">
-    <div class="vc-thumb" data-video-id="HI2DXDOyx8Q"
-      style="background-image: url('https://img.youtube.com/vi/HI2DXDOyx8Q/maxresdefault.jpg'),
-                               url('https://img.youtube.com/vi/HI2DXDOyx8Q/hqdefault.jpg');">
-      <i class="fa-brands fa-youtube vc-thumb-play"></i>
+<div id="goal" class="tab-content active">
+
+    <!-- Bloomナラティブ：5日目・朝 -->
+    <div class="bloom-story">
+        <span class="bloom-story-label">📍 Bloom 5日目・朝</span>
+        <p>
+            Bloomもオープンして5日。常連さんが増えてきました。<br>
+            「あ、今日財布忘れちゃった。ツケにしといて！」なんて会話や、<br>
+            「カードで払えますか？」というお客さんも。<br><br>
+            <strong>「その場でお金が動かない取引」</strong>をどう記録するか——それが今日のテーマです。
+        </p>
     </div>
-  </div>
-  <div class="lc-content">
-    <div class="lc-header">
-      <span class="vc-tag">全体像</span>
-      <h3 class="lc-title">「資産・負債・純資産・収益・費用」5要素で簿記の世界を見る</h3>
+
+    <!-- Whyボックス -->
+    <div class="why-box">
+        <div class="why-q">なぜ「売掛金」と「売上」を分けるの？</div>
+        <div class="why-a">
+            「売上」は今日いくら売ったかという <strong>成果（収益）</strong> です。<br>
+            「売掛金」は後でいくらもらえるかという <strong>権利（資産）</strong> です。<br>
+            「儲け」と「手元の権利」を分けて記録することで、将来の資金繰りが予測できるようになります。
+        </div>
     </div>
-    <div class="lc-body">
-      <h4><i class="fa-solid fa-layer-group"></i> 学習のポイント</h4>
-      <ul class="lc-list">
-        <li>5要素（資産・負債・純資産・収益・費用）はすべての仕訳の「材料」</li>
-        <li>資産・費用は「借方（左）ホーム」、負債・純資産・収益は「貸方（右）ホーム」</li>
-        <li>会計ソフト（弥生・freee など）も内部でこの仕訳ルールに従って動いている</li>
-      </ul>
+
+    <!-- talk-scene -->
+    <div class="talk-scene">
+        <div class="talk-bubble owner">
+            <div class="talk-icon">🧑</div>
+            <div class="talk-text">「諸掛（しょがかり）」って言葉、難しそうですね。何のことですか？</div>
+        </div>
+        <div class="talk-bubble teacher">
+            <div class="talk-icon">👩‍🏫</div>
+            <div class="talk-text">簡単に言えば「送料や保険料」のことです。<br>商品を仕入れる時にかかった送料は、<strong>商品の原価の一部</strong>として扱います。これが簿記の面白いルールの一つですよ。</div>
+        </div>
     </div>
-  </div>
+
+    <!-- 既存goal-box -->
+    <div class="goal-box">
+        <i class="fa-solid fa-truck-fast"></i>
+        <h3>「掛取引・返品・諸掛を理解し、在庫管理とカード決済をマスターする」</h3>
+        <p>売掛金・買掛金の基本から、返品時の逆仕訳、送料の処理（諸掛）、<br>そして現代に欠かせないクレジット決済の仕組みまでを網羅します。</p>
+    </div>
+
+    <h2>本日の学習マップ</h2>
+    <p>Day 5は「商売の広がり」を学びます。現金以外のやり取りを正確に記録する力を身につけましょう。</p>
+
+    <!-- フローマップ（D：ビジュアルフロー） -->
+    <div class="flow-map">
+        <div class="flow-step">
+            <i class="fa-solid fa-handshake"></i>
+            <strong>掛取引の発生</strong>
+            <span>売掛金・買掛金</span>
+        </div>
+        <div class="flow-step">
+            <i class="fa-solid fa-rotate-left"></i>
+            <strong>返品・諸掛</strong>
+            <span>逆仕訳と原価算入</span>
+        </div>
+        <div class="flow-step">
+            <i class="fa-solid fa-boxes-stacked"></i>
+            <strong>在庫管理</strong>
+            <span>商品有高帳（FIFO）</span>
+        </div>
+        <div class="flow-step">
+            <i class="fa-solid fa-credit-card"></i>
+            <strong>カード決済</strong>
+            <span>支払手数料の処理</span>
+        </div>
+        <div class="flow-step">
+            <i class="fa-solid fa-file-invoice-dollar"></i>
+            <strong>代金回収・支払</strong>
+            <span>掛の消し込み</span>
+        </div>
+    </div>
+
+    <div style="background:#fffbeb; padding:25px 30px; border-radius:12px; margin:35px 0 20px; border-left:6px solid var(--accent-gold);">
+        <h4 style="color:#b45309; margin:0 0 10px; font-size:1.15rem;"><i class="fa-solid fa-lightbulb"></i> AI Director's Eye：在庫管理の自動化</h4>
+        <p style="margin:0; font-size:0.95rem; color:#333; line-height:1.7;">POSシステムやAIによる在庫管理の裏側では、今日学ぶ「先入先出法（FIFO）」などのアルゴリズムが動いています。基本のロジックを知ることで、システムの異常に気づいたり、より効率的な発注予測ができるようになります。</p>
+    </div>
+
+    <div style="text-align:center; margin-top:30px;">
+        <button class="tool-link-btn" onclick="openTab('first')" style="background:var(--accent-green);">
+            前半（掛取引と仕訳）へ進む <i class="fa-solid fa-arrow-right"></i>
+        </button>
+    </div>
 </div>
 ```
 
 ---
 
-### Learning Card 2（前半②）
+## 4. 前半タブ（掛取引と仕訳）
 
 ```html
-<!-- Learning Card 2: T字勘定攻略 -->
-<div class="learning-card">
-  <div class="lc-video">
-    <div class="vc-thumb" data-video-id="JGnQIxkZChI"
-      style="background-image: url('https://img.youtube.com/vi/JGnQIxkZChI/maxresdefault.jpg'),
-                               url('https://img.youtube.com/vi/JGnQIxkZChI/hqdefault.jpg');">
-      <i class="fa-brands fa-youtube vc-thumb-play"></i>
+<div id="first" class="tab-content">
+
+    <!-- Bloomナラティブ：5日目・午前 -->
+    <div class="bloom-story" style="margin-bottom: 24px;">
+        <span class="bloom-story-label">📍 Bloom 5日目・午前</span>
+        <p>
+            卸売業者さんから新しい雑貨が届きました。「代金は月末にまとめて払うね」という約束。<br>
+            これが<strong>買掛金（かいかけきん）</strong>です。<br><br>
+            まずは「分記法」という基礎的な考え方で利益の構造を理解し、
+            その後に実務で必須の「売掛金・買掛金」の仕訳を学びます。
+        </p>
     </div>
-  </div>
-  <div class="lc-content">
-    <div class="lc-header">
-      <span class="vc-tag">T字勘定</span>
-      <h3 class="lc-title">T字勘定の書き方3ステップ：前払保険料で完全攻略</h3>
+
+    <h2>セクション1：商品売買と掛取引の基礎</h2>
+
+    <!-- Learning Card 1: 分記法 -->
+    <div class="learning-card">
+        <div class="lc-video">
+            <div class="vc-thumb" data-video-id="BboEGZR2XV8" style="background-image: url('https://img.youtube.com/vi/BboEGZR2XV8/maxresdefault.jpg'), url('https://img.youtube.com/vi/BboEGZR2XV8/hqdefault.jpg');">
+                <i class="fa-brands fa-youtube vc-thumb-play"></i>
+            </div>
+        </div>
+        <div class="lc-content">
+            <div class="lc-header">
+                <span class="vc-tag">基礎概念</span>
+                <h3 class="lc-title">分記法：商品と利益を分けて考える</h3>
+            </div>
+            <div class="lc-body">
+                <h4><i class="fa-solid fa-layer-group"></i> 分記法（ぶんきほう）とは？</h4>
+                <ul class="lc-list">
+                    <li><strong>仕入時</strong>：(借) 商品 100 ／ (貸) 現金 100 （資産の増加として記録）</li>
+                    <li><strong>売上時</strong>：(借) 現金 150 ／ (貸) 商品 100, <strong>商品売買益 50</strong></li>
+                    <li><strong>メリット</strong>：取引のたびに「いくら儲かったか」が明確になる。</li>
+                    <li><strong>デメリット</strong>：実務では商品ごとの原価計算が煩雑なため、通常は「三分法」を使う。</li>
+                </ul>
+            </div>
+        </div>
     </div>
-    <div class="lc-body">
-      <h4><i class="fa-solid fa-t"></i> 解き方の型</h4>
-      <ul class="lc-list">
-        <li>T字勘定は「総勘定元帳」の略式形式。仕訳のあとに「天記」する帳簿</li>
-        <li>前払費用など経過勘定の問題は①タイムテーブルで整理→②仕訳→③T勘定の3ステップ</li>
-        <li>資産・負債科目のT勘定には期首「前期繰越」・期末「次期繰越」が入る</li>
-      </ul>
+
+    <!-- Learning Card 2: 売掛金・買掛金 -->
+    <div class="learning-card">
+        <div class="lc-video">
+            <div class="vc-thumb" data-video-id="qHPXHWv8xws" style="background-image: url('https://img.youtube.com/vi/qHPXHWv8xws/maxresdefault.jpg'), url('https://img.youtube.com/vi/qHPXHWv8xws/hqdefault.jpg');">
+                <i class="fa-brands fa-youtube vc-thumb-play"></i>
+            </div>
+        </div>
+        <div class="lc-content">
+            <div class="lc-header">
+                <span class="vc-tag">重要科目</span>
+                <h3 class="lc-title">売掛金と買掛金：掛取引の仕訳</h3>
+            </div>
+            <div class="lc-body">
+                <h4><i class="fa-solid fa-file-contract"></i> 資産と負債の区別</h4>
+                <ul class="lc-list">
+                    <li><strong>売掛金（資産）</strong>：代金を後でもらえる「権利」。商品を売った時に発生。</li>
+                    <li><strong>買掛金（負債）</strong>：代金を後で払う「義務」。商品を仕入れた時に発生。</li>
+                    <li><strong>回収時</strong>：(借) 現金 100 ／ (貸) 売掛金 100（資産である権利を消す）</li>
+                    <li><strong>支払時</strong>：(借) 買掛金 100 ／ (貸) 現金 100（負債である義務を消す）</li>
+                </ul>
+            </div>
+        </div>
     </div>
-  </div>
+
+    <!-- Learning Card 3: 仕訳3ステップ -->
+    <div class="learning-card">
+        <div class="lc-video">
+            <div class="vc-thumb" data-video-id="NCw9voGKR74" style="background-image: url('https://img.youtube.com/vi/NCw9voGKR74/maxresdefault.jpg'), url('https://img.youtube.com/vi/NCw9voGKR74/hqdefault.jpg');">
+                <i class="fa-brands fa-youtube vc-thumb-play"></i>
+            </div>
+        </div>
+        <div class="lc-content">
+            <div class="lc-header">
+                <span class="vc-tag gold">鉄則</span>
+                <h3 class="lc-title">迷わない！仕訳の解き方3ステップ</h3>
+            </div>
+            <div class="lc-body">
+                <h4><i class="fa-solid fa-list-check"></i> 手順をルーチン化する</h4>
+                <ul class="lc-list">
+                    <li><strong>Step 1</strong>：取引を読んで、何が増えたか・何が減ったかを探す。</li>
+                    <li><strong>Step 2</strong>：それが「5つの要素（資産・負債・純資産・収益・費用）」のどれかを判断。</li>
+                    <li><strong>Step 3</strong>：増減に応じて左右（借方・貸方）を決める。資産増加＝借方、負債増加＝貸方など。</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- talk-scene：掛取引あるある -->
+    <div class="talk-scene" style="margin: 24px 0;">
+        <div class="talk-bubble owner">
+            <div class="talk-icon">🧑</div>
+            <div class="talk-text">売掛金と売上、どちらも「売った時」に出てくるので混乱します…</div>
+        </div>
+        <div class="talk-bubble teacher">
+            <div class="talk-icon">👩‍🏫</div>
+            <div class="talk-text">「売上」は<strong>今日儲けたという事実（収益）</strong>、「売掛金」は<strong>まだもらっていないお金の権利（資産）</strong>です。<br>掛取引では、この2つが同時に生まれます。商売の成果と、まだ手元にないお金——これを分けて記録するのが複式簿記の面白さですよ。</div>
+        </div>
+    </div>
+
+    <!-- NotebookLM 実習：前半 -->
+    <div class="practice-area">
+        <h3><i class="fa-solid fa-robot"></i> 実習：掛取引の理解を深める</h3>
+        <p>3本の動画をNotebookLMに読み込ませ、分記法・掛取引の仕訳を自分の言葉で整理しましょう。</p>
+        <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:12px; padding:20px; margin-bottom:24px;">
+            <h4 style="color:#b45309; margin:0 0 12px; display:flex; align-items:center; gap:8px;">
+                <i class="fa-solid fa-book"></i> NotebookLM へのソース追加手順
+            </h4>
+            <ol style="margin:0; padding-left:1.4rem; font-size:0.92rem; line-height:1.9; color:#78350f;">
+                <li><strong>notebooklm.google.com</strong> にアクセスし「新しいノートブック」を作成</li>
+                <li>画面左の「ソースを追加」をクリックし「YouTube」または「URL」を選択</li>
+                <li>動画① <code>https://www.youtube.com/watch?v=BboEGZR2XV8</code> を追加</li>
+                <li>動画② <code>https://www.youtube.com/watch?v=qHPXHWv8xws</code> を追加</li>
+                <li>動画③ <code>https://www.youtube.com/watch?v=NCw9voGKR74</code> を追加</li>
+                <li>追加完了後、下のプロンプトをコピーして選択式テストを作成する</li>
+            </ol>
+        </div>
+        <div class="chat-prompt-container">
+            <div class="chat-bubble">
+                <div class="chat-text"><span class="prompt-text">読み込んだ動画①〜③の内容をもとに、Day5前半（分記法・売掛金・買掛金・掛取引の発生と回収・支払・仕訳の3ステップ）の理解度を確認する選択式テストを20問作ってください。各問は4択にし、解答は最後にまとめて表示してください。</span></div>
+                <button class="copy-btn" title="プロンプトをコピー"><i class="fa-regular fa-copy"></i> コピー</button>
+            </div>
+            <div class="chat-bubble">
+                <div class="chat-text"><span class="prompt-text">上の20問テストの中から特に「売掛金か買掛金か」「資産か負債か」「借方か貸方か」の判断を問う問題だけを10問に絞り、各問に「なぜその答えになるのか」を2文で添えてください。</span></div>
+                <button class="copy-btn" title="プロンプトをコピー"><i class="fa-regular fa-copy"></i> コピー</button>
+            </div>
+        </div>
+        <div style="text-align:center; margin-top:20px;">
+            <a href="https://notebooklm.google.com/" target="_blank" class="tool-link-btn" style="background:var(--accent-gold);">
+                <i class="fa-solid fa-book"></i> NotebookLM を開く
+            </a>
+        </div>
+    </div>
+
+    <div style="text-align:center; margin-top:30px;">
+        <button class="tool-link-btn" onclick="openTab('second')" style="background:var(--accent-green);">
+            後半（返品・在庫・カード）へ進む <i class="fa-solid fa-arrow-right"></i>
+        </button>
+    </div>
 </div>
 ```
 
 ---
 
-### Learning Card 3（前半③）
+## 5. 後半タブ（返品・在庫・カード決済）
 
 ```html
-<!-- Learning Card 3: 天記と総勘定元帳 -->
-<div class="learning-card">
-  <div class="lc-video">
-    <div class="vc-thumb" data-video-id="EeDOxSb95ew"
-      style="background-image: url('https://img.youtube.com/vi/EeDOxSb95ew/maxresdefault.jpg'),
-                               url('https://img.youtube.com/vi/EeDOxSb95ew/hqdefault.jpg');">
-      <i class="fa-brands fa-youtube vc-thumb-play"></i>
+<div id="second" class="tab-content">
+
+    <!-- Bloomナラティブ：5日目・午後 -->
+    <div class="bloom-story" style="margin-bottom: 24px;">
+        <span class="bloom-story-label">📍 Bloom 5日目・午後</span>
+        <p>
+            「あ、このお皿、角が欠けてる…」仕入れた商品に不備が見つかり、業者さんに返品することに。<br>
+            さらに、ネットショップでの販売分を発送するための送料も発生しました。<br><br>
+            <strong>返品や送料（諸掛）</strong>、そして在庫の数え方など、
+            商売を続ける上で避けて通れない「実務のルール」を学びましょう。
+        </p>
     </div>
-  </div>
-  <div class="lc-content">
-    <div class="lc-header">
-      <span class="vc-tag">天記・元帳</span>
-      <h3 class="lc-title">仕訳 → 総勘定元帳への「天記」：帳簿づくりの流れをつかむ</h3>
+
+    <h2>セクション2：返品・諸掛と在庫管理</h2>
+
+    <!-- 先入先出法フロービジュアル（D：ビジュアルフロー） -->
+    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:24px; margin-bottom:28px;">
+        <h4 style="margin:0 0 16px; color:var(--accent-green);"><i class="fa-solid fa-route"></i> 先入先出法（FIFO）の払い出し計算ロジック</h4>
+        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; justify-content:center;">
+            <div style="background:#ecfdf5; border:2px solid var(--accent-green); border-radius:10px; padding:14px 18px; text-align:center; min-width:140px;">
+                <div style="font-size:0.78rem; color:var(--accent-green); font-weight:700; margin-bottom:6px;">STEP 1：古い在庫から</div>
+                <div style="font-size:0.9rem; font-weight:700;">先に仕入れた分を<br>先に払い出す</div>
+                <div style="font-size:0.78rem; color:var(--text-sub); margin-top:4px;">古い単価 × 個数</div>
+            </div>
+            <div style="font-size:1.5rem; color:#94a3b8;">→</div>
+            <div style="background:#fef3c7; border:2px solid var(--accent-gold); border-radius:10px; padding:14px 18px; text-align:center; min-width:140px;">
+                <div style="font-size:0.78rem; color:var(--accent-gold); font-weight:700; margin-bottom:6px;">STEP 2：足りなければ</div>
+                <div style="font-size:0.9rem; font-weight:700;">次の仕入れ分で<br>補充する</div>
+                <div style="font-size:0.78rem; color:var(--text-sub); margin-top:4px;">新しい単価 × 残り個数</div>
+            </div>
+            <div style="font-size:1.5rem; color:#94a3b8;">→</div>
+            <div style="background:#eff6ff; border:2px solid #3b82f6; border-radius:10px; padding:14px 18px; text-align:center; min-width:140px;">
+                <div style="font-size:0.78rem; color:#3b82f6; font-weight:700; margin-bottom:6px;">払い出し欄の記入は</div>
+                <div style="font-size:0.9rem; font-weight:700;">必ず「原価」で！<br>売価では❌</div>
+                <div style="font-size:0.78rem; color:var(--text-sub); margin-top:4px;">残高も同様に原価で</div>
+            </div>
+        </div>
     </div>
-    <div class="lc-body">
-      <h4><i class="fa-solid fa-right-left"></i> 帳簿づくりの流れ</h4>
-      <ul class="lc-list">
-        <li>天記とは「日付順の仕訳帳」の内容を、科目別の「総勘定元帳」に集計する手続き</li>
-        <li>元帳で相手勘定を書くことで、複式簿記の「取引の2面性」が見える</li>
-        <li>全体の流れ：取引 → 仕訳帳 → 天記 → 試算表 → 決算整理 → 財務諸表</li>
-      </ul>
+
+    <!-- Learning Card 4: 返品と諸掛 -->
+    <div class="learning-card">
+        <div class="lc-video">
+            <div class="vc-thumb" data-video-id="8YeucmRVqbw" style="background-image: url('https://img.youtube.com/vi/8YeucmRVqbw/maxresdefault.jpg'), url('https://img.youtube.com/vi/8YeucmRVqbw/hqdefault.jpg');">
+                <i class="fa-brands fa-youtube vc-thumb-play"></i>
+            </div>
+        </div>
+        <div class="lc-content">
+            <div class="lc-header">
+                <span class="vc-tag gold">重要</span>
+                <h3 class="lc-title">返品と諸掛（送料）の処理ルール</h3>
+            </div>
+            <div class="lc-body">
+                <h4><i class="fa-solid fa-truck-ramp-box"></i> ここがテストに出る！</h4>
+                <ul class="lc-list">
+                    <li><strong>返品（仕入戻し）</strong>：仕入時の仕訳をそのまま逆にするだけ。</li>
+                    <li><strong>仕入諸掛（運賃等）</strong>：原則として <strong>仕入原価に含める</strong>（仕入勘定に加算）。</li>
+                    <li><strong>売上諸掛</strong>：当社負担の場合は「発送費」等の費用科目で別処理。</li>
+                    <li>「仕入は原価にプラス、売上は別科目」——この対比を覚える。</li>
+                </ul>
+            </div>
+        </div>
     </div>
-  </div>
+
+    <!-- Learning Card 5: 商品有高帳 -->
+    <div class="learning-card">
+        <div class="lc-video">
+            <div class="vc-thumb" data-video-id="fai9jxaXIho" style="background-image: url('https://img.youtube.com/vi/fai9jxaXIho/maxresdefault.jpg'), url('https://img.youtube.com/vi/fai9jxaXIho/hqdefault.jpg');">
+                <i class="fa-brands fa-youtube vc-thumb-play"></i>
+            </div>
+        </div>
+        <div class="lc-content">
+            <div class="lc-header">
+                <span class="vc-tag">帳簿</span>
+                <h3 class="lc-title">商品有高帳：先入先出法のマスター</h3>
+            </div>
+            <div class="lc-body">
+                <h4><i class="fa-solid fa-boxes-packing"></i> 在庫計算のロジック</h4>
+                <ul class="lc-list">
+                    <li><strong>商品有高帳</strong>：商品の在庫が「いつ・いくらで・何個」動いたかを管理する補助簿。</li>
+                    <li><strong>先入先出法（FIFO）</strong>：古い仕入れ分から先に売れたとみなして計算。</li>
+                    <li><strong>最重要注意</strong>：払い出し欄は「原価」で記入。問題文に売価が書いてあっても惑わされない。</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Learning Card 6: クレジット売掛金 -->
+    <div class="learning-card">
+        <div class="lc-video">
+            <div class="vc-thumb" data-video-id="wmihafdKezA" style="background-image: url('https://img.youtube.com/vi/wmihafdKezA/maxresdefault.jpg'), url('https://img.youtube.com/vi/wmihafdKezA/hqdefault.jpg');">
+                <i class="fa-brands fa-youtube vc-thumb-play"></i>
+            </div>
+        </div>
+        <div class="lc-content">
+            <div class="lc-header">
+                <span class="vc-tag blue">現代実務</span>
+                <h3 class="lc-title">クレジット売掛金と支払手数料</h3>
+            </div>
+            <div class="lc-body">
+                <h4><i class="fa-solid fa-credit-card"></i> カード決済の流れ</h4>
+                <ul class="lc-list">
+                    <li><strong>クレジット売掛金（資産）</strong>：信販会社から後日受け取れるお金の権利。</li>
+                    <li><strong>支払手数料（費用）</strong>：カード利用時に信販会社へ払う手数料。</li>
+                    <li><strong>売上時（手数料3%の場合）</strong>：(借) クレジット売掛金 9,700、支払手数料 300 ／ (貸) 売上 10,000</li>
+                    <li><strong>入金時</strong>：(借) 当座預金 9,700 ／ (貸) クレジット売掛金 9,700</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- talk-scene：諸掛あるある -->
+    <div class="talk-scene" style="margin: 24px 0;">
+        <div class="talk-bubble owner">
+            <div class="talk-icon">🧑</div>
+            <div class="talk-text">仕入れた時の送料を「仕入」に含めるのが、どうしても慣れません。</div>
+        </div>
+        <div class="talk-bubble teacher">
+            <div class="talk-icon">👩‍🏫</div>
+            <div class="talk-text">「その商品を使える状態にするまでにかかったコスト」を原価と考えるからです。<br>100円のお皿を10円の送料で仕入れたなら、そのお皿の仕入原価は自分にとって110円ですよね？そう考えると納得しやすいですよ。</div>
+        </div>
+    </div>
+
+    <!-- 本日の結論コミック枠 -->
+    <div class="conclusion-comic">
+        <span class="comic-label">✍️ DAY 5 の核心</span>
+        <p>掛取引は「いつかお金が動く約束」——<br>
+        権利（売掛金）と義務（買掛金）を正確に記録することが、健全な商売の基礎。</p>
+    </div>
+
+    <!-- NotebookLM 実習：後半 -->
+    <div class="practice-area">
+        <h3><i class="fa-solid fa-clipboard-check"></i> 実習：返品・在庫管理・カード決済を問題で確認</h3>
+        <p>動画④〜⑥をNotebookLMに追加し、諸掛の処理ルールと先入先出法の計算力を鍛えましょう。</p>
+        <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:12px; padding:20px; margin-bottom:24px;">
+            <h4 style="color:#b45309; margin:0 0 12px; display:flex; align-items:center; gap:8px;">
+                <i class="fa-solid fa-book"></i> NotebookLM へのソース追加手順
+            </h4>
+            <ol style="margin:0; padding-left:1.4rem; font-size:0.92rem; line-height:1.9; color:#78350f;">
+                <li><strong>notebooklm.google.com</strong> にアクセスし、前半と同じノートブックを開く</li>
+                <li>画面左の「ソースを追加」をクリックし「YouTube」または「URL」を選択</li>
+                <li>動画④ <code>https://www.youtube.com/watch?v=8YeucmRVqbw</code> を追加</li>
+                <li>動画⑤ <code>https://www.youtube.com/watch?v=fai9jxaXIho</code> を追加</li>
+                <li>動画⑥ <code>https://www.youtube.com/watch?v=wmihafdKezA</code> を追加</li>
+                <li>追加完了後、下のプロンプトをコピーして選択式テストを作成する</li>
+            </ol>
+        </div>
+        <div class="chat-prompt-container">
+            <div class="chat-bubble">
+                <div class="chat-text"><span class="prompt-text">読み込んだ動画④〜⑥の内容をもとに、Day5後半（商品の返品・仕入諸掛と売上諸掛の違い・商品有高帳の先入先出法・クレジット売掛金と支払手数料）の理解度を確認する選択式テストを20問作ってください。各問は4択にし、解答は最後にまとめて表示してください。</span></div>
+                <button class="copy-btn" title="プロンプトをコピー"><i class="fa-regular fa-copy"></i> コピー</button>
+            </div>
+            <div class="chat-bubble">
+                <div class="chat-text"><span class="prompt-text">先入先出法（FIFO）の計算に特化した問題を5問作ってください。各問に「仕入日・単価・数量」の具体的な数字を設定し、払い出し時の計算過程と残高の求め方を解説付きで示してください。</span></div>
+                <button class="copy-btn" title="プロンプトをコピー"><i class="fa-regular fa-copy"></i> コピー</button>
+            </div>
+        </div>
+        <div style="text-align:center; margin-top:20px;">
+            <a href="https://notebooklm.google.com/" target="_blank" class="tool-link-btn" style="background:var(--accent-gold);">
+                <i class="fa-solid fa-book"></i> NotebookLM を開く
+            </a>
+        </div>
+    </div>
+
+    <div style="text-align:center; margin-top:30px;">
+        <button class="tool-link-btn" onclick="openTab('summary')" style="background:var(--accent-green);">
+            まとめへ進む <i class="fa-solid fa-arrow-right"></i>
+        </button>
+    </div>
 </div>
 ```
 
 ---
 
-### 前半 NotebookLM 実習
+## 6. まとめタブ（完全版）
 
 ```html
-<div class="practice-area">
-  <h3 style="color:var(--accent-green);">
-    <i class="fa-solid fa-pencil"></i> 実習：NotebookLM で確認テストを自動生成しよう
-  </h3>
-  <p>今日学んだ3本の動画からNotebookLMがテストを自動生成します。アウトプットで記憶を定着させましょう。</p>
+<div id="summary" class="tab-content">
 
-  <ul class="step-list">
-    <li>NotebookLMにアクセスして新しいノートブックを作成し、「ソースを追加」から下記3本のYouTube動画URLを入力する。</li>
-    <li>チャット欄に下のプロンプトを貼り付けて実行する。</li>
-    <li>生成されたテストを解いて、間違えた問題は動画に戻って確認する。</li>
-  </ul>
-
-  <!-- プロンプトボックス -->
-  <div class="prompt-box">
-    <div class="prompt-header">
-      <span><i class="fa-solid fa-robot"></i> NotebookLM プロンプト（コピーして貼り付けよう）</span>
+    <!-- Bloomナラティブ：5日目・夜 -->
+    <div class="bloom-story" style="margin-bottom: 24px;">
+        <span class="bloom-story-label">📍 Bloom 5日目・夜</span>
+        <p>
+            「ツケで売った」「返品があった」「カードで払ってもらった」——<br>
+            今日だけでこんなに多様な取引が生まれました。<br><br>
+            <strong>お金が動く瞬間だけじゃなく、「約束」も記録する。</strong><br>
+            それが複式簿記の誠実さです。
+        </p>
     </div>
-    <div class="prompt-urls" style="margin: 10px 0; font-size: 0.9rem; color: var(--text-sub);">
-      ソースに追加するURL：<br>
-      https://youtu.be/HI2DXDOyx8Q<br>
-      https://youtu.be/JGnQIxkZChI<br>
-      https://youtu.be/EeDOxSb95ew
+
+    <h2>DAY 5 まとめ</h2>
+    <div class="summary-grid">
+        <div class="summary-card">
+            <div class="summary-icon"><i class="fa-solid fa-handshake"></i></div>
+            <h3>掛取引は「権利」と「義務」</h3>
+            <p>売掛金は資産、買掛金は負債。お金を後でもらう約束、払う約束を明確に区別して仕訳します。</p>
+        </div>
+        <div class="summary-card">
+            <div class="summary-icon"><i class="fa-solid fa-rotate-left"></i></div>
+            <h3>返品は「逆再生」</h3>
+            <p>返品が起きたら、仕入・売上の仕訳をそのままひっくり返して反対側に書くことで打ち消します。</p>
+        </div>
+        <div class="summary-card">
+            <div class="summary-icon"><i class="fa-solid fa-truck"></i></div>
+            <h3>仕入諸掛は「本体価格」に</h3>
+            <p>仕入れ時の送料は「仕入」に含める。売り上げ時の送料は「発送費」など別科目。この区別が最重要です。</p>
+        </div>
+        <div class="summary-card">
+            <div class="summary-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+            <h3>商品有高帳は「原価」で書く</h3>
+            <p>在庫管理ノートには、売れた時の値段（売価）ではなく、仕入れた時の値段（原価）を記録します。</p>
+        </div>
     </div>
-    <div class="chat-bubble">
-      <p style="margin:0;">読み込んだ3つの動画の内容に基づいて、簿記の基礎知識に関する確認テストを20問作成してください。形式は選択式とし、最後に解答と解説も出力してください。</p>
-      <button class="copy-btn" onclick="navigator.clipboard.writeText('読み込んだ3つの動画の内容に基づいて、簿記の基礎知識に関する確認テストを20問作成してください。形式は選択式とし、最後に解答と解説も出力してください。')">
-        <i class="fa-solid fa-copy"></i> コピー
-      </button>
+
+    <h2>重要用語チェック</h2>
+    <div class="term-grid">
+        <div class="term-card"><strong>掛取引（かけとりひき）</strong><span>商品の売買代金をその場ではなく後日まとめて受け払いする取引形態。</span></div>
+        <div class="term-card"><strong>売掛金</strong><span>商品を掛けで売った際に発生する「後日受け取る権利」。資産のグループに属する。</span></div>
+        <div class="term-card"><strong>買掛金</strong><span>商品を掛けで仕入れた際に発生する「後日払う義務」。負債のグループに属する。</span></div>
+        <div class="term-card"><strong>分記法（ぶんきほう）</strong><span>商品売買を「商品（資産）」と「商品売買益（収益）」に分けて記録する方法。</span></div>
+        <div class="term-card"><strong>商品売買益</strong><span>分記法で、売値と原価の差額として計上する収益科目。</span></div>
+        <div class="term-card"><strong>仕入戻し・売上戻り</strong><span>返品の簿記用語。仕入の返品が「仕入戻し」、売上の返品が「売上戻り」。逆仕訳で処理する。</span></div>
+        <div class="term-card"><strong>仕入諸掛（しいれしょがかり）</strong><span>商品仕入れ時にかかる運賃・保険料等。原則として仕入原価に含める。</span></div>
+        <div class="term-card"><strong>売上諸掛（発送費）</strong><span>商品売上時に当社が負担する発送費用。仕入とは別に費用科目で処理する。</span></div>
+        <div class="term-card"><strong>商品有高帳</strong><span>商品の在庫の入出庫を「数量・単価・金額」で管理する補助簿。原価で記録する。</span></div>
+        <div class="term-card"><strong>先入先出法（FIFO）</strong><span>古く仕入れた商品から順に売れたとみなして在庫計算を行う方法。</span></div>
+        <div class="term-card"><strong>クレジット売掛金</strong><span>クレジットカード決済時に信販会社から後日受け取る金額の権利。資産に属する。</span></div>
+        <div class="term-card"><strong>支払手数料</strong><span>クレジット決済等で信販会社に支払う手数料。費用科目として処理する。</span></div>
     </div>
-  </div>
 
-  <div style="text-align: center; margin-top: 20px;">
-    <a href="https://notebooklm.google.com/" target="_blank" class="tool-link-btn">
-      <i class="fa-solid fa-book"></i> NotebookLM を開く
-    </a>
-  </div>
-</div>
-```
-
-### 前半→後半ナビボタン
-
-```html
-<div style="text-align: center; margin-top: 30px;">
-  <button class="tool-link-btn" onclick="openTab('second')" style="background:var(--accent-green);">
-    後半（帳簿体系）へ進む <i class="fa-solid fa-arrow-right"></i>
-  </button>
-</div>
-```
-
----
-
-## 5. 後半タブ（`id="second"`）
-
-### セクションタイトル
-
-```
-<h2>セクション2：帳簿体系と補助簿の活用</h2>
-<p>日々の仕訳を集計・管理する「帳簿の種類」を学びます。試験で頻出の「どの補助簿に記入するか？」問題も攻略しましょう。</p>
-```
-
----
-
-### Learning Card 4（後半①）
-
-```html
-<!-- Learning Card 4: 主要簿と伝票会計 -->
-<div class="learning-card">
-  <div class="lc-video">
-    <div class="vc-thumb" data-video-id="5yVU7wLuXP0"
-      style="background-image: url('https://img.youtube.com/vi/5yVU7wLuXP0/maxresdefault.jpg'),
-                               url('https://img.youtube.com/vi/5yVU7wLuXP0/hqdefault.jpg');">
-      <i class="fa-brands fa-youtube vc-thumb-play"></i>
+    <div class="check-panel">
+        <h3><i class="fa-solid fa-clipboard-check"></i> セルフチェック</h3>
+        <ol class="check-list">
+            <li>掛取引の仕訳を「発生時・回収時（または支払時）」の2段階それぞれで、正しく書けますか？</li>
+            <li>仕入諸掛（送料）と売上諸掛（発送費）がなぜ別々の処理になるのか、理由とともに説明できますか？</li>
+            <li>先入先出法の問題で「80個売れた（古い在庫50個@100円、新しい在庫@110円）」という設定で、払い出し金額と残高を正しく計算できますか？</li>
+        </ol>
     </div>
-  </div>
-  <div class="lc-content">
-    <div class="lc-header">
-      <span class="vc-tag">帳簿の基本</span>
-      <h3 class="lc-title">主要簿（仕訳帳・総勘定元帳）と3伝票制の仕組み</h3>
+
+    <!-- 確認クイズ -->
+    <div class="quiz-panel" id="quizPanel">
+        <h3><i class="fa-solid fa-circle-question"></i> 確認クイズ（全5問）</h3>
+        <p style="color:var(--text-sub); font-size:0.9rem; margin-bottom:20px;">今日の掛取引・諸掛・在庫管理・クレジット決済の理解度を確認しましょう。</p>
+        <div id="quiz-container"></div>
+        <div id="quiz-result" style="display:none; margin-top:24px; padding:20px; border-radius:12px; text-align:center;">
+            <p id="quiz-score" style="font-size:1.6rem; font-weight:900; margin-bottom:8px;"></p>
+            <p id="quiz-msg" style="font-size:0.95rem; color:var(--text-sub);"></p>
+            <button onclick="resetQuiz()" class="tool-link-btn" style="margin-top:16px; background:var(--accent-green);">
+                <i class="fa-solid fa-rotate-right"></i> もう一度
+            </button>
+        </div>
     </div>
-    <div class="lc-body">
-      <h4><i class="fa-solid fa-book-bookmark"></i> 学習のポイント</h4>
-      <ul class="lc-list">
-        <li>主要簿（仕訳帳・総勘定元帳）は作成が法定義務のマスト帳簿</li>
-        <li>補助簿は管理したいニーズがある場合にのみ作成する任意の帳簿</li>
-        <li>3伝票制：入金伝票・出金伝票・振替伝票で全取引を記録する仕組み</li>
-      </ul>
+
+    <div style="background:#f0fdf4; padding:25px 30px; border-radius:12px; margin:35px 0 20px; border-left:6px solid #059669;">
+        <h4 style="color:#047857; margin:0 0 10px; font-size:1.15rem;"><i class="fa-solid fa-forward"></i> 次回予告：Day 6</h4>
+        <p style="margin:0; font-size:0.95rem; color:#333; line-height:1.6;">次回は「手形と電子記録債権」へ。Bloomが取引先と約束手形でやり取りするようになり、受取手形・支払手形・電子記録債権の仕訳を学びます。</p>
     </div>
-  </div>
 </div>
 ```
 
 ---
 
-### Learning Card 5（後半②）
+## 7. ページ末尾ナビボタン（summaryタブの外・scriptより前）
 
 ```html
-<!-- Learning Card 5: 補助簿の種類と活用 -->
-<div class="learning-card">
-  <div class="lc-video">
-    <div class="vc-thumb" data-video-id="ViIAqPXtrAY"
-      style="background-image: url('https://img.youtube.com/vi/ViIAqPXtrAY/maxresdefault.jpg'),
-                               url('https://img.youtube.com/vi/ViIAqPXtrAY/hqdefault.jpg');">
-      <i class="fa-brands fa-youtube vc-thumb-play"></i>
-    </div>
-  </div>
-  <div class="lc-content">
-    <div class="lc-header">
-      <span class="vc-tag">補助簿</span>
-      <h3 class="lc-title">各種補助簿の特徴と「どれに記入するか？」問題の攻略法</h3>
-    </div>
-    <div class="lc-body">
-      <h4><i class="fa-solid fa-table-list"></i> 試験のツボ</h4>
-      <ul class="lc-list">
-        <li>主な補助簿：現金出納帳・当座預金出納帳・売上帳・仕入帳・商品有高帳など</li>
-        <li>商品有高帳の単価計算：先入先出法（FIFO）と移動平均法の2方式</li>
-        <li>補助簿の選択問題→「どの勘定科目が動くか」＝仕訳が分かれば解ける</li>
-      </ul>
-    </div>
-  </div>
+<div style="text-align:center; padding: 3rem 0 2rem; display: flex; flex-direction: column; gap: 1rem; align-items: center;">
+    <button type="button" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:linear-gradient(135deg, #34d399, #059669); border:none; box-shadow: 0 10px 30px rgba(5,150,105, 0.25); cursor:pointer;" onclick="(async function(){try{const r=await fetch('./vol06-1.html',{method:'HEAD',cache:'no-store'});if(r.ok){window.location.href='./vol06-1.html';return;}}catch(e){}alert('Day 6 は準備中です。もうしばらくお待ちください。');})()">
+        Day 6 へ進む <i class="fa-solid fa-arrow-right"></i>
+    </button>
+    <button type="button" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:#fff; color:#4a4a4a; border:2px solid #e2e8f0; box-shadow:none; cursor:pointer;" onclick="window.location.href='./index.html'">
+        <i class="fa-solid fa-house"></i> 学習記録をつけて Home へ戻る
+    </button>
 </div>
 ```
 
 ---
 
-### 後半 NotebookLM 実習
+## 8. quizData（ページ末尾の `<script>` ブロック内に記述）
 
-```html
-<div class="practice-area">
-  <h3 style="color:var(--accent-green);">
-    <i class="fa-solid fa-pencil"></i> 実習：NotebookLM で確認テストを自動生成しよう
-  </h3>
-  <p>帳簿体系の2本の動画からテストを生成して復習しましょう。</p>
-
-  <ul class="step-list">
-    <li>新しいNotebookLMのノートブックを作成し、下記2本のURLをソースとして追加する。</li>
-    <li>チャット欄に下のプロンプトを貼り付けて実行する。</li>
-    <li>生成されたテストを解いて、間違えた問題は動画に戻って確認する。</li>
-  </ul>
-
-  <!-- プロンプトボックス -->
-  <div class="prompt-box">
-    <div class="prompt-header">
-      <span><i class="fa-solid fa-robot"></i> NotebookLM プロンプト（コピーして貼り付けよう）</span>
-    </div>
-    <div class="prompt-urls" style="margin: 10px 0; font-size: 0.9rem; color: var(--text-sub);">
-      ソースに追加するURL：<br>
-      https://youtu.be/5yVU7wLuXP0<br>
-      https://youtu.be/ViIAqPXtrAY
-    </div>
-    <div class="chat-bubble">
-      <p style="margin:0;">読み込んだ2つの動画の内容に基づいて、簿記の基礎知識に関する確認テストを20問作成してください。形式は選択式とし、最後に解答と解説も出力してください。</p>
-      <button class="copy-btn" onclick="navigator.clipboard.writeText('読み込んだ2つの動画の内容に基づいて、簿記の基礎知識に関する確認テストを20問作成してください。形式は選択式とし、最後に解答と解説も出力してください。')">
-        <i class="fa-solid fa-copy"></i> コピー
-      </button>
-    </div>
-  </div>
-
-  <div style="text-align: center; margin-top: 20px;">
-    <a href="https://notebooklm.google.com/" target="_blank" class="tool-link-btn">
-      <i class="fa-solid fa-book"></i> NotebookLM を開く
-    </a>
-  </div>
-</div>
-```
-
-### 後半→テストナビボタン
-
-```html
-<div style="text-align: center; margin-top: 30px;">
-  <button class="tool-link-btn" onclick="openTab('quiz')" style="background:var(--accent-gold);">
-    理解度チェックテストへ <i class="fa-solid fa-arrow-right"></i>
-  </button>
-</div>
-```
-
----
-
-## 6. テストタブ（`id="quiz"`）
-
-vol02-1.html の quizData を以下で**まるごと差し替える**。
+> ⚠️ 注意：quizData は `<div id="summary">` の中ではなく、  
+> ページ末尾の `<script>` ブロック（`openTab()`・`buildQuiz()` 等の関数定義と同じ場所）に記述すること。
 
 ```javascript
 const quizData = [
-  {
-    q: "T字勘定（総勘定元帳の略式）において、期首（4月1日）の借方に「前期繰越」が記入されるのはどのような勘定科目か？",
-    opts: [
-      "売上・受取手数料など収益科目",
-      "仕入・給料など費用科目",
-      "現金・売掛金など資産科目",
-      "すべての勘定科目に前期繰越が記入される"
-    ],
-    ans: 2,
-    fb: "資産・負債・純資産の科目（貸借対照表に乗る科目）は毎期残高が繰り越されるため、期首（4月1日）に「前期繰越」が記入されます。費用・収益科目（損益計算書の科目）は毎期リセットされるため「前期繰越」は記入されません。"
-  },
-  {
-    q: "11月1日に向こう1年分の保険料18万円を現金で支払った（会計期間4/1〜3/31、月割計算）。当期末（3/31）の決算整理仕訳で「前払保険料」として計上する金額はいくらか？",
-    opts: [
-      "7万5,000円",
-      "10万5,000円",
-      "18万円",
-      "1万5,000円"
-    ],
-    ans: 1,
-    fb: "1ヶ月分の保険料は18万円÷12ヶ月＝1万5,000円。11月〜3月の5ヶ月が当期費用（7万5,000円）。残り4月〜10月の7ヶ月分（1万5,000円×7＝10万5,000円）が来期に所属するため「前払保険料」に計上します。"
-  },
-  {
-    q: "「天記」とはどのような手続きか？",
-    opts: [
-      "取引内容を仕訳帳に記録すること",
-      "仕訳帳の仕訳を勘定科目ごとに総勘定元帳へ書き写すこと",
-      "試算表から財務諸表を作成すること",
-      "期末に決算整理仕訳を行うこと"
-    ],
-    ans: 1,
-    fb: "天記（転記）は仕訳帳（日付順の記録）の内容を、勘定科目別の帳簿「総勘定元帳」に書き写す手続きです。これにより科目ごとの残高が把握できます。"
-  },
-  {
-    q: "次のうち「主要簿」に含まれるものはどれか？",
-    opts: [
-      "現金出納帳・商品有高帳",
-      "売掛金元帳・買掛金元帳",
-      "仕訳帳・総勘定元帳",
-      "売上帳・仕入帳"
-    ],
-    ans: 2,
-    fb: "主要簿は「仕訳帳」と「総勘定元帳」の2つで、作成が法律で義務づけられています。現金出納帳・商品有高帳・売掛金元帳・売上帳などはすべて「補助簿」で、必要に応じて作成します。"
-  },
-  {
-    q: "「商品を現金4,000円で売り上げた」取引がある場合、記入される補助簿の組み合わせとして正しいのはどれか？",
-    opts: [
-      "現金出納帳と売上帳のみ",
-      "現金出納帳・売上帳・商品有高帳の3つ",
-      "売上帳と商品有高帳のみ",
-      "仕訳帳のみ（補助簿は不要）"
-    ],
-    ans: 1,
-    fb: "現金売上の仕訳は（借）現金4,000 /（貸）売上4,000です。①現金が動く→現金出納帳、②売上が増える→売上帳、③商品の在庫が減る→商品有高帳の3つに記入します。補助簿の選択問題は「どの勘定科目が動くか」＝仕訳が分かれば解けます。"
-  }
+    {
+        q: "Bloomが取引先に雑貨を掛けで仕入れた。正しい仕訳はどれ？",
+        opts: [
+            "(借) 仕入 100 ／ (貸) 現金 100",
+            "(借) 仕入 100 ／ (貸) 買掛金 100",
+            "(借) 売掛金 100 ／ (貸) 売上 100",
+            "(借) 買掛金 100 ／ (貸) 仕入 100"
+        ],
+        ans: 1,
+        fb: "掛けで仕入れると「後で払う義務（負債）」が生まれます。これが買掛金です。現金はまだ動いていないので貸方に現金は入りません。"
+    },
+    {
+        q: "Bloomが10,000円の商品を仕入れ、送料500円を現金で支払った。仕入勘定の金額は？",
+        opts: ["10,000円", "500円", "10,500円", "9,500円"],
+        ans: 2,
+        fb: "仕入諸掛（送料）は仕入原価に含めます。Bloomにとってその商品の原価は「10,000 + 500 = 10,500円」となります。"
+    },
+    {
+        q: "商品有高帳（先入先出法）で「80個売れた」時、まず@100円の在庫50個を払い出した後、残り30個をどう処理する？",
+        opts: [
+            "売価の単価で計算する",
+            "50個と同じ@100円を使う",
+            "次に仕入れた単価（@110円など）で計算する",
+            "払い出しをいったん止めて在庫確認する"
+        ],
+        ans: 2,
+        fb: "先入先出法は「古い在庫から先に使う」ルールです。@100円の50個が尽きたら、次に仕入れた単価の在庫から残り30個を払い出します。"
+    },
+    {
+        q: "Bloomでお客さんがカード払いで10,000円の商品を購入。手数料3%の場合、売上時の仕訳はどれ？",
+        opts: [
+            "(借) 現金 10,000 ／ (貸) 売上 10,000",
+            "(借) クレジット売掛金 10,000 ／ (貸) 売上 10,000",
+            "(借) クレジット売掛金 9,700, 支払手数料 300 ／ (貸) 売上 10,000",
+            "(借) 売掛金 9,700 ／ (貸) 売上 9,700"
+        ],
+        ans: 2,
+        fb: "カード決済では現金はもらえず、信販会社への請求権（クレジット売掛金）が生まれます。手数料は支払手数料として費用計上し、売上は全額10,000円のまま計上するのがポイントです。"
+    },
+    {
+        q: "Bloomが仕入れた商品を一部返品（仕入戻し）した。買掛金の処理はどうなる？",
+        opts: [
+            "買掛金を借方に記入して、負債を減らす",
+            "買掛金を貸方に記入して、負債を増やす",
+            "買掛金の仕訳は不要",
+            "買掛金を資産として計上する"
+        ],
+        ans: 0,
+        fb: "返品は仕入時の逆仕訳です。仕入時は「(借)仕入 ／ (貸)買掛金」だったので、逆にすると「(借)買掛金 ／ (貸)仕入」となります。借方に書くことで負債が減ります。"
+    }
 ];
 ```
 
 ---
 
-## 7. Day ナビゲーションリンク
+## 9. 実装チェックリスト
 
-タブエリアの**外側・下部**に配置（vol02-1.html と同じ位置）。
-
-```html
-<!-- Day ナビゲーション（タブ外に常時表示） -->
-<div style="padding: 30px 40px 20px; text-align: center; border-top: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
-  <a href="./vol02-1.html" style="color: var(--text-sub); text-decoration: none; font-size: 0.95rem;">
-    <i class="fa-solid fa-arrow-left"></i> Day 2 に戻る
-  </a>
-  <span id="day4-link-area"></span>
-</div>
-```
-
-Day 4 ページの存在チェック（XHRによる存在確認）は vol01-1.html / vol02-1.html の実装を踏襲する。
-
-```javascript
-// Day4リンク表示チェック
-var x = new XMLHttpRequest();
-x.open('HEAD', './vol04-1.html', false);
-try {
-  x.send();
-  if (x.status === 200) {
-    document.getElementById('day4-link-area').innerHTML =
-      '<a href="./vol04-1.html" style="color:var(--accent-green);text-decoration:none;font-size:0.95rem;">Day 4 へ進む <i class="fa-solid fa-arrow-right"></i></a>';
-  }
-} catch(e) {}
-```
-
----
-
-## 8. cache-bust コメント
-
-HTML末尾（`</html>` の後）に追記：
-
-```html
-<!-- cache-bust: 2026-05-13T00:00:00 -->
-```
-
----
-
-## 9. CSS 差分（vol02 から追加・変更が必要な点）
-
-### prompt-box スタイル（vol02 に存在しない場合は追加）
-
-```css
-.prompt-box {
-  background: #f8fafc; border: 1px solid #e2e8f0;
-  border-radius: var(--radius-medium); padding: 20px;
-  margin: 20px 0;
-}
-.prompt-header {
-  font-weight: 700; color: var(--accent-green);
-  margin-bottom: 12px; font-size: 0.95rem;
-}
-.chat-bubble {
-  background: white; border: 1px solid #e2e8f0;
-  border-radius: 12px; padding: 16px;
-  position: relative; font-size: 0.95rem; line-height: 1.7;
-}
-.copy-btn {
-  position: absolute; top: 12px; right: 12px;
-  background: var(--accent-green); color: white;
-  border: none; border-radius: 8px; padding: 6px 12px;
-  font-size: 0.8rem; cursor: pointer; font-weight: 700;
-}
-.copy-btn:hover { background: #047857; }
-```
-
-※ vol01-1.html には prompt-box / chat-bubble / copy-btn の実装があるので参照すること。
-
-### step-list（NotebookLM用）
-
-vol02 の `.step-list.canva` スタイルを流用可。Day3では `.step-list`（デフォルト緑）のみ使用。
-
----
-
-## 10. 実装チェックリスト
-
-実装後に以下を必ず確認すること：
-
-- [ ] 前半タブに3つのLearning Card（HI2DXDOyx8Q / JGnQIxkZChI / EeDOxSb95ew）がある
-- [ ] 後半タブに2つのLearning Card（5yVU7wLuXP0 / ViIAqPXtrAY）がある
-- [ ] 各動画のFacadeがクリックでiframeに置き換わりautoplay=1で再生される
-- [ ] 前半・後半ともにNotebookLM実習エリア（prompt-box + chat-bubble）がある
-- [ ] 前半の「後半へ進む」ボタンが正しくopenTab('second')を呼ぶ
-- [ ] 後半の「テストへ進む」ボタンが正しくopenTab('quiz')を呼ぶ
-- [ ] quizData が5問ある（Day3内容で上書き済み）
-- [ ] 「Day 2 に戻る」リンクが `./vol02-1.html` を参照している
-- [ ] Day 4 存在チェックXHRが実装されている（`vol04-1.html` を参照）
-- [ ] Canva関連のUI（注意書き・canvaクラスのstep-list等）が残っていない
-- [ ] cache-bust コメントが末尾にある
-- [ ] `.deploy_tmp/vol03-1.html` にもコピーされている
-- [ ] ブラウザでタブ切り替えが正常動作する（openTab関数がquerySelectorベースの修正済み版）
-- [ ] スマートフォン幅（375px）でレイアウト崩れがない
-
----
-
-## 11. ハルシネーション防止ルール
-
-GEMINI.mdの通り、以下を遵守すること：
-
-- Learning Card の箇条書きは **Today_Research.md の内容のみ** に基づく
-- 存在しないCanva機能名・簿記の説明は書かない
-- 使用する動画IDは以下の5個のみ（他IDは使わない）：
-  - 前半: `HI2DXDOyx8Q`, `JGnQIxkZChI`, `EeDOxSb95ew`
-  - 後半: `5yVU7wLuXP0`, `ViIAqPXtrAY`
-- VTTファイルを取得した場合は実装後に必ず削除する
+- [ ] vol04-1.html を vol05-1.html としてコピーして開始
+- [ ] タイトル・ヘッダー・プログレスバー（38%）・DAY番号（05）を変更
+- [ ] goalタブ：Bloom 5日目・朝ナラティブ、Whyボックス、Talk-scene、goal-box、フローマップ（5ステップ）、AI Director's Eye
+- [ ] 前半タブ：Bloom午前ナラティブ、分記法・売掛買掛・仕訳3ステップの学習カード3枚、talk-scene（売掛金vs売上）、NotebookLM実習（URL手順書＋プロンプト2個）
+- [ ] 後半タブ：Bloom午後ナラティブ、FIFOフロービジュアル（3ステップ）、学習カード3枚、talk-scene（諸掛）、conclusion-comic、NotebookLM実習（URL手順書＋プロンプト2個）
+- [ ] まとめタブ：Bloom夜ナラティブ、summary-grid（4枚）、term-grid（12用語）、check-panel（3項目）、quiz-panel（UI部分のみ・quizDataはscript内）、次回予告ボックス（Day 6）
+- [ ] ページ末尾ナビ：Day 6 async fetchボタン＋Home へ戻るボタン（vol04と同じスタイル）
+- [ ] ページ末尾 `<script>`：quizData（5問）・buildQuiz()・answerQuiz()・showResult()・resetQuiz()・buildQuiz()呼び出しを記述
+- [ ] cache-bust: `<!-- cache-bust: 2026-05-14T09:00:00 -->`（ファイル末尾）
+- [ ] .deploy_tmp/vol05-1.html に同じファイルをコピー（内容を必ず同期）
+- [ ] index.html の Day 5 リンクが vol05-1.html を正しく指しているか確認

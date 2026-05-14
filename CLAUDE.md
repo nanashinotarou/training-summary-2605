@@ -31,3 +31,17 @@ worktreeを使う場合も、この設定の自動書き込みは行わないこ
 
 - **`GEMINI.md`** に記載されているYouTube Facadeパターン・レスポンシブ対応ルールを必ず遵守すること
 - 新しいDayページ（`volXX-1.html`）を作成する際は、最新のDayファイルをテンプレートとして複製し、内容を差し替える
+
+## 4. cache-bust フォーマット統一ルール
+
+HTMLファイル末尾の cache-bust コメントは **必ず以下の形式** を使うこと。
+
+```html
+<!-- cache-bust: YYYY-MM-DDTHH:MM:SS -->
+```
+
+例: `<!-- cache-bust: 2026-05-13T12:00:00 -->`
+
+- `YYYY-MM-DDThh:mm:ss`（ISO 8601形式）に統一する
+- `2026-05-13-vol04-day4` のようなページ固有の文字列を混ぜないこと
+- 全 volXX-1.html・.deploy_tmp/ の両ファイルに同じ形式で記入すること
