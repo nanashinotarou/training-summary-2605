@@ -276,3 +276,48 @@ https://www.youtube.com/watch?v=wmihafdKezA
 「問題文をより実務に近い表現に変えてください」
 ③ 内容を確認し、問題を解いて復習する
 分からないところは動画に戻って確認しましょう。
+
+Day6
+前半
+DXコース 簿記実習アーカイブ
+https://minaasa373-wq.github.io/dx-bookkeeping/
+実習：NotebookLMを活用したDX・経理基礎テストの自動生成と復習
+🎯 実習の目的
+簿記の基本を身につける
+NotebookLMを使い、効果的に復習する方法を覚える
+💡 実習の流れ
+① ソースを読み込む
+NotebookLMにアクセスして新しいノートブックを作成し、「ソースを追加」から下記3本のYouTube動画URLを入力します。
+　https://youtu.be/MOR8WF5UHqM?si=lMz9DU8XdZGcZzNv
+　https://www.youtube.com/watch?v=C1tXaGiIyS4
+　https://youtu.be/pPvP1uFf8Uw?si=_YQiA2CTPTo7s5oc
+② プロンプトを入力してテストを生成する
+チャット欄に以下のようなプロンプトを入力し、実行します。
+「読み込んだ動画の内容に基づいて、簿記の基礎知識に関する確認テストを20問作成してください。形式は選択式とし、最後に解答と解説も出力してください。」
+追加指示の例：
+「新人経理担当者向けに、もう少し難易度を下げてください」
+「問題文をより実務に近い表現に変えてください」
+③ 内容を確認し、問題を解いて復習する
+分からないところは動画に戻って確認しましょう。
+
+後半
+DXコース 簿記実習アーカイブ
+https://minaasa373-wq.github.io/dx-bookkeeping/
+実習：NotebookLMを活用したDX・経理基礎テストの自動生成と復習
+🎯 実習の目的
+簿記の基本を身につける
+NotebookLMを使い、効果的に復習する方法を覚える
+💡 実習の流れ
+① ソースを読み込む
+NotebookLMにアクセスして新しいノートブックを作成し、「ソースを追加」から下記のYouTube動画URLを入力します。
+　https://www.youtube.com/watch?v=pbAig18gqpo
+　https://youtu.be/95gTu-gtf7Y?si=rBm0Sp3NLoK1ey2S
+　https://youtu.be/GsCpbBK1BM0?si=lY8pfsGyJraSRI6b
+② プロンプトを入力してテストを生成する
+チャット欄に以下のようなプロンプトを入力し、実行します。
+「読み込んだ動画の内容に基づいて、簿記の基礎知識に関する確認テストを20問作成してください。形式は選択式とし、最後に解答と解説も出力してください。」
+追加指示の例：
+「新人経理担当者向けに、もう少し難易度を下げてください」
+「問題文をより実務に近い表現に変えてください」
+③ 内容を確認し、問題を解いて復習する
+分からないところは動画に戻って確認しましょう。

@@ -6,7 +6,8 @@
       "mcp__Claude_in_Chrome__browser_batch",
       "mcp__Claude_in_Chrome__javascript_tool",
       "Bash(Get-Item \"G:\\\\マイドライブ\\\\研修\\\\【202605】簿記コース\\\\Today_Research.md\")",
-      "Bash(Select-Object Length, LastWriteTime)"
+      "Bash(Select-Object Length, LastWriteTime)",
+      "Bash(Select-Object LastWriteTime, Length)"
     ]
   }
 }
