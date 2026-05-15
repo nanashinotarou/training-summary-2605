@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Day 5 | 商品売買と掛取引</title>
+    <title>Day 6 | 固定資産と減価償却</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Teko:wght@600&display=swap" rel="stylesheet">
     <style>
@@ -70,7 +70,7 @@
         }
         .header h1 { font-size: 2.2rem; font-weight: 900; color: var(--accent-green); margin-bottom: 10px; }
         .progress-wrap { max-width: 520px; height: 8px; background: #e2e8f0; border-radius: 999px; margin: 18px auto 0; overflow: hidden; }
-        .progress-bar { width: 38%; height: 100%; background: linear-gradient(90deg, var(--accent-green), #34d399); border-radius: inherit; }
+        .progress-bar { width: 46%; height: 100%; background: linear-gradient(90deg, var(--accent-green), #34d399); border-radius: inherit; }
 
         .tabs { display: flex; padding: 0 20px; background: rgba(255, 255, 255, 0.5); border-bottom: 1px solid #eee; overflow-x: auto; }
         .tab-btn {
@@ -396,8 +396,8 @@
 
     <div class="container">
         <header class="header">
-            <span class="header-tag">DAY 05</span>
-            <h1>商品売買と掛取引</h1>
+            <span class="header-tag">DAY 06</span>
+            <h1>固定資産と減価償却</h1>
             <p style="margin:0; color:var(--text-sub);">May 2026 - Bookkeeping Course</p>
             <div class="progress-wrap" aria-label="Course progress">
                 <div class="progress-bar"></div>
@@ -405,200 +405,200 @@
         </header>
 
         <nav class="tabs">
-            <button class="tab-btn active" onclick="openTab('goal')"><i class="fa-solid fa-bullseye"></i> 今日の目標</button>
-            <button class="tab-btn" onclick="openTab('first')"><i class="fa-solid fa-handshake"></i> 前半：掛取引と仕訳の基本</button>
-            <button class="tab-btn" onclick="openTab('second')"><i class="fa-solid fa-boxes-stacked"></i> 後半：返品・在庫・カード決済</button>
+            <button class="tab-btn active" onclick="openTab('goal')"><i class="fa-solid fa-building"></i> 今日の目標</button>
+            <button class="tab-btn" onclick="openTab('first')"><i class="fa-solid fa-arrow-trend-down"></i> 前半：取得と減価償却の基本</button>
+            <button class="tab-btn" onclick="openTab('second')"><i class="fa-solid fa-money-bill-trend-up"></i> 後半：売却と評価勘定</button>
             <button class="tab-btn" onclick="openTab('summary')"><i class="fa-solid fa-list-check"></i> まとめ</button>
         </nav>
 
         <div id="goal" class="tab-content active">
 
-            <!-- Bloomナラティブ：5日目・朝 -->
+            <!-- Bloomナラティブ：6日目・朝 -->
             <div class="bloom-story">
-                <span class="bloom-story-label">📍 Bloom 5日目・朝</span>
+                <span class="bloom-story-label">📍 Bloom 6日目・朝</span>
                 <p>
-                    Bloomもオープンして5日。常連さんが増えてきました。<br>
-                    「あ、今日財布忘れちゃった。ツケにしといて！」なんて会話や、<br>
-                    「カードで払えますか？」というお客さんも。<br><br>
-                    <strong>「その場でお金が動かない取引」</strong>をどう記録するか——それが今日のテーマです。
+                    Bloomがオープンして1週間。Harukaさんが念願のエスプレッソマシンを購入しました。<br>
+                    「150,000円か……大きな買い物だったな」<br><br>
+                    でも簿記では、この出費を「今日全部の費用」にはしません。<br>
+                    <strong>長く使うモノの代金は、使う年数に分けて記録する</strong>——それが今日のテーマです。
                 </p>
             </div>
 
             <!-- Whyボックス -->
             <div class="why-box">
-                <div class="why-q">なぜ「売掛金」と「売上」を分けるの？</div>
+                <div class="why-q">なぜ「減価償却累計額」という別勘定を使うの？</div>
                 <div class="why-a">
-                    「売上」は今日いくら売ったかという <strong>成果（収益）</strong> です。<br>
-                    「売掛金」は後でいくらもらえるかという <strong>権利（資産）</strong> です。<br>
-                    「儲け」と「手元の権利」を分けて記録することで、将来の資金繰りが予測できるようになります。
+                    資産を直接減らしてしまうと、<strong>「もともといくらで買ったか」が帳簿から消えてしまいます。</strong><br>
+                    別勘定で「今まで何円分価値が減ったか」をメモしておくことで、<br>
+                    取得原価・累計の減少額・現在の帳簿価額を<strong>同時に見える化</strong>できます。
                 </div>
             </div>
 
-            <!-- talk-scene -->
+            <!-- talk-scene：あるある疑問 -->
             <div class="talk-scene">
                 <div class="talk-bubble owner">
                     <div class="talk-icon">🧑</div>
-                    <div class="talk-text">「諸掛（しょがかり）」って言葉、難しそうですね。何のことですか？</div>
+                    <div class="talk-text">機械を買った時、なぜ「費用」じゃなくて「資産」で記録するんですか？</div>
                 </div>
                 <div class="talk-bubble teacher">
                     <div class="talk-icon">👩‍🏫</div>
-                    <div class="talk-text">簡単に言えば「送料や保険料」のことです。<br>商品を仕入れる時にかかった送料は、<strong>商品の原価の一部</strong>として扱います。これが簿記の面白いルールの一つですよ。</div>
+                    <div class="talk-text">買った瞬間に全額費用にすると、その年だけ大赤字になりますよね。<br>5年使うなら、<strong>5年に分けて費用化する</strong>のが正直な記録です。これが「費用収益対応の原則」です。</div>
                 </div>
             </div>
 
-            <!-- 既存goal-box -->
+            <!-- goal-box -->
             <div class="goal-box">
-                <i class="fa-solid fa-truck-fast"></i>
-                <h3>「掛取引・返品・諸掛を理解し、在庫管理とカード決済をマスターする」</h3>
-                <p>売掛金・買掛金の基本から、返品時の逆仕訳、送料の処理（諸掛）、<br>そして現代に欠かせないクレジット決済の仕組みまでを網羅します。</p>
+                <i class="fa-solid fa-building"></i>
+                <h3>「固定資産の取得から売却まで、一連の流れを仕訳できる」</h3>
+                <p>付随費用の取扱い、定額法による減価償却、資本的支出vs収益的支出の区別、<br>そして売却時の損益計算まで——固定資産の全サイクルをBloomで体験します。</p>
             </div>
 
             <h2>本日の学習マップ</h2>
-            <p>Day 5は「商売の広がり」を学びます。現金以外のやり取りを正確に記録する力を身につけましょう。</p>
+            <p>Day 6は「設備投資の記録」を学びます。長期にわたる資産の管理が、いかに企業の実態を正確に伝えるかを理解しましょう。</p>
 
             <!-- フローマップ（D：ビジュアルフロー） -->
             <div class="flow-map">
                 <div class="flow-step">
-                    <i class="fa-solid fa-handshake"></i>
-                    <strong>掛取引の発生</strong>
-                    <span>売掛金・買掛金</span>
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <strong>固定資産の取得</strong>
+                    <span>購入代価＋付随費用</span>
                 </div>
                 <div class="flow-step">
-                    <i class="fa-solid fa-rotate-left"></i>
-                    <strong>返品・諸掛</strong>
-                    <span>逆仕訳と原価算入</span>
+                    <i class="fa-solid fa-arrow-trend-down"></i>
+                    <strong>減価償却</strong>
+                    <span>定額法・間接法</span>
                 </div>
                 <div class="flow-step">
-                    <i class="fa-solid fa-boxes-stacked"></i>
-                    <strong>在庫管理</strong>
-                    <span>商品有高帳（FIFO）</span>
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    <strong>改良・修繕</strong>
+                    <span>資本的支出 vs 収益的支出</span>
                 </div>
                 <div class="flow-step">
-                    <i class="fa-solid fa-credit-card"></i>
-                    <strong>カード決済</strong>
-                    <span>支払手数料の処理</span>
+                    <i class="fa-solid fa-scale-balanced"></i>
+                    <strong>評価勘定の理解</strong>
+                    <span>累計額は資産のマイナス</span>
                 </div>
                 <div class="flow-step">
-                    <i class="fa-solid fa-file-invoice-dollar"></i>
-                    <strong>代金回収・支払</strong>
-                    <span>掛の消し込み</span>
+                    <i class="fa-solid fa-money-bill-trend-up"></i>
+                    <strong>固定資産の売却</strong>
+                    <span>売却益・売却損の計算</span>
                 </div>
             </div>
 
             <div style="background:#fffbeb; padding:25px 30px; border-radius:12px; margin:35px 0 20px; border-left:6px solid var(--accent-gold);">
-                <h4 style="color:#b45309; margin:0 0 10px; font-size:1.15rem;"><i class="fa-solid fa-lightbulb"></i> AI Director's Eye：在庫管理の自動化</h4>
-                <p style="margin:0; font-size:0.95rem; color:#333; line-height:1.7;">POSシステムやAIによる在庫管理の裏側では、今日学ぶ「先入先出法（FIFO）」などのアルゴリズムが動いています。基本のロジックを知ることで、システムの異常に気づいたり、より効率的な発注予測ができるようになります。</p>
+                <h4 style="color:#b45309; margin:0 0 10px; font-size:1.15rem;"><i class="fa-solid fa-lightbulb"></i> AI Director's Eye：資産管理の自動化</h4>
+                <p style="margin:0; font-size:0.95rem; color:#333; line-height:1.7;">ERPやクラウド会計ソフトでは、固定資産台帳が自動で減価償却を計算します。「定額法で5年・残存価額0」と入力するだけで毎期の仕訳が自動生成される仕組みの裏側には、今日学ぶ計算式がそのまま動いています。</p>
             </div>
 
             <div style="text-align:center; margin-top:30px;">
                 <button class="tool-link-btn" onclick="openTab('first')" style="background:var(--accent-green);">
-                    前半（掛取引と仕訳）へ進む <i class="fa-solid fa-arrow-right"></i>
+                    前半（取得と減価償却）へ進む <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </div>
         </div>
 
         <div id="first" class="tab-content">
 
-            <!-- Bloomナラティブ：5日目・午前 -->
+            <!-- Bloomナラティブ：6日目・午前 -->
             <div class="bloom-story" style="margin-bottom: 24px;">
-                <span class="bloom-story-label">📍 Bloom 5日目・午前</span>
+                <span class="bloom-story-label">📍 Bloom 6日目・午前</span>
                 <p>
-                    卸売業者さんから新しい雑貨が届きました。「代金は月末にまとめて払うね」という約束。<br>
-                    これが<strong>買掛金（かいかけきん）</strong>です。<br><br>
-                    まずは「分記法」という基礎的な考え方で利益の構造を理解し、
-                    その後に実務で必須の「売掛金・買掛金」の仕訳を学びます。
+                    エスプレッソマシン150,000円に加え、設置業者への工事費10,000円もかかりました。<br>
+                    「この工事費も、機械の原価に含めるんですか？」<br><br>
+                    そう——<strong>使える状態にするためのコストは、すべて取得原価</strong>です。<br>
+                    そして代金は月末払い。この時「買掛金」ではなく「未払金」を使います。
                 </p>
             </div>
 
-            <h2>セクション1：商品売買と掛取引の基礎</h2>
+            <h2>セクション1：固定資産の取得と減価償却</h2>
 
-            <!-- Learning Card 1: 分記法 -->
+            <!-- Learning Card 1: 固定資産の購入と付随費用 -->
             <div class="learning-card">
                 <div class="lc-video">
-                    <div class="vc-thumb" data-video-id="BboEGZR2XV8" style="background-image: url('https://img.youtube.com/vi/BboEGZR2XV8/maxresdefault.jpg'), url('https://img.youtube.com/vi/BboEGZR2XV8/hqdefault.jpg');">
+                    <div class="vc-thumb" data-video-id="MOR8WF5UHqM" style="background-image: url('https://img.youtube.com/vi/MOR8WF5UHqM/maxresdefault.jpg'), url('https://img.youtube.com/vi/MOR8WF5UHqM/hqdefault.jpg');">
                         <i class="fa-brands fa-youtube vc-thumb-play"></i>
                     </div>
                 </div>
                 <div class="lc-content">
                     <div class="lc-header">
-                        <span class="vc-tag">基礎概念</span>
-                        <h3 class="lc-title">分記法：商品と利益を分けて考える</h3>
+                        <span class="vc-tag">取得原価</span>
+                        <h3 class="lc-title">固定資産の購入と付随費用の処理</h3>
                     </div>
                     <div class="lc-body">
-                        <h4><i class="fa-solid fa-layer-group"></i> 分記法（ぶんきほう）とは？</h4>
+                        <h4><i class="fa-solid fa-cart-shopping"></i> 取得原価の計算ルール</h4>
                         <ul class="lc-list">
-                            <li><strong>仕入時</strong>：(借) 商品 100 ／ (貸) 現金 100 （資産の増加として記録）</li>
-                            <li><strong>売上時</strong>：(借) 現金 150 ／ (貸) 商品 100, <strong>商品売買益 50</strong></li>
-                            <li><strong>メリット</strong>：取引のたびに「いくら儲かったか」が明確になる。</li>
-                            <li><strong>デメリット</strong>：実務では商品ごとの原価計算が煩雑なため、通常は「三分法」を使う。</li>
+                            <li><strong>取得原価 ＝ 購入代価 ＋ 付随費用</strong>（設置費・仲介手数料・登記料など）</li>
+                            <li>付随費用を「支払手数料」等の費用にするのは<strong>NG</strong>——資産の原価に含める。</li>
+                            <li><strong>代金後払い → 「未払金」</strong>（商品以外の負債）。「買掛金」は商品仕入れ専用。</li>
+                            <li>例：機械150,000円 ＋ 設置費10,000円 → (借) 備品 160,000 ／ (貸) 未払金 160,000</li>
                         </ul>
                     </div>
                 </div>
             </div>
 
-            <!-- Learning Card 2: 売掛金・買掛金 -->
+            <!-- Learning Card 2: 定額法と間接法 -->
             <div class="learning-card">
                 <div class="lc-video">
-                    <div class="vc-thumb" data-video-id="qHPXHWv8xws" style="background-image: url('https://img.youtube.com/vi/qHPXHWv8xws/maxresdefault.jpg'), url('https://img.youtube.com/vi/qHPXHWv8xws/hqdefault.jpg');">
+                    <div class="vc-thumb" data-video-id="C1tXaGiIyS4" style="background-image: url('https://img.youtube.com/vi/C1tXaGiIyS4/maxresdefault.jpg'), url('https://img.youtube.com/vi/C1tXaGiIyS4/hqdefault.jpg');">
                         <i class="fa-brands fa-youtube vc-thumb-play"></i>
                     </div>
                 </div>
                 <div class="lc-content">
                     <div class="lc-header">
-                        <span class="vc-tag">重要科目</span>
-                        <h3 class="lc-title">売掛金と買掛金：掛取引の仕訳</h3>
+                        <span class="vc-tag gold">最重要</span>
+                        <h3 class="lc-title">定額法と間接法：減価償却の計算と仕訳</h3>
                     </div>
                     <div class="lc-body">
-                        <h4><i class="fa-solid fa-file-contract"></i> 資産と負債の区別</h4>
+                        <h4><i class="fa-solid fa-calculator"></i> 計算式と仕訳を丸ごと覚える</h4>
                         <ul class="lc-list">
-                            <li><strong>売掛金（資産）</strong>：代金を後でもらえる「権利」。商品を売った時に発生。</li>
-                            <li><strong>買掛金（負債）</strong>：代金を後で払う「義務」。商品を仕入れた時に発生。</li>
-                            <li><strong>回収時</strong>：(借) 現金 100 ／ (貸) 売掛金 100（資産である権利を消す）</li>
-                            <li><strong>支払時</strong>：(借) 買掛金 100 ／ (貸) 現金 100（負債である義務を消す）</li>
+                            <li><strong>定額法</strong>：(取得原価 − 残存価額) ÷ 耐用年数 ＝ 年間減価償却費</li>
+                            <li><strong>間接法の仕訳</strong>：(借) 減価償却費 XXX ／ (貸) 減価償却累計額 XXX</li>
+                            <li>資産（備品など）は直接減らさない——<strong>取得原価を帳簿上に残す</strong>のが間接法の目的。</li>
+                            <li><strong>月割り計算</strong>：期中取得の場合 → 年額 × 使用月数 ÷ 12</li>
                         </ul>
                     </div>
                 </div>
             </div>
 
-            <!-- Learning Card 3: 仕訳3ステップ -->
+            <!-- Learning Card 3: 資本的支出・収益的支出 -->
             <div class="learning-card">
                 <div class="lc-video">
-                    <div class="vc-thumb" data-video-id="NCw9voGKR74" style="background-image: url('https://img.youtube.com/vi/NCw9voGKR74/maxresdefault.jpg'), url('https://img.youtube.com/vi/NCw9voGKR74/hqdefault.jpg');">
+                    <div class="vc-thumb" data-video-id="pPvP1uFf8Uw" style="background-image: url('https://img.youtube.com/vi/pPvP1uFf8Uw/maxresdefault.jpg'), url('https://img.youtube.com/vi/pPvP1uFf8Uw/hqdefault.jpg');">
                         <i class="fa-brands fa-youtube vc-thumb-play"></i>
                     </div>
                 </div>
                 <div class="lc-content">
                     <div class="lc-header">
-                        <span class="vc-tag gold">鉄則</span>
-                        <h3 class="lc-title">迷わない！仕訳の解き方3ステップ</h3>
+                        <span class="vc-tag blue">判断力</span>
+                        <h3 class="lc-title">資本的支出 vs 収益的支出：改良か修繕か</h3>
                     </div>
                     <div class="lc-body">
-                        <h4><i class="fa-solid fa-list-check"></i> 手順をルーチン化する</h4>
+                        <h4><i class="fa-solid fa-screwdriver-wrench"></i> 「価値UP」か「現状維持」かで判断する</h4>
                         <ul class="lc-list">
-                            <li><strong>Step 1</strong>：取引を読んで、何が増えたか・何が減ったかを探す。</li>
-                            <li><strong>Step 2</strong>：それが「5つの要素（資産・負債・純資産・収益・費用）」のどれかを判断。</li>
-                            <li><strong>Step 3</strong>：増減に応じて左右（借方・貸方）を決める。資産増加＝借方、負債増加＝貸方など。</li>
+                            <li><strong>資本的支出</strong>：資産の価値向上・耐用年数の延長（非常階段の設置、耐震工事）→ <strong>資産（建物など）に加算</strong></li>
+                            <li><strong>収益的支出</strong>：現状維持・故障箇所を元に戻す（雨漏り修繕、窓ガラス交換）→ <strong>修繕費（費用）</strong></li>
+                            <li>試験では「価値を高める」「耐用年数を延ばす」というキーワードが資本的支出のヒント。</li>
                         </ul>
                     </div>
                 </div>
             </div>
 
-            <!-- talk-scene：掛取引あるある -->
+            <!-- talk-scene：定額法あるある -->
             <div class="talk-scene" style="margin: 24px 0;">
                 <div class="talk-bubble owner">
                     <div class="talk-icon">🧑</div>
-                    <div class="talk-text">売掛金と売上、どちらも「売った時」に出てくるので混乱します…</div>
+                    <div class="talk-text">「残存価額ゼロ」って試験でよく見ますが、毎回ゼロとは限らないですよね？</div>
                 </div>
                 <div class="talk-bubble teacher">
                     <div class="talk-icon">👩‍🏫</div>
-                    <div class="talk-text">「売上」は<strong>今日儲けたという事実（収益）</strong>、「売掛金」は<strong>まだもらっていないお金の権利（資産）</strong>です。<br>掛取引では、この2つが同時に生まれます。商売の成果と、まだ手元にないお金——これを分けて記録するのが複式簿記の面白さですよ。</div>
+                    <div class="talk-text">その通り。「残存価額 = 取得原価の10%」と指定される問題もあります。<br>まず<strong>問題文の条件を確認してから計算式に代入</strong>する癖をつけましょう。条件が変わっても計算式の構造は同じです。</div>
                 </div>
             </div>
 
             <!-- NotebookLM 実習：前半 -->
             <div class="practice-area">
-                <h3><i class="fa-solid fa-robot"></i> 実習：掛取引の理解を深める</h3>
-                <p>3本の動画をNotebookLMに読み込ませ、分記法・掛取引の仕訳を自分の言葉で整理しましょう。</p>
+                <h3><i class="fa-solid fa-robot"></i> 実習：固定資産の取得・減価償却を問題で確認</h3>
+                <p>3本の動画をNotebookLMに読み込ませ、取得原価の計算・定額法・資本的支出の区別を自分の言葉で整理しましょう。</p>
                 <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:12px; padding:20px; margin-bottom:24px;">
                     <h4 style="color:#b45309; margin:0 0 12px; display:flex; align-items:center; gap:8px;">
                         <i class="fa-solid fa-book"></i> NotebookLM へのソース追加手順
@@ -606,19 +606,19 @@
                     <ol style="margin:0; padding-left:1.4rem; font-size:0.92rem; line-height:1.9; color:#78350f;">
                         <li><strong>notebooklm.google.com</strong> にアクセスし「新しいノートブック」を作成</li>
                         <li>画面左の「ソースを追加」をクリックし「YouTube」または「URL」を選択</li>
-                        <li>動画① <code>https://www.youtube.com/watch?v=BboEGZR2XV8</code> を追加</li>
-                        <li>動画② <code>https://www.youtube.com/watch?v=qHPXHWv8xws</code> を追加</li>
-                        <li>動画③ <code>https://www.youtube.com/watch?v=NCw9voGKR74</code> を追加</li>
+                        <li>動画① <code>https://www.youtube.com/watch?v=MOR8WF5UHqM</code> を追加</li>
+                        <li>動画② <code>https://www.youtube.com/watch?v=C1tXaGiIyS4</code> を追加</li>
+                        <li>動画③ <code>https://www.youtube.com/watch?v=pPvP1uFf8Uw</code> を追加</li>
                         <li>追加完了後、下のプロンプトをコピーして選択式テストを作成する</li>
                     </ol>
                 </div>
                 <div class="chat-prompt-container">
                     <div class="chat-bubble">
-                        <div class="chat-text"><span class="prompt-text">読み込んだ動画①〜③の内容をもとに、Day5前半（分記法・売掛金・買掛金・掛取引の発生と回収・支払・仕訳の3ステップ）の理解度を確認する選択式テストを20問作ってください。各問は4択にし、解答は最後にまとめて表示してください。</span></div>
+                        <div class="chat-text"><span class="prompt-text">読み込んだ動画①〜③の内容をもとに、Day6前半（固定資産の取得原価・付随費用・未払金・定額法による減価償却費の計算・間接法の仕訳・資本的支出と収益的支出の区別）の理解度を確認する選択式テストを20問作ってください。各問は4択にし、解答は最後にまとめて表示してください。</span></div>
                         <button class="copy-btn" title="プロンプトをコピー"><i class="fa-regular fa-copy"></i> コピー</button>
                     </div>
                     <div class="chat-bubble">
-                        <div class="chat-text"><span class="prompt-text">上の20問テストの中から特に「売掛金か買掛金か」「資産か負債か」「借方か貸方か」の判断を問う問題だけを10問に絞り、各問に「なぜその答えになるのか」を2文で添えてください。</span></div>
+                        <div class="chat-text"><span class="prompt-text">定額法の計算に特化した問題を5問作ってください。各問に「取得原価・残存価額・耐用年数・取得日」の具体的な数字を設定し、年間減価償却費と月割り計算の過程を解説付きで示してください。</span></div>
                         <button class="copy-btn" title="プロンプトをコピー"><i class="fa-regular fa-copy"></i> コピー</button>
                     </div>
                 </div>
@@ -631,144 +631,145 @@
 
             <div style="text-align:center; margin-top:30px;">
                 <button class="tool-link-btn" onclick="openTab('second')" style="background:var(--accent-green);">
-                    後半（返品・在庫・カード）へ進む <i class="fa-solid fa-arrow-right"></i>
+                    後半（売却と評価勘定）へ進む <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </div>
         </div>
 
         <div id="second" class="tab-content">
 
-            <!-- Bloomナラティブ：5日目・午後 -->
+            <!-- Bloomナラティブ：6日目・午後 -->
             <div class="bloom-story" style="margin-bottom: 24px;">
-                <span class="bloom-story-label">📍 Bloom 5日目・午後</span>
+                <span class="bloom-story-label">📍 Bloom 6日目・午後</span>
                 <p>
-                    「あ、このお皿、角が欠けてる…」仕入れた商品に不備が見つかり、業者さんに返品することに。<br>
-                    さらに、ネットショップでの販売分を発送するための送料も発生しました。<br><br>
-                    <strong>返品や送料（諸掛）</strong>、そして在庫の数え方など、
-                    商売を続ける上で避けて通れない「実務のルール」を学びましょう。
+                    3年前に買ったショーケースを、ついに売ることになりました。<br>
+                    「帳簿上の価値は残っているのに、売れた金額は違う……これって損？得？」<br><br>
+                    <strong>「帳簿価額と売値の比較」</strong>が固定資産売却のポイント。<br>
+                    月割り計算・評価勘定の正体・売却3パターンを一気に理解しましょう。
                 </p>
             </div>
 
-            <h2>セクション2：返品・諸掛と在庫管理</h2>
+            <h2>セクション2：売却と評価勘定の深化</h2>
 
-            <!-- 先入先出法フロービジュアル（D：ビジュアルフロー） -->
+            <!-- 売却損益判定フロービジュアル（D：ビジュアルフロー） -->
             <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:24px; margin-bottom:28px;">
-                <h4 style="margin:0 0 16px; color:var(--accent-green);"><i class="fa-solid fa-route"></i> 先入先出法（FIFO）の払い出し計算ロジック</h4>
+                <h4 style="margin:0 0 16px; color:var(--accent-green);"><i class="fa-solid fa-route"></i> 固定資産売却の損益判定フロー</h4>
                 <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; justify-content:center;">
-                    <div style="background:#ecfdf5; border:2px solid var(--accent-green); border-radius:10px; padding:14px 18px; text-align:center; min-width:140px;">
-                        <div style="font-size:0.78rem; color:var(--accent-green); font-weight:700; margin-bottom:6px;">STEP 1：古い在庫から</div>
-                        <div style="font-size:0.9rem; font-weight:700;">先に仕入れた分を<br>先に払い出す</div>
-                        <div style="font-size:0.78rem; color:var(--text-sub); margin-top:4px;">古い単価 × 個数</div>
+                    <div style="background:#ecfdf5; border:2px solid var(--accent-green); border-radius:10px; padding:14px 18px; text-align:center; min-width:150px;">
+                        <div style="font-size:0.78rem; color:var(--accent-green); font-weight:700; margin-bottom:6px;">STEP 1：帳簿価額を計算</div>
+                        <div style="font-size:0.9rem; font-weight:700;">取得原価<br>− 減価償却累計額</div>
+                        <div style="font-size:0.78rem; color:var(--text-sub); margin-top:4px;">= 帳簿上の現在価値</div>
                     </div>
                     <div style="font-size:1.5rem; color:#94a3b8;">→</div>
-                    <div style="background:#fef3c7; border:2px solid var(--accent-gold); border-radius:10px; padding:14px 18px; text-align:center; min-width:140px;">
-                        <div style="font-size:0.78rem; color:var(--accent-gold); font-weight:700; margin-bottom:6px;">STEP 2：足りなければ</div>
-                        <div style="font-size:0.9rem; font-weight:700;">次の仕入れ分で<br>補充する</div>
-                        <div style="font-size:0.78rem; color:var(--text-sub); margin-top:4px;">新しい単価 × 残り個数</div>
+                    <div style="background:#fef3c7; border:2px solid var(--accent-gold); border-radius:10px; padding:14px 18px; text-align:center; min-width:150px;">
+                        <div style="font-size:0.78rem; color:var(--accent-gold); font-weight:700; margin-bottom:6px;">STEP 2：売値と比較</div>
+                        <div style="font-size:0.9rem; font-weight:700;">売却価格<br>vs 帳簿価額</div>
+                        <div style="font-size:0.78rem; color:var(--text-sub); margin-top:4px;">購入価格との比較ではない！</div>
                     </div>
                     <div style="font-size:1.5rem; color:#94a3b8;">→</div>
-                    <div style="background:#eff6ff; border:2px solid #3b82f6; border-radius:10px; padding:14px 18px; text-align:center; min-width:140px;">
-                        <div style="font-size:0.78rem; color:#3b82f6; font-weight:700; margin-bottom:6px;">払い出し欄の記入は</div>
-                        <div style="font-size:0.9rem; font-weight:700;">必ず「原価」で！<br>売価では❌</div>
-                        <div style="font-size:0.78rem; color:var(--text-sub); margin-top:4px;">残高も同様に原価で</div>
+                    <div style="background:#eff6ff; border:2px solid #3b82f6; border-radius:10px; padding:14px 18px; text-align:center; min-width:150px;">
+                        <div style="font-size:0.78rem; color:#3b82f6; font-weight:700; margin-bottom:6px;">STEP 3：損益を記録</div>
+                        <div style="font-size:0.9rem; font-weight:700;">売値 ＞ 帳簿価額<br>→ <strong style="color:#059669;">売却益（収益）</strong></div>
+                        <div style="font-size:0.78rem; color:#555; margin-top:4px;">売値 ＜ 帳簿価額<br>→ <strong style="color:#dc2626;">売却損（費用）</strong></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Learning Card 4: 返品と諸掛 -->
+            <!-- Learning Card 4: 月割り計算と間接法 -->
             <div class="learning-card">
                 <div class="lc-video">
-                    <div class="vc-thumb" data-video-id="8YeucmRVqbw" style="background-image: url('https://img.youtube.com/vi/8YeucmRVqbw/maxresdefault.jpg'), url('https://img.youtube.com/vi/8YeucmRVqbw/hqdefault.jpg');">
+                    <div class="vc-thumb" data-video-id="pbAig18gqpo" style="background-image: url('https://img.youtube.com/vi/pbAig18gqpo/maxresdefault.jpg'), url('https://img.youtube.com/vi/pbAig18gqpo/hqdefault.jpg');">
                         <i class="fa-brands fa-youtube vc-thumb-play"></i>
                     </div>
                 </div>
                 <div class="lc-content">
                     <div class="lc-header">
-                        <span class="vc-tag gold">重要</span>
-                        <h3 class="lc-title">返品と諸掛（送料）の処理ルール</h3>
+                        <span class="vc-tag">月割り計算</span>
+                        <h3 class="lc-title">月割り計算と間接法の仕組みを深める</h3>
                     </div>
                     <div class="lc-body">
-                        <h4><i class="fa-solid fa-truck-ramp-box"></i> ここがテストに出る！</h4>
+                        <h4><i class="fa-solid fa-calendar-days"></i> 期中取得・期中売却の月割り</h4>
                         <ul class="lc-list">
-                            <li><strong>返品（仕入戻し）</strong>：仕入時の仕訳をそのまま逆にするだけ。</li>
-                            <li><strong>仕入諸掛（運賃等）</strong>：原則として <strong>仕入原価に含める</strong>（仕入勘定に加算）。</li>
-                            <li><strong>売上諸掛</strong>：当社負担の場合は「発送費」等の費用科目で別処理。</li>
-                            <li>「仕入は原価にプラス、売上は別科目」——この対比を覚える。</li>
+                            <li><strong>月割り公式</strong>：年間減価償却費 × 使用月数 ÷ 12</li>
+                            <li>取得月を含めてカウント（例：10月取得→期末3月まで = 6ヶ月）</li>
+                            <li>間接法では減価償却累計額が「これまで総額いくら減ったか」を示す。</li>
+                            <li>売却時は取得原価と累計額を<strong>セットで消す</strong>のがルール。</li>
                         </ul>
                     </div>
                 </div>
             </div>
 
-            <!-- Learning Card 5: 商品有高帳 -->
+            <!-- Learning Card 5: 評価勘定の正体 -->
             <div class="learning-card">
                 <div class="lc-video">
-                    <div class="vc-thumb" data-video-id="fai9jxaXIho" style="background-image: url('https://img.youtube.com/vi/fai9jxaXIho/maxresdefault.jpg'), url('https://img.youtube.com/vi/fai9jxaXIho/hqdefault.jpg');">
+                    <div class="vc-thumb" data-video-id="95gTu-gtf7Y" style="background-image: url('https://img.youtube.com/vi/95gTu-gtf7Y/maxresdefault.jpg'), url('https://img.youtube.com/vi/95gTu-gtf7Y/hqdefault.jpg');">
                         <i class="fa-brands fa-youtube vc-thumb-play"></i>
                     </div>
                 </div>
                 <div class="lc-content">
                     <div class="lc-header">
-                        <span class="vc-tag">帳簿</span>
-                        <h3 class="lc-title">商品有高帳：先入先出法のマスター</h3>
+                        <span class="vc-tag gold">よく出る疑問</span>
+                        <h3 class="lc-title">減価償却累計額は負債なの？評価勘定の正体</h3>
                     </div>
                     <div class="lc-body">
-                        <h4><i class="fa-solid fa-boxes-packing"></i> 在庫計算のロジック</h4>
+                        <h4><i class="fa-solid fa-scale-balanced"></i> 「資産のマイナス」という特別な役割</h4>
                         <ul class="lc-list">
-                            <li><strong>商品有高帳</strong>：商品の在庫が「いつ・いくらで・何個」動いたかを管理する補助簿。</li>
-                            <li><strong>先入先出法（FIFO）</strong>：古い仕入れ分から先に売れたとみなして計算。</li>
-                            <li><strong>最重要注意</strong>：払い出し欄は「原価」で記入。問題文に売価が書いてあっても惑わされない。</li>
+                            <li>減価償却累計額は<strong>負債ではなく「資産の評価勘定」</strong>。</li>
+                            <li>通常の資産と逆で、ホームポジションは<strong>貸方（右側）</strong>。</li>
+                            <li>B/S上では固定資産の<strong>すぐ下にマイナス表示</strong>され、現在の帳簿価額を示す。</li>
+                            <li>メリット：取得原価が一目でわかり、どれだけ使ったかも把握できる。</li>
                         </ul>
                     </div>
                 </div>
             </div>
 
-            <!-- Learning Card 6: クレジット売掛金 -->
+            <!-- Learning Card 6: 固定資産の売却3パターン -->
             <div class="learning-card">
                 <div class="lc-video">
-                    <div class="vc-thumb" data-video-id="wmihafdKezA" style="background-image: url('https://img.youtube.com/vi/wmihafdKezA/maxresdefault.jpg'), url('https://img.youtube.com/vi/wmihafdKezA/hqdefault.jpg');">
+                    <div class="vc-thumb" data-video-id="GsCpbBK1BM0" style="background-image: url('https://img.youtube.com/vi/GsCpbBK1BM0/maxresdefault.jpg'), url('https://img.youtube.com/vi/GsCpbBK1BM0/hqdefault.jpg');">
                         <i class="fa-brands fa-youtube vc-thumb-play"></i>
                     </div>
                 </div>
                 <div class="lc-content">
                     <div class="lc-header">
-                        <span class="vc-tag blue">現代実務</span>
-                        <h3 class="lc-title">クレジット売掛金と支払手数料</h3>
+                        <span class="vc-tag blue">売却3パターン</span>
+                        <h3 class="lc-title">固定資産の売却：期首・期中・期末の違い</h3>
                     </div>
                     <div class="lc-body">
-                        <h4><i class="fa-solid fa-credit-card"></i> カード決済の流れ</h4>
+                        <h4><i class="fa-solid fa-money-bill-trend-up"></i> タイミングで仕訳が変わる！</h4>
                         <ul class="lc-list">
-                            <li><strong>クレジット売掛金（資産）</strong>：信販会社から後日受け取れるお金の権利。</li>
-                            <li><strong>支払手数料（費用）</strong>：カード利用時に信販会社へ払う手数料。</li>
-                            <li><strong>売上時（手数料3%の場合）</strong>：(借) クレジット売掛金 9,700、支払手数料 300 ／ (貸) 売上 10,000</li>
-                            <li><strong>入金時</strong>：(借) 当座預金 9,700 ／ (貸) クレジット売掛金 9,700</li>
+                            <li><strong>期首売却</strong>：前期末に償却済み → 当期の減価償却費計上は不要。</li>
+                            <li><strong>期中・期末売却</strong>：当期使用分を月割りで先に計上してから売却処理。</li>
+                            <li><strong>代金後払い → 「未収入金」</strong>（商品以外）。「売掛金」は商品販売専用。</li>
+                            <li><strong>土地は減価償却しない</strong>（使っても価値が減らないため）。</li>
                         </ul>
                     </div>
                 </div>
             </div>
 
-            <!-- talk-scene：諸掛あるある -->
+            <!-- talk-scene：売却あるある -->
             <div class="talk-scene" style="margin: 24px 0;">
                 <div class="talk-bubble owner">
                     <div class="talk-icon">🧑</div>
-                    <div class="talk-text">仕入れた時の送料を「仕入」に含めるのが、どうしても慣れません。</div>
+                    <div class="talk-text">期中に売った時、なぜ売却の前に減価償却費を計上するんですか？順番が逆では？</div>
                 </div>
                 <div class="talk-bubble teacher">
                     <div class="talk-icon">👩‍🏫</div>
-                    <div class="talk-text">「その商品を使える状態にするまでにかかったコスト」を原価と考えるからです。<br>100円のお皿を10円の送料で仕入れたなら、そのお皿の仕入原価は自分にとって110円ですよね？そう考えると納得しやすいですよ。</div>
+                    <div class="talk-text">売却日までの間も資産を使っていたからです。<br>「4月〜6月の3ヶ月分は使った」という事実を<strong>先に記録してから</strong>、その累計額を反映した状態で売却損益を計算します。</div>
                 </div>
             </div>
 
             <!-- 本日の結論コミック枠 -->
             <div class="conclusion-comic">
-                <span class="comic-label">✍️ DAY 5 の核心</span>
-                <p>掛取引は「いつかお金が動く約束」——<br>
-                権利（売掛金）と義務（買掛金）を正確に記録することが、健全な商売の基礎。</p>
+                <span class="comic-label">✍️ DAY 6 の核心</span>
+                <p>固定資産は「買った瞬間」ではなく「使い切った後まで」記録し続ける——<br>
+                その誠実な記録が、企業の真の実力を映し出します。</p>
             </div>
 
             <!-- NotebookLM 実習：後半 -->
             <div class="practice-area">
-                <h3><i class="fa-solid fa-clipboard-check"></i> 実習：返品・在庫管理・カード決済を問題で確認</h3>
-                <p>動画④〜⑥をNotebookLMに追加し、諸掛の処理ルールと先入先出法の計算力を鍛えましょう。</p>
+                <h3><i class="fa-solid fa-clipboard-check"></i> 実習：売却損益の計算と評価勘定を問題で確認</h3>
+                <p>動画④〜⑥をNotebookLMに追加し、月割り計算・評価勘定・売却3パターンの計算力を鍛えましょう。</p>
                 <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:12px; padding:20px; margin-bottom:24px;">
                     <h4 style="color:#b45309; margin:0 0 12px; display:flex; align-items:center; gap:8px;">
                         <i class="fa-solid fa-book"></i> NotebookLM へのソース追加手順
@@ -776,19 +777,19 @@
                     <ol style="margin:0; padding-left:1.4rem; font-size:0.92rem; line-height:1.9; color:#78350f;">
                         <li><strong>notebooklm.google.com</strong> にアクセスし、前半と同じノートブックを開く</li>
                         <li>画面左の「ソースを追加」をクリックし「YouTube」または「URL」を選択</li>
-                        <li>動画④ <code>https://www.youtube.com/watch?v=8YeucmRVqbw</code> を追加</li>
-                        <li>動画⑤ <code>https://www.youtube.com/watch?v=fai9jxaXIho</code> を追加</li>
-                        <li>動画⑥ <code>https://www.youtube.com/watch?v=wmihafdKezA</code> を追加</li>
+                        <li>動画④ <code>https://www.youtube.com/watch?v=pbAig18gqpo</code> を追加</li>
+                        <li>動画⑤ <code>https://www.youtube.com/watch?v=95gTu-gtf7Y</code> を追加</li>
+                        <li>動画⑥ <code>https://www.youtube.com/watch?v=GsCpbBK1BM0</code> を追加</li>
                         <li>追加完了後、下のプロンプトをコピーして選択式テストを作成する</li>
                     </ol>
                 </div>
                 <div class="chat-prompt-container">
                     <div class="chat-bubble">
-                        <div class="chat-text"><span class="prompt-text">読み込んだ動画④〜⑥の内容をもとに、Day5後半（商品の返品・仕入諸掛と売上諸掛の違い・商品有高帳の先入先出法・クレジット売掛金と支払手数料）の理解度を確認する選択式テストを20問作ってください。各問は4択にし、解答は最後にまとめて表示してください。</span></div>
+                        <div class="chat-text"><span class="prompt-text">読み込んだ動画④〜⑥の内容をもとに、Day6後半（月割り計算・減価償却累計額は評価勘定であること・B/S上の表示・期首/期中/期末別の売却仕訳・未収入金と売掛金の違い・土地は減価償却しない）の理解度を確認する選択式テストを20問作ってください。各問は4択にし、解答は最後にまとめて表示してください。</span></div>
                         <button class="copy-btn" title="プロンプトをコピー"><i class="fa-regular fa-copy"></i> コピー</button>
                     </div>
                     <div class="chat-bubble">
-                        <div class="chat-text"><span class="prompt-text">先入先出法（FIFO）の計算に特化した問題を5問作ってください。各問に「仕入日・単価・数量」の具体的な数字を設定し、払い出し時の計算過程と残高の求め方を解説付きで示してください。</span></div>
+                        <div class="chat-text"><span class="prompt-text">固定資産の売却に特化した計算問題を5問作ってください。各問に「取得原価・耐用年数・残存価額・経過年数（または累計額）・売却価格・売却時期（期首/期中/期末）」の具体的な数字を設定し、売却損益の計算過程と正しい仕訳を解説付きで示してください。</span></div>
                         <button class="copy-btn" title="プロンプトをコピー"><i class="fa-regular fa-copy"></i> コピー</button>
                     </div>
                 </div>
@@ -808,70 +809,70 @@
 
         <div id="summary" class="tab-content">
 
-            <!-- Bloomナラティブ：5日目・夜 -->
+            <!-- Bloomナラティブ：6日目・夜 -->
             <div class="bloom-story" style="margin-bottom: 24px;">
-                <span class="bloom-story-label">📍 Bloom 5日目・夜</span>
+                <span class="bloom-story-label">📍 Bloom 6日目・夜</span>
                 <p>
-                    「ツケで売った」「返品があった」「カードで払ってもらった」——<br>
-                    今日だけでこんなに多様な取引が生まれました。<br><br>
-                    <strong>お金が動く瞬間だけじゃなく、「約束」も記録する。</strong><br>
-                    それが複式簿記の誠実さです。
+                    「設備を買って、少しずつ費用にして、最後に売る」——<br>
+                    固定資産は長い時間をかけて帳簿に刻まれていく存在でした。<br><br>
+                    <strong>毎年の減価償却が、企業の「正直さ」を守っている。</strong><br>
+                    Harukaさんも今日、その意味をじわじわ理解し始めました。
                 </p>
             </div>
 
-            <h2>DAY 5 まとめ</h2>
+            <h2>DAY 6 まとめ</h2>
             <div class="summary-grid">
                 <div class="summary-card">
-                    <div class="summary-icon"><i class="fa-solid fa-handshake"></i></div>
-                    <h3>掛取引は「権利」と「義務」</h3>
-                    <p>売掛金は資産、買掛金は負債。お金を後でもらう約束、払う約束を明確に区別して仕訳します。</p>
+                    <div class="summary-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+                    <h3>取得原価は「使える状態になるまで」</h3>
+                    <p>付随費用（設置費・仲介料）は取得原価に含める。後払いは「未払金」（買掛金ではない）。</p>
                 </div>
                 <div class="summary-card">
-                    <div class="summary-icon"><i class="fa-solid fa-rotate-left"></i></div>
-                    <h3>返品は「逆再生」</h3>
-                    <p>返品が起きたら、仕入・売上の仕訳をそのままひっくり返して反対側に書くことで打ち消します。</p>
+                    <div class="summary-icon"><i class="fa-solid fa-arrow-trend-down"></i></div>
+                    <h3>定額法 × 間接法が基本セット</h3>
+                    <p>(取得原価 − 残存価額) ÷ 耐用年数 ＝ 年間償却費。仕訳は借方に「減価償却費」、貸方に「減価償却累計額」。</p>
                 </div>
                 <div class="summary-card">
-                    <div class="summary-icon"><i class="fa-solid fa-truck"></i></div>
-                    <h3>仕入諸掛は「本体価格」に</h3>
-                    <p>仕入れ時の送料は「仕入」に含める。売り上げ時の送料は「発送費」など別科目。この区別が最重要です。</p>
+                    <div class="summary-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+                    <h3>改良か修繕か：目的で仕訳が変わる</h3>
+                    <p>価値UP・耐用年数延長 → 資産（資本的支出）。現状回復・維持 → 修繕費（収益的支出）。</p>
                 </div>
                 <div class="summary-card">
-                    <div class="summary-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
-                    <h3>商品有高帳は「原価」で書く</h3>
-                    <p>在庫管理ノートには、売れた時の値段（売価）ではなく、仕入れた時の値段（原価）を記録します。</p>
+                    <div class="summary-icon"><i class="fa-solid fa-money-bill-trend-up"></i></div>
+                    <h3>売却損益は「帳簿価額」との比較</h3>
+                    <p>売価 ＞ 帳簿価額 → 固定資産売却益（収益）。売価 ＜ 帳簿価額 → 固定資産売却損（費用）。</p>
                 </div>
             </div>
 
             <h2>重要用語チェック</h2>
             <div class="term-grid">
-                <div class="term-card"><strong>掛取引（かけとりひき）</strong><span>商品の売買代金をその場ではなく後日まとめて受け払いする取引形態。</span></div>
-                <div class="term-card"><strong>売掛金</strong><span>商品を掛けで売った際に発生する「後日受け取る権利」。資産のグループに属する。</span></div>
-                <div class="term-card"><strong>買掛金</strong><span>商品を掛けで仕入れた際に発生する「後日払う義務」。負債のグループに属する。</span></div>
-                <div class="term-card"><strong>分記法（ぶんきほう）</strong><span>商品売買を「商品（資産）」と「商品売買益（収益）」に分けて記録する方法。</span></div>
-                <div class="term-card"><strong>商品売買益</strong><span>分記法で、売値と原価の差額として計上する収益科目。</span></div>
-                <div class="term-card"><strong>仕入戻し・売上戻り</strong><span>返品の簿記用語。仕入の返品が「仕入戻し」、売上の返品が「売上戻り」。逆仕訳で処理する。</span></div>
-                <div class="term-card"><strong>仕入諸掛（しいれしょがかり）</strong><span>商品仕入れ時にかかる運賃・保険料等。原則として仕入原価に含める。</span></div>
-                <div class="term-card"><strong>売上諸掛（発送費）</strong><span>商品売上時に当社が負担する発送費用。仕入とは別に費用科目で処理する。</span></div>
-                <div class="term-card"><strong>商品有高帳</strong><span>商品の在庫の入出庫を「数量・単価・金額」で管理する補助簿。原価で記録する。</span></div>
-                <div class="term-card"><strong>先入先出法（FIFO）</strong><span>古く仕入れた商品から順に売れたとみなして在庫計算を行う方法。</span></div>
-                <div class="term-card"><strong>クレジット売掛金</strong><span>クレジットカード決済時に信販会社から後日受け取る金額の権利。資産に属する。</span></div>
-                <div class="term-card"><strong>支払手数料</strong><span>クレジット決済等で信販会社に支払う手数料。費用科目として処理する。</span></div>
+                <div class="term-card"><strong>固定資産</strong><span>1年を超えて使用する有形の資産（建物・備品・車両運搬具など）。</span></div>
+                <div class="term-card"><strong>取得原価</strong><span>購入代価に付随費用（設置費・登記料など）を加えた、資産取得のための総コスト。</span></div>
+                <div class="term-card"><strong>未払金</strong><span>商品以外のもの（固定資産など）を後払いで購入した際に生じる負債科目。</span></div>
+                <div class="term-card"><strong>減価償却（げんかしょうきゃく）</strong><span>固定資産の価値の減少分を、使用期間にわたって費用として配分する手続き。</span></div>
+                <div class="term-card"><strong>定額法（ていがくほう）</strong><span>毎年同額ずつ減価償却する計算方法。(取得原価 − 残存価額) ÷ 耐用年数。</span></div>
+                <div class="term-card"><strong>耐用年数（たいようねんすう）</strong><span>固定資産が使用できると見込まれる期間。税法上の年数が試験では使われる。</span></div>
+                <div class="term-card"><strong>間接法（かんせつほう）</strong><span>資産を直接減らさず「減価償却累計額」という別勘定で累積の減少額を管理する方法。</span></div>
+                <div class="term-card"><strong>減価償却累計額</strong><span>これまでの減価償却の合計額を示す評価勘定。資産のマイナスで貸方残高。</span></div>
+                <div class="term-card"><strong>評価勘定（ひょうかかんじょう）</strong><span>本体資産の価値をマイナスして評価するための特別な勘定科目。</span></div>
+                <div class="term-card"><strong>資本的支出</strong><span>固定資産の価値向上・耐用年数延長を目的とした支出。取得原価に加算する。</span></div>
+                <div class="term-card"><strong>収益的支出（修繕費）</strong><span>固定資産の現状維持・原状回復のための支出。費用（修繕費）として計上。</span></div>
+                <div class="term-card"><strong>未収入金</strong><span>商品以外のもの（固定資産など）を後払いで売却した際に生じる資産科目。</span></div>
             </div>
 
             <div class="check-panel">
                 <h3><i class="fa-solid fa-clipboard-check"></i> セルフチェック</h3>
                 <ol class="check-list">
-                    <li>掛取引の仕訳を「発生時・回収時（または支払時）」の2段階それぞれで、正しく書けますか？</li>
-                    <li>仕入諸掛（送料）と売上諸掛（発送費）がなぜ別々の処理になるのか、理由とともに説明できますか？</li>
-                    <li>先入先出法の問題で「80個売れた（古い在庫50個@100円、新しい在庫@110円）」という設定で、払い出し金額と残高を正しく計算できますか？</li>
+                    <li>備品300,000円・残存価額0・耐用年数5年を定額法・間接法で記録する場合、1年目の仕訳を正しく書けますか？（減価償却費60,000円・減価償却累計額60,000円）</li>
+                    <li>「雨漏りの修繕工事30,000円」と「耐震補強工事200,000円」のうち、どちらが資本的支出でどちらが収益的支出か、理由とともに説明できますか？</li>
+                    <li>取得原価300,000円・減価償却累計額90,000円の備品を180,000円で期首に売却した場合の仕訳を書けますか？（売却損30,000円が発生します）</li>
                 </ol>
             </div>
 
             <!-- 確認クイズ -->
             <div class="quiz-panel" id="quizPanel">
                 <h3><i class="fa-solid fa-circle-question"></i> 確認クイズ（全5問）</h3>
-                <p style="color:var(--text-sub); font-size:0.9rem; margin-bottom:20px;">今日の掛取引・諸掛・在庫管理・クレジット決済の理解度を確認しましょう。</p>
+                <p style="color:var(--text-sub); font-size:0.9rem; margin-bottom:20px;">今日の固定資産・減価償却・売却損益の理解度を確認しましょう。</p>
                 <div id="quiz-container"></div>
                 <div id="quiz-result" style="display:none; margin-top:24px; padding:20px; border-radius:12px; text-align:center;">
                     <p id="quiz-score" style="font-size:1.6rem; font-weight:900; margin-bottom:8px;"></p>
@@ -883,14 +884,14 @@
             </div>
 
             <div style="background:#f0fdf4; padding:25px 30px; border-radius:12px; margin:35px 0 20px; border-left:6px solid #059669;">
-                <h4 style="color:#047857; margin:0 0 10px; font-size:1.15rem;"><i class="fa-solid fa-forward"></i> 次回予告：Day 6</h4>
-                <p style="margin:0; font-size:0.95rem; color:#333; line-height:1.6;">次回は「固定資産と減価償却」へ。Bloomが新しい設備を購入するところから、毎年の価値の目減り（減価償却）をどう記録するかを学びます。</p>
+                <h4 style="color:#047857; margin:0 0 10px; font-size:1.15rem;"><i class="fa-solid fa-forward"></i> 次回予告：Day 7</h4>
+                <p style="margin:0; font-size:0.95rem; color:#333; line-height:1.6;">（Day 7 の内容確定後に記入）</p>
             </div>
         </div>
 
         <div style="text-align:center; padding: 3rem 0 2rem; display: flex; flex-direction: column; gap: 1rem; align-items: center;">
-            <button type="button" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:linear-gradient(135deg, #34d399, #059669); border:none; box-shadow: 0 10px 30px rgba(5,150,105, 0.25); cursor:pointer;" onclick="window.location.href='./vol06-1.html'">
-                Day 6 へ進む <i class="fa-solid fa-arrow-right"></i>
+            <button type="button" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:linear-gradient(135deg, #34d399, #059669); border:none; box-shadow: 0 10px 30px rgba(5,150,105, 0.25); cursor:pointer;" onclick="(async function(){try{const r=await fetch('./vol07-1.html',{method:'HEAD',cache:'no-store'});if(r.ok){window.location.href='./vol07-1.html';return;}}catch(e){}alert('Day 7 は準備中です。もうしばらくお待ちください。');})()">
+                Day 7 へ進む <i class="fa-solid fa-arrow-right"></i>
             </button>
             <button type="button" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:#fff; color:#4a4a4a; border:2px solid #e2e8f0; box-shadow:none; cursor:pointer;" onclick="window.location.href='./index.html'">
                 <i class="fa-solid fa-house"></i> 学習記録をつけて Home へ戻る
@@ -945,60 +946,40 @@
                 } catch (error) {
                     // Local file previews may reject HEAD requests; keep users away from a broken link.
                 }
-                alert('Day 6ページはまだ準備中です。公開後にこのリンクから進めます。');
+                alert('Day 7ページはまだ準備中です。公開後にこのリンクから進めます。');
             });
         });
 
         const quizData = [
             {
-                q: "Bloomが取引先に雑貨を掛けで仕入れた。正しい仕訳はどれ？",
-                opts: [
-                    "(借) 仕入 100 ／ (貸) 現金 100",
-                    "(借) 仕入 100 ／ (貸) 買掛金 100",
-                    "(借) 売掛金 100 ／ (貸) 売上 100",
-                    "(借) 買掛金 100 ／ (貸) 仕入 100"
-                ],
+                q: "Bloomがショーケース150,000円を購入し、設置費10,000円を現金で支払った。備品勘定に計上する取得原価は？",
+                opts: ["150,000円", "10,000円", "160,000円", "140,000円"],
+                ans: 2,
+                fb: "付随費用（設置費）は取得原価に含めます。Bloomにとってショーケースの原価は「150,000 + 10,000 = 160,000円」です。費用（支払手数料等）にするのは誤りです。"
+            },
+            {
+                q: "取得原価90,000円・残存価額0・耐用年数5年の備品を定額法で減価償却する場合、1年間の減価償却費は？",
+                opts: ["9,000円", "18,000円", "15,000円", "4,500円"],
                 ans: 1,
-                fb: "掛けで仕入れると「後で払う義務（負債）」が生まれます。これが買掛金です。現金はまだ動いていないので貸方に現金は入りません。"
+                fb: "(90,000 − 0) ÷ 5 = 18,000円。定額法は残存価額を引いてから耐用年数で割ります。残存価額がゼロの場合は取得原価をそのまま年数で割ればOKです。"
             },
             {
-                q: "Bloomが10,000円の商品を仕入れ、送料500円を現金で支払った。仕入勘定の金額は？",
-                opts: ["10,000円", "500円", "10,500円", "9,500円"],
-                ans: 2,
-                fb: "仕入諸掛（送料）は仕入原価に含めます。Bloomにとってその商品の原価は「10,000 + 500 = 10,500円」となります。"
+                q: "Bloomのカフェで雨漏りが発生し、修繕工事費30,000円を現金で支払った。正しい仕訳の借方科目は？",
+                opts: ["建物", "修繕費", "資本的支出", "減価償却費"],
+                ans: 1,
+                fb: "雨漏りの修繕は「現状回復」なので収益的支出です。費用科目「修繕費」を借方に計上します。資産価値を高める工事（資本的支出）なら建物に加算しますが、今回は違います。"
             },
             {
-                q: "商品有高帳（先入先出法）で「80個売れた」時、まず@100円の在庫50個を払い出した後、残り30個をどう処理する？",
-                opts: [
-                    "売価の単価で計算する",
-                    "50個と同じ@100円を使う",
-                    "次に仕入れた単価（@110円など）で計算する",
-                    "払い出しをいったん止めて在庫確認する"
-                ],
-                ans: 2,
-                fb: "先入先出法は「古い在庫から先に使う」ルールです。@100円の50個が尽きたら、次に仕入れた単価の在庫から残り30個を払い出します。"
+                q: "取得原価300,000円・減価償却累計額90,000円の備品を180,000円で売却した（代金現金）。売却損益はいくら？",
+                opts: ["売却益90,000円", "売却損30,000円", "売却益30,000円", "売却損90,000円"],
+                ans: 1,
+                fb: "帳簿価額 = 300,000 − 90,000 = 210,000円。売却価格180,000円 ＜ 帳簿価額210,000円なので、差額30,000円が「固定資産売却損（費用）」です。"
             },
             {
-                q: "Bloomでお客さんがカード払いで10,000円の商品を購入。手数料3%の場合、売上時の仕訳はどれ？",
-                opts: [
-                    "(借) 現金 10,000 ／ (貸) 売上 10,000",
-                    "(借) クレジット売掛金 10,000 ／ (貸) 売上 10,000",
-                    "(借) クレジット売掛金 9,700, 支払手数料 300 ／ (貸) 売上 10,000",
-                    "(借) 売掛金 9,700 ／ (貸) 売上 9,700"
-                ],
-                ans: 2,
-                fb: "カード決済では現金はもらえず、信販会社への請求権（クレジット売掛金）が生まれます。手数料は支払手数料として費用計上し、売上は全額10,000円のまま計上するのがポイントです。"
-            },
-            {
-                q: "Bloomが仕入れた商品を一部返品（仕入戻し）した。買掛金の処理はどうなる？",
-                opts: [
-                    "買掛金を借方に記入して、負債を減らす",
-                    "買掛金を貸方に記入して、負債を増やす",
-                    "買掛金の仕訳は不要",
-                    "買掛金を資産として計上する"
-                ],
-                ans: 0,
-                fb: "返品は仕入時の逆仕訳です。仕入時は「(借)仕入 ／ (貸)買掛金」だったので、逆にすると「(借)買掛金 ／ (貸)仕入」となります。借方に書くことで負債が減ります。"
+                q: "減価償却累計額は、簿記の5大要素（資産・負債・純資産・収益・費用）のどれに属する？",
+                opts: ["負債", "費用", "純資産", "資産（の評価勘定）"],
+                ans: 3,
+                fb: "減価償却累計額は「資産の評価勘定」です。資産のマイナスを表す特別な科目で、負債ではありません。貸借対照表では固定資産の下にマイナス表示され、現在の帳簿価額を示します。"
             }
         ];
 
@@ -1053,7 +1034,7 @@
             result.className = isPassed ? 'pass' : 'fail';
             document.getElementById('quiz-score').textContent = `${score} / ${quizData.length} 正解`;
             document.getElementById('quiz-msg').textContent = isPassed
-                ? '素晴らしい！Bloomの掛取引・在庫・カード決済、しっかり理解できています。Day6へ進みましょう。'
+                ? '素晴らしい！Bloomの固定資産と減価償却、しっかり理解できています。Day7へ進みましょう。'
                 : 'もう一度ページを読み直してから再挑戦しましょう。NotebookLMに解説を頼むのもOKです。';
             result.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
@@ -1067,4 +1048,4 @@
     </script>
 </body>
 </html>
-<!-- cache-bust: 2026-05-14T09:00:00 -->
+<!-- cache-bust: 2026-05-15T09:00:00 -->
