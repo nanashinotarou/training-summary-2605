@@ -2,6 +2,5 @@ scratch/
 *.vtt
 *.vtt.txt
 .claude/worktrees/
-.deploy_tmp/
 .wrangler/
 node_modules/

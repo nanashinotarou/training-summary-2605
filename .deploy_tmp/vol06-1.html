@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 6 | 固定資産と減価償却</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Teko:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #f0fdf4;
+            --bg-card: rgba(255, 255, 255, 0.85);
+            --bg-card-solid: #ffffff;
+            --text-main: #1e293b;
+            --text-sub: #64748b;
+            --accent-green: #059669;
+            --accent-gold: #d97706;
+            --accent-blue: #2563eb;
+            --accent-light: #d1fae5;
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 15px 40px rgba(5, 150, 105, 0.2);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.6);
+            --radius-large: 24px;
+            --radius-medium: 16px;
+            --radius-small: 8px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: var(--bg-body);
+            background-image:
+                radial-gradient(at 0% 0%, rgba(255, 255, 255, 0.8) 0, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(209, 250, 229, 0.8) 0, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 20px;
+        }
+
+        .home-btn {
+            position: fixed; bottom: 30px; right: 30px;
+            width: 60px; height: 60px;
+            background: var(--accent-green); color: white;
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 1.5rem; text-decoration: none;
+            box-shadow: 0 10px 25px rgba(5, 150, 105, 0.4);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 1000;
+        }
+        .home-btn:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 15px 30px rgba(5, 150, 105, 0.5); background: #047857; }
+
+        .container {
+            width: 100%; max-width: 900px;
+            background: var(--bg-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: var(--glass-border); border-radius: var(--radius-large);
+            box-shadow: var(--shadow-soft); overflow: hidden;
+            display: flex; flex-direction: column; animation: fadeIn 0.8s ease-out;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .header { padding: 40px 40px 20px; border-bottom: 2px solid var(--accent-light); text-align: center; }
+        .header-tag {
+            display: inline-block; background: var(--accent-green); color: white;
+            font-weight: 700; padding: 4px 12px; border-radius: 20px;
+            font-family: 'Roboto', sans-serif; font-size: 0.85rem; letter-spacing: 1px; margin-bottom: 15px;
+        }
+        .header h1 { font-size: 2.2rem; font-weight: 900; color: var(--accent-green); margin-bottom: 10px; }
+        .progress-wrap { max-width: 520px; height: 8px; background: #e2e8f0; border-radius: 999px; margin: 18px auto 0; overflow: hidden; }
+        .progress-bar { width: 46%; height: 100%; background: linear-gradient(90deg, var(--accent-green), #34d399); border-radius: inherit; }
+
+        .tabs { display: flex; padding: 0 20px; background: rgba(255, 255, 255, 0.5); border-bottom: 1px solid #eee; overflow-x: auto; }
+        .tab-btn {
+            border: none; background: none; padding: 20px 24px; font-size: 1rem; font-weight: 700;
+            color: var(--text-sub); cursor: pointer; position: relative; transition: color 0.3s; white-space: nowrap;
+        }
+        .tab-btn:hover, .tab-btn.active { color: var(--accent-green); }
+        .tab-btn.active::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px;
+            background: var(--accent-green); border-radius: 3px 3px 0 0;
+        }
+
+        .tab-content { display: none; padding: 40px; background: var(--bg-card-solid); min-height: 500px; animation: fadeInTab 0.4s ease-out; }
+        .tab-content.active { display: block; }
+        @keyframes fadeInTab { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h2 { font-size: 1.6rem; color: var(--text-main); border-left: 5px solid var(--accent-gold); padding-left: 15px; margin: 30px 0 20px; }
+        h2:first-child { margin-top: 0; }
+        h3 { font-size: 1.3rem; color: var(--accent-green); margin: 25px 0 15px; display: flex; align-items: center; gap: 10px; }
+        p { line-height: 1.8; margin-bottom: 20px; color: #555; font-size: 1.05rem; max-width: 1000px; }
+
+        .goal-box {
+            background: linear-gradient(135deg, var(--accent-light), #fff);
+            border: 1px solid var(--accent-green); border-radius: var(--radius-medium);
+            padding: 30px; margin-bottom: 30px; text-align: center;
+        }
+        .goal-box i { font-size: 3rem; color: var(--accent-green); margin-bottom: 15px; }
+        .goal-box h3 { justify-content: center; font-size: 1.5rem; margin-top: 0; }
+        .goal-box p { font-size: 1.15rem; font-weight: 500; margin-bottom: 0; color: var(--text-main); }
+
+        .learning-card {
+            display: flex; flex-direction: row; background: rgba(255, 255, 255, 0.9);
+            border-radius: var(--radius-medium); border: var(--glass-border); overflow: hidden;
+            margin-bottom: 30px; box-shadow: var(--shadow-soft); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .learning-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); border-color: var(--accent-light); }
+        .lc-video { flex: 0 0 45%; background: #000; display: flex; flex-direction: column; position: relative; }
+        .lc-content { flex: 1; padding: 30px; display: flex; flex-direction: column; justify-content: center; }
+        .lc-header { border-bottom: 2px dashed var(--accent-light); padding-bottom: 15px; margin-bottom: 20px; }
+        .lc-title { font-size: 1.2rem; font-weight: 900; color: var(--text-main); margin: 10px 0 0 0; line-height: 1.4; }
+        .lc-body h4 { font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .lc-body p { font-size: 1rem; line-height: 1.7; margin-bottom: 15px; color: #555; }
+        .lc-list { list-style: none; padding-left: 0; margin-bottom: 0; background: #fdfdfd; padding: 15px; border-radius: var(--radius-small); border: 1px solid #f5f5f5; }
+        .lc-list li { position: relative; padding-left: 25px; margin-bottom: 8px; font-size: 0.95rem; color: #444; line-height: 1.65; }
+        .lc-list li::before { content: '\f0da'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; left: 5px; top: 3px; color: var(--accent-gold); }
+
+        .vc-thumb { width: 100%; aspect-ratio: 16/9; background-color: #000; background-size: cover; background-position: center; position: relative; cursor: pointer; }
+        .vc-thumb::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.1); transition: background 0.3s ease; pointer-events: none; }
+        .vc-thumb:hover::before { background: rgba(0, 0, 0, 0.2); }
+        .vc-thumb-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 3rem; color: rgba(255, 255, 255, 0.9); text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4); transition: transform 0.3s ease, color 0.3s ease; pointer-events: none; }
+        .vc-thumb:hover .vc-thumb-play { transform: translate(-50%, -50%) scale(1.1); color: #ff0000; }
+        .vc-tag { font-size: 0.75rem; background: var(--accent-light); color: var(--accent-green); font-weight: 700; padding: 3px 10px; border-radius: 20px; border: 1px solid rgba(5,150,105,0.25); display: inline-block; margin-bottom: 8px; }
+        .vc-tag.blue { background: #dbeafe; color: var(--accent-blue); border-color: rgba(37,99,235,0.25); }
+        .vc-tag.gold { background: #fffbeb; color: var(--accent-gold); border-color: rgba(217,119,6,0.25); }
+
+        .flow-map { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 24px 0 30px; }
+        .flow-step { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px 12px; text-align: center; position: relative; box-shadow: var(--shadow-soft); }
+        .flow-step:not(:last-child)::after { content: '\f054'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: -10px; top: 50%; transform: translateY(-50%); color: #94a3b8; z-index: 2; }
+        .flow-step i { color: var(--accent-green); font-size: 1.3rem; margin-bottom: 8px; }
+        .flow-step strong { display: block; font-size: 0.9rem; color: var(--text-main); margin-bottom: 4px; }
+        .flow-step span { display: block; font-size: 0.74rem; color: var(--text-sub); line-height: 1.45; }
+
+        .book-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 22px 0 30px; }
+        .book-card { border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; background: #f8fafc; }
+        .book-card.primary { background: #ecfdf5; border-color: #a7f3d0; }
+        .book-card.assist { background: #eff6ff; border-color: #bfdbfe; }
+        .book-card h4 { color: var(--text-main); font-size: 1.08rem; margin-bottom: 10px; display: flex; gap: 8px; align-items: center; }
+        .book-card p { font-size: 0.92rem; margin-bottom: 0; line-height: 1.65; }
+
+        .ledger-demo { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 22px; margin: 20px 0 30px; }
+        .ledger-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 14px; align-items: stretch; }
+        .journal, .ledger { background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; padding: 16px; }
+        .journal h4, .ledger h4 { margin: 0 0 12px; font-size: 1rem; color: var(--accent-green); }
+        .journal-line { display: flex; justify-content: space-between; gap: 10px; border-bottom: 1px dashed #e2e8f0; padding: 7px 0; font-size: 0.9rem; }
+        .arrow-mid { display: flex; align-items: center; justify-content: center; color: var(--accent-gold); font-size: 1.6rem; }
+        .t-account { width: 100%; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .t-header { background: #1e293b; color: #fff; padding: 8px; text-align: center; font-weight: bold; font-size: 0.9rem; }
+        .t-body { display: flex; border-top: 2px solid #1e293b; min-height: 120px; }
+        .t-left, .t-right { flex: 1; padding: 10px; font-size: 0.82rem; }
+        .t-left { border-right: 2px solid #1e293b; background: #eff6ff; }
+        .t-right { background: #fef2f2; }
+        .t-label { font-size: 0.7rem; color: #64748b; margin-bottom: 5px; display: block; }
+
+        .voucher-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 18px 0 25px; }
+        .voucher-card { border-radius: 16px; padding: 18px; border: 1px solid #e2e8f0; background: #fff; box-shadow: var(--shadow-soft); }
+        .voucher-card h4 { margin: 0 0 8px; color: var(--text-main); font-size: 1rem; }
+        .voucher-card p { margin-bottom: 0; font-size: 0.9rem; line-height: 1.6; }
+        .voucher-card.in { border-top: 5px solid #059669; }
+        .voucher-card.out { border-top: 5px solid #dc2626; }
+        .voucher-card.transfer { border-top: 5px solid #2563eb; }
+
+        .practice-area { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-medium); padding: 30px; margin-top: 30px; }
+        .tool-link-btn { display: inline-flex; align-items: center; gap: 10px; background: #059669; color: white; padding: 12px 24px; border-radius: 30px; text-decoration: none; font-weight: bold; transition: 0.3s; margin-bottom: 20px; border: 0; cursor: pointer; font-size: 0.95rem; }
+        .tool-link-btn:hover { background: #047857; transform: translateY(-2px); }
+        .step-list { list-style: none; padding-left: 0; margin: 14px 0 0; }
+        .step-list li { position: relative; padding-left: 40px; margin-bottom: 15px; font-size: 1.02rem; line-height: 1.65; }
+        .step-list li::before { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; left: 0; top: 3px; width: 25px; height: 25px; background: var(--accent-green); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; }
+
+        .chat-prompt-container { display: flex; flex-direction: column; gap: 15px; margin: 20px auto; max-width: 1000px; background: #fff; padding: 25px; border-radius: var(--radius-large); box-shadow: inset 0 2px 10px rgba(0,0,0,0.02); border: 1px solid #eee; }
+        .chat-bubble { display: flex; align-items: center; justify-content: space-between; background: #f1f5f9; padding: 12px 20px; border-radius: 20px 20px 20px 0; max-width: 95%; align-self: flex-start; gap: 15px; transition: all 0.2s; border: 1px solid transparent; }
+        .chat-bubble:hover { border-color: #cbd5e1; background: #e2e8f0; }
+        .chat-text { font-size: 1rem; color: #1e293b; line-height: 1.55; font-weight: 500; }
+        .copy-btn { background: #fff; border: 1px solid #cbd5e1; color: #059669; padding: 8px 15px; border-radius: 15px; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+        .copy-btn:hover { background: #f8fafc; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .copy-btn.copied { background: #d1fae5; border-color: #a7f3d0; color: #047857; }
+
+        .summary-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin: 25px 0 35px; }
+        .summary-card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: var(--radius-medium); padding: 24px; box-shadow: var(--shadow-soft); }
+        .summary-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: var(--accent-light); color: var(--accent-green); font-size: 1.25rem; margin-bottom: 14px; }
+        .summary-card h3 { margin: 0 0 10px; color: var(--text-main); font-size: 1.1rem; }
+        .summary-card p { margin-bottom: 0; font-size: 0.96rem; line-height: 1.75; }
+
+        .term-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 18px 0 30px; }
+        .term-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; }
+        .term-card strong { display: block; color: var(--accent-green); margin-bottom: 6px; font-size: 1rem; }
+        .term-card span { display: block; color: #475569; font-size: 0.9rem; line-height: 1.55; }
+
+        .check-panel {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-left: 6px solid var(--accent-gold);
+            border-radius: var(--radius-medium);
+            padding: 26px;
+            margin: 28px 0;
+        }
+        .check-panel h3 { color: #b45309; margin-top: 0; }
+        .check-list {
+            margin: 0;
+            padding-left: 1.4rem;
+        }
+        .check-list li {
+            margin-bottom: 12px;
+            line-height: 1.7;
+            color: #44403c;
+        }
+
+        .quiz-panel { background: #fafafa; border: 1px solid #e2e8f0; border-radius: var(--radius-medium); padding: 28px; margin: 28px 0; }
+        .quiz-q { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .quiz-q-text { font-size: 1rem; font-weight: 700; color: var(--text-main); margin-bottom: 14px; }
+        .quiz-q-num { font-size: 0.78rem; color: var(--accent-gold); font-weight: 700; margin-bottom: 6px; }
+        .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+        .quiz-opt {
+            display: flex; align-items: center; gap: 12px;
+            background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 10px;
+            padding: 12px 16px; cursor: pointer; transition: 0.2s;
+            font-size: 0.95rem; color: var(--text-main); text-align: left;
+        }
+        .quiz-opt:hover { background: var(--accent-light); border-color: var(--accent-green); }
+        .quiz-opt.correct { background: #ecfdf5; border-color: #059669; color: #065f46; }
+        .quiz-opt.wrong { background: #fef2f2; border-color: #ef4444; color: #991b1b; }
+        .quiz-opt.disabled { cursor: default; pointer-events: none; }
+        .quiz-opt-icon { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #cbd5e1; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
+        .quiz-feedback { margin-top: 12px; padding: 10px 14px; border-radius: 8px; font-size: 0.88rem; line-height: 1.6; display: none; }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct-fb { background: #ecfdf5; color: #065f46; border-left: 4px solid #059669; }
+        .quiz-feedback.wrong-fb { background: #fef2f2; color: #991b1b; border-left: 4px solid #ef4444; }
+        #quiz-result.pass { background: #ecfdf5; border: 2px solid #059669; border-radius: 12px; }
+        #quiz-result.fail { background: #fff7ed; border: 2px solid #d97706; border-radius: 12px; }
+
+        .nav-links { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; padding: 20px 40px 40px; background: var(--bg-card-solid); }
+        .nav-link {
+            display: inline-flex; align-items: center; gap: 8px; color: var(--text-sub);
+            font-size: 0.9rem; text-decoration: none; border: 1px solid #e2e8f0;
+            padding: 10px 20px; border-radius: 20px; transition: 0.2s;
+        }
+        .nav-link:hover { border-color: var(--accent-green); color: var(--accent-green); }
+        .nav-link.pending { border-style: dashed; }
+
+        /* ===== Bloomコンポーネント（vol01と共通） ===== */
+        .intro-note {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--radius-small);
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            font-size: 0.92rem;
+            color: var(--text-sub);
+            line-height: 1.7;
+        }
+        .intro-note strong { color: var(--text-main); }
+
+        .bloom-story {
+            position: relative;
+            background: linear-gradient(135deg, #ecfdf5 0%, #fef3c7 100%);
+            border-left: 5px solid var(--accent-green);
+            border-radius: var(--radius-small);
+            padding: 20px 24px 20px 28px;
+            margin-bottom: 28px;
+            overflow: hidden;
+            line-height: 1.8;
+        }
+        .bloom-story::before {
+            content: '🌸';
+            position: absolute;
+            right: 16px; top: 10px;
+            font-size: 3rem;
+            opacity: 0.12;
+            pointer-events: none;
+        }
+        .bloom-story-label {
+            display: inline-block;
+            background: var(--accent-green);
+            color: #fff;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            letter-spacing: 0.03em;
+        }
+        .bloom-story p { margin-bottom: 0; color: var(--text-main); font-size: 1rem; }
+
+        .why-box {
+            background: #1e293b;
+            color: #f8fafc;
+            border-radius: var(--radius-small);
+            padding: 20px 24px;
+            margin-bottom: 24px;
+        }
+        .why-box .why-q {
+            color: #fde68a;
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+        }
+        .why-box .why-q::before { content: '❓ '; }
+        .why-box .why-a {
+            font-size: 0.95rem;
+            line-height: 1.75;
+            color: #cbd5e1;
+        }
+        .why-box .why-a strong { color: #6ee7b7; }
+
+        .talk-scene {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+        .talk-scene .talk-bubble {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            max-width: 88%;
+        }
+        .talk-scene .talk-bubble.owner { align-self: flex-start; }
+        .talk-scene .talk-bubble.teacher { align-self: flex-end; flex-direction: row-reverse; }
+        .talk-scene .talk-icon {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; flex-shrink: 0;
+        }
+        .talk-scene .talk-bubble.owner .talk-icon { background: #d1fae5; }
+        .talk-scene .talk-bubble.teacher .talk-icon { background: #fef3c7; }
+        .talk-scene .talk-text {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 0.88rem;
+            line-height: 1.65;
+            color: var(--text-main);
+        }
+        .talk-scene .talk-bubble.owner .talk-text { border-top-left-radius: 2px; }
+        .talk-scene .talk-bubble.teacher .talk-text { border-top-right-radius: 2px; }
+
+        .conclusion-comic {
+            transform: rotate(-0.8deg);
+            border: 3px dashed var(--accent-gold);
+            border-radius: 14px;
+            padding: 22px 26px;
+            margin: 32px 0;
+            background: #fffbeb;
+            box-shadow: 4px 4px 0 rgba(217,119,6,0.15);
+            text-align: center;
+        }
+        .conclusion-comic .comic-label {
+            font-size: 0.78rem;
+            color: var(--accent-gold);
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .conclusion-comic p {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* === レスポンシブ対応（モバイル最適化） === */
+        @media (max-width: 768px) {
+            body { padding: 20px 10px; }
+            .container { padding: 0 10px; margin-top: 20px; border-radius: 18px; }
+            .header { padding: 32px 20px 18px; }
+            .header h1 { font-size: 1.8rem; }
+            .tab-content { padding: 28px 18px; }
+            .tabs { padding: 0 10px; flex-wrap: wrap; }
+            .tab-btn { padding: 15px 10px; font-size: 0.85rem; flex: 1 1 100%; justify-content: center; }
+            .learning-card { flex-direction: column; }
+            .lc-video { width: 100%; flex: none; }
+            .lc-content { padding: 20px; }
+            .flow-map, .book-grid, .voucher-grid, .summary-grid, .term-grid { grid-template-columns: 1fr; }
+            .check-panel { padding: 20px; margin: 20px 0; }
+            .flow-step:not(:last-child)::after { content: '\f078'; right: 50%; top: auto; bottom: -12px; transform: translateX(50%); }
+            .ledger-row { grid-template-columns: 1fr; }
+            .arrow-mid { transform: rotate(90deg); }
+            .chat-bubble { max-width: 100%; flex-direction: column; align-items: stretch; }
+            .talk-scene .talk-bubble { max-width: 100%; align-self: stretch; }
+            .talk-scene .talk-bubble.teacher { flex-direction: row; }
+            .home-btn { width: 52px; height: 52px; bottom: 20px; right: 20px; }
+        }
+    </style>
+</head>
+
+<body>
+    <a href="./index.html" class="home-btn" title="ホームに戻る">
+        <i class="fa-solid fa-house"></i>
+    </a>
+
+    <div class="container">
+        <header class="header">
+            <span class="header-tag">DAY 06</span>
+            <h1>固定資産と減価償却</h1>
+            <p style="margin:0; color:var(--text-sub);">May 2026 - Bookkeeping Course</p>
+            <div class="progress-wrap" aria-label="Course progress">
+                <div class="progress-bar"></div>
+            </div>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" onclick="openTab('goal')"><i class="fa-solid fa-building"></i> 今日の目標</button>
+            <button class="tab-btn" onclick="openTab('first')"><i class="fa-solid fa-arrow-trend-down"></i> 前半：取得と減価償却の基本</button>
+            <button class="tab-btn" onclick="openTab('second')"><i class="fa-solid fa-money-bill-trend-up"></i> 後半：売却と評価勘定</button>
+            <button class="tab-btn" onclick="openTab('summary')"><i class="fa-solid fa-list-check"></i> まとめ</button>
+        </nav>
+
+        <div id="goal" class="tab-content active">
+
+            <!-- Bloomナラティブ：6日目・朝 -->
+            <div class="bloom-story">
+                <span class="bloom-story-label">📍 Bloom 6日目・朝</span>
+                <p>
+                    Bloomがオープンして1週間。Harukaさんが念願のエスプレッソマシンを購入しました。<br>
+                    「150,000円か……大きな買い物だったな」<br><br>
+                    でも簿記では、この出費を「今日全部の費用」にはしません。<br>
+                    <strong>長く使うモノの代金は、使う年数に分けて記録する</strong>——それが今日のテーマです。
+                </p>
+            </div>
+
+            <!-- Whyボックス -->
+            <div class="why-box">
+                <div class="why-q">なぜ「減価償却累計額」という別勘定を使うの？</div>
+                <div class="why-a">
+                    資産を直接減らしてしまうと、<strong>「もともといくらで買ったか」が帳簿から消えてしまいます。</strong><br>
+                    別勘定で「今まで何円分価値が減ったか」をメモしておくことで、<br>
+                    取得原価・累計の減少額・現在の帳簿価額を<strong>同時に見える化</strong>できます。
+                </div>
+            </div>
+
+            <!-- talk-scene：あるある疑問 -->
+            <div class="talk-scene">
+                <div class="talk-bubble owner">
+                    <div class="talk-icon">🧑</div>
+                    <div class="talk-text">機械を買った時、なぜ「費用」じゃなくて「資産」で記録するんですか？</div>
+                </div>
+                <div class="talk-bubble teacher">
+                    <div class="talk-icon">👩‍🏫</div>
+                    <div class="talk-text">買った瞬間に全額費用にすると、その年だけ大赤字になりますよね。<br>5年使うなら、<strong>5年に分けて費用化する</strong>のが正直な記録です。これが「費用収益対応の原則」です。</div>
+                </div>
+            </div>
+
+            <!-- goal-box -->
+            <div class="goal-box">
+                <i class="fa-solid fa-building"></i>
+                <h3>「固定資産の取得から売却まで、一連の流れを仕訳できる」</h3>
+                <p>付随費用の取扱い、定額法による減価償却、資本的支出vs収益的支出の区別、<br>そして売却時の損益計算まで——固定資産の全サイクルをBloomで体験します。</p>
+            </div>
+
+            <h2>本日の学習マップ</h2>
+            <p>Day 6は「設備投資の記録」を学びます。長期にわたる資産の管理が、いかに企業の実態を正確に伝えるかを理解しましょう。</p>
+
+            <!-- フローマップ（D：ビジュアルフロー） -->
+            <div class="flow-map">
+                <div class="flow-step">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <strong>固定資産の取得</strong>
+                    <span>購入代価＋付随費用</span>
+                </div>
+                <div class="flow-step">
+                    <i class="fa-solid fa-arrow-trend-down"></i>
+                    <strong>減価償却</strong>
+                    <span>定額法・間接法</span>
+                </div>
+                <div class="flow-step">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    <strong>改良・修繕</strong>
+                    <span>資本的支出 vs 収益的支出</span>
+                </div>
+                <div class="flow-step">
+                    <i class="fa-solid fa-scale-balanced"></i>
+                    <strong>評価勘定の理解</strong>
+                    <span>累計額は資産のマイナス</span>
+                </div>
+                <div class="flow-step">
+                    <i class="fa-solid fa-money-bill-trend-up"></i>
+                    <strong>固定資産の売却</strong>
+                    <span>売却益・売却損の計算</span>
+                </div>
+            </div>
+
+            <div style="background:#fffbeb; padding:25px 30px; border-radius:12px; margin:35px 0 20px; border-left:6px solid var(--accent-gold);">
+                <h4 style="color:#b45309; margin:0 0 10px; font-size:1.15rem;"><i class="fa-solid fa-lightbulb"></i> AI Director's Eye：資産管理の自動化</h4>
+                <p style="margin:0; font-size:0.95rem; color:#333; line-height:1.7;">ERPやクラウド会計ソフトでは、固定資産台帳が自動で減価償却を計算します。「定額法で5年・残存価額0」と入力するだけで毎期の仕訳が自動生成される仕組みの裏側には、今日学ぶ計算式がそのまま動いています。</p>
+            </div>
+
+            <div style="text-align:center; margin-top:30px;">
+                <button class="tool-link-btn" onclick="openTab('first')" style="background:var(--accent-green);">
+                    前半（取得と減価償却）へ進む <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="first" class="tab-content">
+
+            <!-- Bloomナラティブ：6日目・午前 -->
+            <div class="bloom-story" style="margin-bottom: 24px;">
+                <span class="bloom-story-label">📍 Bloom 6日目・午前</span>
+                <p>
+                    エスプレッソマシン150,000円に加え、設置業者への工事費10,000円もかかりました。<br>
+                    「この工事費も、機械の原価に含めるんですか？」<br><br>
+                    そう——<strong>使える状態にするためのコストは、すべて取得原価</strong>です。<br>
+                    そして代金は月末払い。この時「買掛金」ではなく「未払金」を使います。
+                </p>
+            </div>
+
+            <h2>セクション1：固定資産の取得と減価償却</h2>
+
+            <!-- Learning Card 1: 固定資産の購入と付随費用 -->
+            <div class="learning-card">
+                <div class="lc-video">
+                    <div class="vc-thumb" data-video-id="MOR8WF5UHqM" style="background-image: url('https://img.youtube.com/vi/MOR8WF5UHqM/maxresdefault.jpg'), url('https://img.youtube.com/vi/MOR8WF5UHqM/hqdefault.jpg');">
+                        <i class="fa-brands fa-youtube vc-thumb-play"></i>
+                    </div>
+                </div>
+                <div class="lc-content">
+                    <div class="lc-header">
+                        <span class="vc-tag">取得原価</span>
+                        <h3 class="lc-title">固定資産の購入と付随費用の処理</h3>
+                    </div>
+                    <div class="lc-body">
+                        <h4><i class="fa-solid fa-cart-shopping"></i> 取得原価の計算ルール</h4>
+                        <ul class="lc-list">
+                            <li><strong>取得原価 ＝ 購入代価 ＋ 付随費用</strong>（設置費・仲介手数料・登記料など）</li>
+                            <li>付随費用を「支払手数料」等の費用にするのは<strong>NG</strong>——資産の原価に含める。</li>
+                            <li><strong>代金後払い → 「未払金」</strong>（商品以外の負債）。「買掛金」は商品仕入れ専用。</li>
+                            <li>例：機械150,000円 ＋ 設置費10,000円 → (借) 備品 160,000 ／ (貸) 未払金 160,000</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Card 2: 定額法と間接法 -->
+            <div class="learning-card">
+                <div class="lc-video">
+                    <div class="vc-thumb" data-video-id="C1tXaGiIyS4" style="background-image: url('https://img.youtube.com/vi/C1tXaGiIyS4/maxresdefault.jpg'), url('https://img.youtube.com/vi/C1tXaGiIyS4/hqdefault.jpg');">
+                        <i class="fa-brands fa-youtube vc-thumb-play"></i>
+                    </div>
+                </div>
+                <div class="lc-content">
+                    <div class="lc-header">
+                        <span class="vc-tag gold">最重要</span>
+                        <h3 class="lc-title">定額法と間接法：減価償却の計算と仕訳</h3>
+                    </div>
+                    <div class="lc-body">
+                        <h4><i class="fa-solid fa-calculator"></i> 計算式と仕訳を丸ごと覚える</h4>
+                        <ul class="lc-list">
+                            <li><strong>定額法</strong>：(取得原価 − 残存価額) ÷ 耐用年数 ＝ 年間減価償却費</li>
+                            <li><strong>間接法の仕訳</strong>：(借) 減価償却費 XXX ／ (貸) 減価償却累計額 XXX</li>
+                            <li>資産（備品など）は直接減らさない——<strong>取得原価を帳簿上に残す</strong>のが間接法の目的。</li>
+                            <li><strong>月割り計算</strong>：期中取得の場合 → 年額 × 使用月数 ÷ 12</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Card 3: 資本的支出・収益的支出 -->
+            <div class="learning-card">
+                <div class="lc-video">
+                    <div class="vc-thumb" data-video-id="pPvP1uFf8Uw" style="background-image: url('https://img.youtube.com/vi/pPvP1uFf8Uw/maxresdefault.jpg'), url('https://img.youtube.com/vi/pPvP1uFf8Uw/hqdefault.jpg');">
+                        <i class="fa-brands fa-youtube vc-thumb-play"></i>
+                    </div>
+                </div>
+                <div class="lc-content">
+                    <div class="lc-header">
+                        <span class="vc-tag blue">判断力</span>
+                        <h3 class="lc-title">資本的支出 vs 収益的支出：改良か修繕か</h3>
+                    </div>
+                    <div class="lc-body">
+                        <h4><i class="fa-solid fa-screwdriver-wrench"></i> 「価値UP」か「現状維持」かで判断する</h4>
+                        <ul class="lc-list">
+                            <li><strong>資本的支出</strong>：資産の価値向上・耐用年数の延長（非常階段の設置、耐震工事）→ <strong>資産（建物など）に加算</strong></li>
+                            <li><strong>収益的支出</strong>：現状維持・故障箇所を元に戻す（雨漏り修繕、窓ガラス交換）→ <strong>修繕費（費用）</strong></li>
+                            <li>試験では「価値を高める」「耐用年数を延ばす」というキーワードが資本的支出のヒント。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- talk-scene：定額法あるある -->
+            <div class="talk-scene" style="margin: 24px 0;">
+                <div class="talk-bubble owner">
+                    <div class="talk-icon">🧑</div>
+                    <div class="talk-text">「残存価額ゼロ」って試験でよく見ますが、毎回ゼロとは限らないですよね？</div>
+                </div>
+                <div class="talk-bubble teacher">
+                    <div class="talk-icon">👩‍🏫</div>
+                    <div class="talk-text">その通り。「残存価額 = 取得原価の10%」と指定される問題もあります。<br>まず<strong>問題文の条件を確認してから計算式に代入</strong>する癖をつけましょう。条件が変わっても計算式の構造は同じです。</div>
+                </div>
+            </div>
+
+            <!-- NotebookLM 実習：前半 -->
+            <div class="practice-area">
+                <h3><i class="fa-solid fa-robot"></i> 実習：固定資産の取得・減価償却を問題で確認</h3>
+                <p>3本の動画をNotebookLMに読み込ませ、取得原価の計算・定額法・資本的支出の区別を自分の言葉で整理しましょう。</p>
+                <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:12px; padding:20px; margin-bottom:24px;">
+                    <h4 style="color:#b45309; margin:0 0 12px; display:flex; align-items:center; gap:8px;">
+                        <i class="fa-solid fa-book"></i> NotebookLM へのソース追加手順
+                    </h4>
+                    <ol style="margin:0; padding-left:1.4rem; font-size:0.92rem; line-height:1.9; color:#78350f;">
+                        <li><strong>notebooklm.google.com</strong> にアクセスし「新しいノートブック」を作成</li>
+                        <li>画面左の「ソースを追加」をクリックし「YouTube」または「URL」を選択</li>
+                        <li>動画① <code>https://www.youtube.com/watch?v=MOR8WF5UHqM</code> を追加</li>
+                        <li>動画② <code>https://www.youtube.com/watch?v=C1tXaGiIyS4</code> を追加</li>
+                        <li>動画③ <code>https://www.youtube.com/watch?v=pPvP1uFf8Uw</code> を追加</li>
+                        <li>追加完了後、下のプロンプトをコピーして選択式テストを作成する</li>
+                    </ol>
+                </div>
+                <div class="chat-prompt-container">
+                    <div class="chat-bubble">
+                        <div class="chat-text"><span class="prompt-text">読み込んだ動画①〜③の内容をもとに、Day6前半（固定資産の取得原価・付随費用・未払金・定額法による減価償却費の計算・間接法の仕訳・資本的支出と収益的支出の区別）の理解度を確認する選択式テストを20問作ってください。各問は4択にし、解答は最後にまとめて表示してください。</span></div>
+                        <button class="copy-btn" title="プロンプトをコピー"><i class="fa-regular fa-copy"></i> コピー</button>
+                    </div>
+                    <div class="chat-bubble">
+                        <div class="chat-text"><span class="prompt-text">定額法の計算に特化した問題を5問作ってください。各問に「取得原価・残存価額・耐用年数・取得日」の具体的な数字を設定し、年間減価償却費と月割り計算の過程を解説付きで示してください。</span></div>
+                        <button class="copy-btn" title="プロンプトをコピー"><i class="fa-regular fa-copy"></i> コピー</button>
+                    </div>
+                </div>
+                <div style="text-align:center; margin-top:20px;">
+                    <a href="https://notebooklm.google.com/" target="_blank" class="tool-link-btn" style="background:var(--accent-gold);">
+                        <i class="fa-solid fa-book"></i> NotebookLM を開く
+                    </a>
+                </div>
+            </div>
+
+            <div style="text-align:center; margin-top:30px;">
+                <button class="tool-link-btn" onclick="openTab('second')" style="background:var(--accent-green);">
+                    後半（売却と評価勘定）へ進む <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="second" class="tab-content">
+
+            <!-- Bloomナラティブ：6日目・午後 -->
+            <div class="bloom-story" style="margin-bottom: 24px;">
+                <span class="bloom-story-label">📍 Bloom 6日目・午後</span>
+                <p>
+                    3年前に買ったショーケースを、ついに売ることになりました。<br>
+                    「帳簿上の価値は残っているのに、売れた金額は違う……これって損？得？」<br><br>
+                    <strong>「帳簿価額と売値の比較」</strong>が固定資産売却のポイント。<br>
+                    月割り計算・評価勘定の正体・売却3パターンを一気に理解しましょう。
+                </p>
+            </div>
+
+            <h2>セクション2：売却と評価勘定の深化</h2>
+
+            <!-- 売却損益判定フロービジュアル（D：ビジュアルフロー） -->
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:24px; margin-bottom:28px;">
+                <h4 style="margin:0 0 16px; color:var(--accent-green);"><i class="fa-solid fa-route"></i> 固定資産売却の損益判定フロー</h4>
+                <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; justify-content:center;">
+                    <div style="background:#ecfdf5; border:2px solid var(--accent-green); border-radius:10px; padding:14px 18px; text-align:center; min-width:150px;">
+                        <div style="font-size:0.78rem; color:var(--accent-green); font-weight:700; margin-bottom:6px;">STEP 1：帳簿価額を計算</div>
+                        <div style="font-size:0.9rem; font-weight:700;">取得原価<br>− 減価償却累計額</div>
+                        <div style="font-size:0.78rem; color:var(--text-sub); margin-top:4px;">= 帳簿上の現在価値</div>
+                    </div>
+                    <div style="font-size:1.5rem; color:#94a3b8;">→</div>
+                    <div style="background:#fef3c7; border:2px solid var(--accent-gold); border-radius:10px; padding:14px 18px; text-align:center; min-width:150px;">
+                        <div style="font-size:0.78rem; color:var(--accent-gold); font-weight:700; margin-bottom:6px;">STEP 2：売値と比較</div>
+                        <div style="font-size:0.9rem; font-weight:700;">売却価格<br>vs 帳簿価額</div>
+                        <div style="font-size:0.78rem; color:var(--text-sub); margin-top:4px;">購入価格との比較ではない！</div>
+                    </div>
+                    <div style="font-size:1.5rem; color:#94a3b8;">→</div>
+                    <div style="background:#eff6ff; border:2px solid #3b82f6; border-radius:10px; padding:14px 18px; text-align:center; min-width:150px;">
+                        <div style="font-size:0.78rem; color:#3b82f6; font-weight:700; margin-bottom:6px;">STEP 3：損益を記録</div>
+                        <div style="font-size:0.9rem; font-weight:700;">売値 ＞ 帳簿価額<br>→ <strong style="color:#059669;">売却益（収益）</strong></div>
+                        <div style="font-size:0.78rem; color:#555; margin-top:4px;">売値 ＜ 帳簿価額<br>→ <strong style="color:#dc2626;">売却損（費用）</strong></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Card 4: 月割り計算と間接法 -->
+            <div class="learning-card">
+                <div class="lc-video">
+                    <div class="vc-thumb" data-video-id="pbAig18gqpo" style="background-image: url('https://img.youtube.com/vi/pbAig18gqpo/maxresdefault.jpg'), url('https://img.youtube.com/vi/pbAig18gqpo/hqdefault.jpg');">
+                        <i class="fa-brands fa-youtube vc-thumb-play"></i>
+                    </div>
+                </div>
+                <div class="lc-content">
+                    <div class="lc-header">
+                        <span class="vc-tag">月割り計算</span>
+                        <h3 class="lc-title">月割り計算と間接法の仕組みを深める</h3>
+                    </div>
+                    <div class="lc-body">
+                        <h4><i class="fa-solid fa-calendar-days"></i> 期中取得・期中売却の月割り</h4>
+                        <ul class="lc-list">
+                            <li><strong>月割り公式</strong>：年間減価償却費 × 使用月数 ÷ 12</li>
+                            <li>取得月を含めてカウント（例：10月取得→期末3月まで = 6ヶ月）</li>
+                            <li>間接法では減価償却累計額が「これまで総額いくら減ったか」を示す。</li>
+                            <li>売却時は取得原価と累計額を<strong>セットで消す</strong>のがルール。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Card 5: 評価勘定の正体 -->
+            <div class="learning-card">
+                <div class="lc-video">
+                    <div class="vc-thumb" data-video-id="95gTu-gtf7Y" style="background-image: url('https://img.youtube.com/vi/95gTu-gtf7Y/maxresdefault.jpg'), url('https://img.youtube.com/vi/95gTu-gtf7Y/hqdefault.jpg');">
+                        <i class="fa-brands fa-youtube vc-thumb-play"></i>
+                    </div>
+                </div>
+                <div class="lc-content">
+                    <div class="lc-header">
+                        <span class="vc-tag gold">よく出る疑問</span>
+                        <h3 class="lc-title">減価償却累計額は負債なの？評価勘定の正体</h3>
+                    </div>
+                    <div class="lc-body">
+                        <h4><i class="fa-solid fa-scale-balanced"></i> 「資産のマイナス」という特別な役割</h4>
+                        <ul class="lc-list">
+                            <li>減価償却累計額は<strong>負債ではなく「資産の評価勘定」</strong>。</li>
+                            <li>通常の資産と逆で、ホームポジションは<strong>貸方（右側）</strong>。</li>
+                            <li>B/S上では固定資産の<strong>すぐ下にマイナス表示</strong>され、現在の帳簿価額を示す。</li>
+                            <li>メリット：取得原価が一目でわかり、どれだけ使ったかも把握できる。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Card 6: 固定資産の売却3パターン -->
+            <div class="learning-card">
+                <div class="lc-video">
+                    <div class="vc-thumb" data-video-id="GsCpbBK1BM0" style="background-image: url('https://img.youtube.com/vi/GsCpbBK1BM0/maxresdefault.jpg'), url('https://img.youtube.com/vi/GsCpbBK1BM0/hqdefault.jpg');">
+                        <i class="fa-brands fa-youtube vc-thumb-play"></i>
+                    </div>
+                </div>
+                <div class="lc-content">
+                    <div class="lc-header">
+                        <span class="vc-tag blue">売却3パターン</span>
+                        <h3 class="lc-title">固定資産の売却：期首・期中・期末の違い</h3>
+                    </div>
+                    <div class="lc-body">
+                        <h4><i class="fa-solid fa-money-bill-trend-up"></i> タイミングで仕訳が変わる！</h4>
+                        <ul class="lc-list">
+                            <li><strong>期首売却</strong>：前期末に償却済み → 当期の減価償却費計上は不要。</li>
+                            <li><strong>期中・期末売却</strong>：当期使用分を月割りで先に計上してから売却処理。</li>
+                            <li><strong>代金後払い → 「未収入金」</strong>（商品以外）。「売掛金」は商品販売専用。</li>
+                            <li><strong>土地は減価償却しない</strong>（使っても価値が減らないため）。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- talk-scene：売却あるある -->
+            <div class="talk-scene" style="margin: 24px 0;">
+                <div class="talk-bubble owner">
+                    <div class="talk-icon">🧑</div>
+                    <div class="talk-text">期中に売った時、なぜ売却の前に減価償却費を計上するんですか？順番が逆では？</div>
+                </div>
+                <div class="talk-bubble teacher">
+                    <div class="talk-icon">👩‍🏫</div>
+                    <div class="talk-text">売却日までの間も資産を使っていたからです。<br>「4月〜6月の3ヶ月分は使った」という事実を<strong>先に記録してから</strong>、その累計額を反映した状態で売却損益を計算します。</div>
+                </div>
+            </div>
+
+            <!-- 本日の結論コミック枠 -->
+            <div class="conclusion-comic">
+                <span class="comic-label">✍️ DAY 6 の核心</span>
+                <p>固定資産は「買った瞬間」ではなく「使い切った後まで」記録し続ける——<br>
+                その誠実な記録が、企業の真の実力を映し出します。</p>
+            </div>
+
+            <!-- NotebookLM 実習：後半 -->
+            <div class="practice-area">
+                <h3><i class="fa-solid fa-clipboard-check"></i> 実習：売却損益の計算と評価勘定を問題で確認</h3>
+                <p>動画④〜⑥をNotebookLMに追加し、月割り計算・評価勘定・売却3パターンの計算力を鍛えましょう。</p>
+                <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:12px; padding:20px; margin-bottom:24px;">
+                    <h4 style="color:#b45309; margin:0 0 12px; display:flex; align-items:center; gap:8px;">
+                        <i class="fa-solid fa-book"></i> NotebookLM へのソース追加手順
+                    </h4>
+                    <ol style="margin:0; padding-left:1.4rem; font-size:0.92rem; line-height:1.9; color:#78350f;">
+                        <li><strong>notebooklm.google.com</strong> にアクセスし、前半と同じノートブックを開く</li>
+                        <li>画面左の「ソースを追加」をクリックし「YouTube」または「URL」を選択</li>
+                        <li>動画④ <code>https://www.youtube.com/watch?v=pbAig18gqpo</code> を追加</li>
+                        <li>動画⑤ <code>https://www.youtube.com/watch?v=95gTu-gtf7Y</code> を追加</li>
+                        <li>動画⑥ <code>https://www.youtube.com/watch?v=GsCpbBK1BM0</code> を追加</li>
+                        <li>追加完了後、下のプロンプトをコピーして選択式テストを作成する</li>
+                    </ol>
+                </div>
+                <div class="chat-prompt-container">
+                    <div class="chat-bubble">
+                        <div class="chat-text"><span class="prompt-text">読み込んだ動画④〜⑥の内容をもとに、Day6後半（月割り計算・減価償却累計額は評価勘定であること・B/S上の表示・期首/期中/期末別の売却仕訳・未収入金と売掛金の違い・土地は減価償却しない）の理解度を確認する選択式テストを20問作ってください。各問は4択にし、解答は最後にまとめて表示してください。</span></div>
+                        <button class="copy-btn" title="プロンプトをコピー"><i class="fa-regular fa-copy"></i> コピー</button>
+                    </div>
+                    <div class="chat-bubble">
+                        <div class="chat-text"><span class="prompt-text">固定資産の売却に特化した計算問題を5問作ってください。各問に「取得原価・耐用年数・残存価額・経過年数（または累計額）・売却価格・売却時期（期首/期中/期末）」の具体的な数字を設定し、売却損益の計算過程と正しい仕訳を解説付きで示してください。</span></div>
+                        <button class="copy-btn" title="プロンプトをコピー"><i class="fa-regular fa-copy"></i> コピー</button>
+                    </div>
+                </div>
+                <div style="text-align:center; margin-top:20px;">
+                    <a href="https://notebooklm.google.com/" target="_blank" class="tool-link-btn" style="background:var(--accent-gold);">
+                        <i class="fa-solid fa-book"></i> NotebookLM を開く
+                    </a>
+                </div>
+            </div>
+
+            <div style="text-align:center; margin-top:30px;">
+                <button class="tool-link-btn" onclick="openTab('summary')" style="background:var(--accent-green);">
+                    まとめへ進む <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="summary" class="tab-content">
+
+            <!-- Bloomナラティブ：6日目・夜 -->
+            <div class="bloom-story" style="margin-bottom: 24px;">
+                <span class="bloom-story-label">📍 Bloom 6日目・夜</span>
+                <p>
+                    「設備を買って、少しずつ費用にして、最後に売る」——<br>
+                    固定資産は長い時間をかけて帳簿に刻まれていく存在でした。<br><br>
+                    <strong>毎年の減価償却が、企業の「正直さ」を守っている。</strong><br>
+                    Harukaさんも今日、その意味をじわじわ理解し始めました。
+                </p>
+            </div>
+
+            <h2>DAY 6 まとめ</h2>
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+                    <h3>取得原価は「使える状態になるまで」</h3>
+                    <p>付随費用（設置費・仲介料）は取得原価に含める。後払いは「未払金」（買掛金ではない）。</p>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon"><i class="fa-solid fa-arrow-trend-down"></i></div>
+                    <h3>定額法 × 間接法が基本セット</h3>
+                    <p>(取得原価 − 残存価額) ÷ 耐用年数 ＝ 年間償却費。仕訳は借方に「減価償却費」、貸方に「減価償却累計額」。</p>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+                    <h3>改良か修繕か：目的で仕訳が変わる</h3>
+                    <p>価値UP・耐用年数延長 → 資産（資本的支出）。現状回復・維持 → 修繕費（収益的支出）。</p>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon"><i class="fa-solid fa-money-bill-trend-up"></i></div>
+                    <h3>売却損益は「帳簿価額」との比較</h3>
+                    <p>売価 ＞ 帳簿価額 → 固定資産売却益（収益）。売価 ＜ 帳簿価額 → 固定資産売却損（費用）。</p>
+                </div>
+            </div>
+
+            <h2>重要用語チェック</h2>
+            <div class="term-grid">
+                <div class="term-card"><strong>固定資産</strong><span>1年を超えて使用する有形の資産（建物・備品・車両運搬具など）。</span></div>
+                <div class="term-card"><strong>取得原価</strong><span>購入代価に付随費用（設置費・登記料など）を加えた、資産取得のための総コスト。</span></div>
+                <div class="term-card"><strong>未払金</strong><span>商品以外のもの（固定資産など）を後払いで購入した際に生じる負債科目。</span></div>
+                <div class="term-card"><strong>減価償却（げんかしょうきゃく）</strong><span>固定資産の価値の減少分を、使用期間にわたって費用として配分する手続き。</span></div>
+                <div class="term-card"><strong>定額法（ていがくほう）</strong><span>毎年同額ずつ減価償却する計算方法。(取得原価 − 残存価額) ÷ 耐用年数。</span></div>
+                <div class="term-card"><strong>耐用年数（たいようねんすう）</strong><span>固定資産が使用できると見込まれる期間。税法上の年数が試験では使われる。</span></div>
+                <div class="term-card"><strong>間接法（かんせつほう）</strong><span>資産を直接減らさず「減価償却累計額」という別勘定で累積の減少額を管理する方法。</span></div>
+                <div class="term-card"><strong>減価償却累計額</strong><span>これまでの減価償却の合計額を示す評価勘定。資産のマイナスで貸方残高。</span></div>
+                <div class="term-card"><strong>評価勘定（ひょうかかんじょう）</strong><span>本体資産の価値をマイナスして評価するための特別な勘定科目。</span></div>
+                <div class="term-card"><strong>資本的支出</strong><span>固定資産の価値向上・耐用年数延長を目的とした支出。取得原価に加算する。</span></div>
+                <div class="term-card"><strong>収益的支出（修繕費）</strong><span>固定資産の現状維持・原状回復のための支出。費用（修繕費）として計上。</span></div>
+                <div class="term-card"><strong>未収入金</strong><span>商品以外のもの（固定資産など）を後払いで売却した際に生じる資産科目。</span></div>
+            </div>
+
+            <div class="check-panel">
+                <h3><i class="fa-solid fa-clipboard-check"></i> セルフチェック</h3>
+                <ol class="check-list">
+                    <li>備品300,000円・残存価額0・耐用年数5年を定額法・間接法で記録する場合、1年目の仕訳を正しく書けますか？（減価償却費60,000円・減価償却累計額60,000円）</li>
+                    <li>「雨漏りの修繕工事30,000円」と「耐震補強工事200,000円」のうち、どちらが資本的支出でどちらが収益的支出か、理由とともに説明できますか？</li>
+                    <li>取得原価300,000円・減価償却累計額90,000円の備品を180,000円で期首に売却した場合の仕訳を書けますか？（売却損30,000円が発生します）</li>
+                </ol>
+            </div>
+
+            <!-- 確認クイズ -->
+            <div class="quiz-panel" id="quizPanel">
+                <h3><i class="fa-solid fa-circle-question"></i> 確認クイズ（全5問）</h3>
+                <p style="color:var(--text-sub); font-size:0.9rem; margin-bottom:20px;">今日の固定資産・減価償却・売却損益の理解度を確認しましょう。</p>
+                <div id="quiz-container"></div>
+                <div id="quiz-result" style="display:none; margin-top:24px; padding:20px; border-radius:12px; text-align:center;">
+                    <p id="quiz-score" style="font-size:1.6rem; font-weight:900; margin-bottom:8px;"></p>
+                    <p id="quiz-msg" style="font-size:0.95rem; color:var(--text-sub);"></p>
+                    <button onclick="resetQuiz()" class="tool-link-btn" style="margin-top:16px; background:var(--accent-green);">
+                        <i class="fa-solid fa-rotate-right"></i> もう一度
+                    </button>
+                </div>
+            </div>
+
+            <div style="background:#f0fdf4; padding:25px 30px; border-radius:12px; margin:35px 0 20px; border-left:6px solid #059669;">
+                <h4 style="color:#047857; margin:0 0 10px; font-size:1.15rem;"><i class="fa-solid fa-forward"></i> 次回予告：Day 7</h4>
+                <p style="margin:0; font-size:0.95rem; color:#333; line-height:1.6;">（Day 7 の内容確定後に記入）</p>
+            </div>
+        </div>
+
+        <div style="text-align:center; padding: 3rem 0 2rem; display: flex; flex-direction: column; gap: 1rem; align-items: center;">
+            <button type="button" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:linear-gradient(135deg, #34d399, #059669); border:none; box-shadow: 0 10px 30px rgba(5,150,105, 0.25); cursor:pointer;" onclick="window.location.href='./vol07-1.html'">
+                Day 7 へ進む <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <button type="button" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:#fff; color:#4a4a4a; border:2px solid #e2e8f0; box-shadow:none; cursor:pointer;" onclick="window.location.href='./index.html'">
+                <i class="fa-solid fa-house"></i> 学習記録をつけて Home へ戻る
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            const targetBtn = document.querySelector(`.tab-btn[onclick*="openTab('${tabId}')"]`);
+            if (targetBtn) targetBtn.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const text = button.parentElement.querySelector('.prompt-text').innerText;
+                navigator.clipboard.writeText(text).then(() => {
+                    button.classList.add('copied');
+                    button.innerHTML = '<i class="fa-solid fa-check"></i> コピーしました';
+                    setTimeout(() => {
+                        button.classList.remove('copied');
+                        button.innerHTML = '<i class="fa-regular fa-copy"></i> コピー';
+                    }, 2000);
+                });
+            });
+        });
+
+        document.querySelectorAll('.vc-thumb[data-video-id]').forEach(thumb => {
+            thumb.addEventListener('click', function() {
+                const videoId = this.dataset.videoId;
+                this.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
+                this.style.backgroundImage = 'none';
+                this.style.cursor = 'default';
+                this.onclick = null;
+            }, { once: true });
+        });
+
+        document.querySelectorAll('a[data-check-page="true"]').forEach(link => {
+            link.addEventListener('click', async event => {
+                event.preventDefault();
+                const target = link.getAttribute('href');
+                try {
+                    const response = await fetch(target, { method: 'HEAD', cache: 'no-store' });
+                    if (response.ok) {
+                        window.location.href = target;
+                        return;
+                    }
+                } catch (error) {
+                    // Local file previews may reject HEAD requests; keep users away from a broken link.
+                }
+                alert('Day 7ページはまだ準備中です。公開後にこのリンクから進めます。');
+            });
+        });
+
+        const quizData = [
+            {
+                q: "Bloomがショーケース150,000円を購入し、設置費10,000円を現金で支払った。備品勘定に計上する取得原価は？",
+                opts: ["150,000円", "10,000円", "160,000円", "140,000円"],
+                ans: 2,
+                fb: "付随費用（設置費）は取得原価に含めます。Bloomにとってショーケースの原価は「150,000 + 10,000 = 160,000円」です。費用（支払手数料等）にするのは誤りです。"
+            },
+            {
+                q: "取得原価90,000円・残存価額0・耐用年数5年の備品を定額法で減価償却する場合、1年間の減価償却費は？",
+                opts: ["9,000円", "18,000円", "15,000円", "4,500円"],
+                ans: 1,
+                fb: "(90,000 − 0) ÷ 5 = 18,000円。定額法は残存価額を引いてから耐用年数で割ります。残存価額がゼロの場合は取得原価をそのまま年数で割ればOKです。"
+            },
+            {
+                q: "Bloomのカフェで雨漏りが発生し、修繕工事費30,000円を現金で支払った。正しい仕訳の借方科目は？",
+                opts: ["建物", "修繕費", "資本的支出", "減価償却費"],
+                ans: 1,
+                fb: "雨漏りの修繕は「現状回復」なので収益的支出です。費用科目「修繕費」を借方に計上します。資産価値を高める工事（資本的支出）なら建物に加算しますが、今回は違います。"
+            },
+            {
+                q: "取得原価300,000円・減価償却累計額90,000円の備品を180,000円で売却した（代金現金）。売却損益はいくら？",
+                opts: ["売却益90,000円", "売却損30,000円", "売却益30,000円", "売却損90,000円"],
+                ans: 1,
+                fb: "帳簿価額 = 300,000 − 90,000 = 210,000円。売却価格180,000円 ＜ 帳簿価額210,000円なので、差額30,000円が「固定資産売却損（費用）」です。"
+            },
+            {
+                q: "減価償却累計額は、簿記の5大要素（資産・負債・純資産・収益・費用）のどれに属する？",
+                opts: ["負債", "費用", "純資産", "資産（の評価勘定）"],
+                ans: 3,
+                fb: "減価償却累計額は「資産の評価勘定」です。資産のマイナスを表す特別な科目で、負債ではありません。貸借対照表では固定資産の下にマイナス表示され、現在の帳簿価額を示します。"
+            }
+        ];
+
+        let selectedAnswers = [];
+
+        function buildQuiz() {
+            const container = document.getElementById('quiz-container');
+            if (!container) return;
+            container.innerHTML = '';
+            selectedAnswers = new Array(quizData.length).fill(null);
+            quizData.forEach((q, qi) => {
+                const letters = ['A', 'B', 'C', 'D'];
+                const optsHtml = q.opts.map((o, oi) => `
+                    <button type="button" class="quiz-opt" onclick="answerQuiz(${qi},${oi})" id="opt-${qi}-${oi}">
+                        <span class="quiz-opt-icon">${letters[oi]}</span>${o}
+                    </button>`).join('');
+                container.innerHTML += `
+                    <div class="quiz-q" id="qq-${qi}">
+                        <div class="quiz-q-num">問${qi + 1} / ${quizData.length}</div>
+                        <div class="quiz-q-text">${q.q}</div>
+                        <div class="quiz-options">${optsHtml}</div>
+                        <div class="quiz-feedback" id="fb-${qi}"></div>
+                    </div>`;
+            });
+            document.getElementById('quiz-result').style.display = 'none';
+        }
+
+        function answerQuiz(qi, oi) {
+            if (selectedAnswers[qi] !== null) return;
+            selectedAnswers[qi] = oi;
+            const q = quizData[qi];
+            const isCorrect = oi === q.ans;
+            q.opts.forEach((_, i) => {
+                const btn = document.getElementById(`opt-${qi}-${i}`);
+                btn.classList.add('disabled');
+                if (i === q.ans) btn.classList.add('correct');
+                else if (i === oi && !isCorrect) btn.classList.add('wrong');
+            });
+            const fb = document.getElementById(`fb-${qi}`);
+            fb.textContent = (isCorrect ? '正解！ ' : '不正解。') + q.fb;
+            fb.className = `quiz-feedback show ${isCorrect ? 'correct-fb' : 'wrong-fb'}`;
+            if (selectedAnswers.every(a => a !== null)) {
+                const score = selectedAnswers.reduce((c, a, i) => c + (a === quizData[i].ans ? 1 : 0), 0);
+                showResult(score);
+            }
+        }
+
+        function showResult(score) {
+            const result = document.getElementById('quiz-result');
+            const isPassed = score >= 4;
+            result.style.display = 'block';
+            result.className = isPassed ? 'pass' : 'fail';
+            document.getElementById('quiz-score').textContent = `${score} / ${quizData.length} 正解`;
+            document.getElementById('quiz-msg').textContent = isPassed
+                ? '素晴らしい！Bloomの固定資産と減価償却、しっかり理解できています。Day7へ進みましょう。'
+                : 'もう一度ページを読み直してから再挑戦しましょう。NotebookLMに解説を頼むのもOKです。';
+            result.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function resetQuiz() {
+            buildQuiz();
+            document.getElementById('quizPanel').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        buildQuiz();
+    </script>
+</body>
+</html>
+<!-- cache-bust: 2026-05-15T09:00:00 -->

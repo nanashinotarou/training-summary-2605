@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 4 | 現金・預金の管理</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Teko:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #f0fdf4;
+            --bg-card: rgba(255, 255, 255, 0.85);
+            --bg-card-solid: #ffffff;
+            --text-main: #1e293b;
+            --text-sub: #64748b;
+            --accent-green: #059669;
+            --accent-gold: #d97706;
+            --accent-blue: #2563eb;
+            --accent-light: #d1fae5;
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 15px 40px rgba(5, 150, 105, 0.2);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.6);
+            --radius-large: 24px;
+            --radius-medium: 16px;
+            --radius-small: 8px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: var(--bg-body);
+            background-image:
+                radial-gradient(at 0% 0%, rgba(255, 255, 255, 0.8) 0, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(209, 250, 229, 0.8) 0, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 20px;
+        }
+
+        .home-btn {
+            position: fixed; bottom: 30px; right: 30px;
+            width: 60px; height: 60px;
+            background: var(--accent-green); color: white;
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 1.5rem; text-decoration: none;
+            box-shadow: 0 10px 25px rgba(5, 150, 105, 0.4);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 1000;
+        }
+        .home-btn:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 15px 30px rgba(5, 150, 105, 0.5); background: #047857; }
+
+        .container {
+            width: 100%; max-width: 900px;
+            background: var(--bg-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: var(--glass-border); border-radius: var(--radius-large);
+            box-shadow: var(--shadow-soft); overflow: hidden;
+            display: flex; flex-direction: column; animation: fadeIn 0.8s ease-out;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .header { padding: 40px 40px 20px; border-bottom: 2px solid var(--accent-light); text-align: center; }
+        .header-tag {
+            display: inline-block; background: var(--accent-green); color: white;
+            font-weight: 700; padding: 4px 12px; border-radius: 20px;
+            font-family: 'Roboto', sans-serif; font-size: 0.85rem; letter-spacing: 1px; margin-bottom: 15px;
+        }
+        .header h1 { font-size: 2.2rem; font-weight: 900; color: var(--accent-green); margin-bottom: 10px; }
+        .progress-wrap { max-width: 520px; height: 8px; background: #e2e8f0; border-radius: 999px; margin: 18px auto 0; overflow: hidden; }
+        .progress-bar { width: 31%; height: 100%; background: linear-gradient(90deg, var(--accent-green), #34d399); border-radius: inherit; }
+
+        .tabs { display: flex; padding: 0 20px; background: rgba(255, 255, 255, 0.5); border-bottom: 1px solid #eee; overflow-x: auto; }
+        .tab-btn {
+            border: none; background: none; padding: 20px 24px; font-size: 1rem; font-weight: 700;
+            color: var(--text-sub); cursor: pointer; position: relative; transition: color 0.3s; white-space: nowrap;
+        }
+        .tab-btn:hover, .tab-btn.active { color: var(--accent-green); }
+        .tab-btn.active::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px;
+            background: var(--accent-green); border-radius: 3px 3px 0 0;
+        }
+
+        .tab-content { display: none; padding: 40px; background: var(--bg-card-solid); min-height: 500px; animation: fadeInTab 0.4s ease-out; }
+        .tab-content.active { display: block; }
+        @keyframes fadeInTab { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h2 { font-size: 1.6rem; color: var(--text-main); border-left: 5px solid var(--accent-gold); padding-left: 15px; margin: 30px 0 20px; }
+        h2:first-child { margin-top: 0; }
+        h3 { font-size: 1.3rem; color: var(--accent-green); margin: 25px 0 15px; display: flex; align-items: center; gap: 10px; }
+        p { line-height: 1.8; margin-bottom: 20px; color: #555; font-size: 1.05rem; max-width: 1000px; }
+
+        .goal-box {
+            background: linear-gradient(135deg, var(--accent-light), #fff);
+            border: 1px solid var(--accent-green); border-radius: var(--radius-medium);
+            padding: 30px; margin-bottom: 30px; text-align: center;
+        }
+        .goal-box i { font-size: 3rem; color: var(--accent-green); margin-bottom: 15px; }
+        .goal-box h3 { justify-content: center; font-size: 1.5rem; margin-top: 0; }
+        .goal-box p { font-size: 1.15rem; font-weight: 500; margin-bottom: 0; color: var(--text-main); }
+
+        .learning-card {
+            display: flex; flex-direction: row; background: rgba(255, 255, 255, 0.9);
+            border-radius: var(--radius-medium); border: var(--glass-border); overflow: hidden;
+            margin-bottom: 30px; box-shadow: var(--shadow-soft); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .learning-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); border-color: var(--accent-light); }
+        .lc-video { flex: 0 0 45%; background: #000; display: flex; flex-direction: column; position: relative; }
+        .lc-content { flex: 1; padding: 30px; display: flex; flex-direction: column; justify-content: center; }
+        .lc-header { border-bottom: 2px dashed var(--accent-light); padding-bottom: 15px; margin-bottom: 20px; }
+        .lc-title { font-size: 1.2rem; font-weight: 900; color: var(--text-main); margin: 10px 0 0 0; line-height: 1.4; }
+        .lc-body h4 { font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .lc-body p { font-size: 1rem; line-height: 1.7; margin-bottom: 15px; color: #555; }
+        .lc-list { list-style: none; padding-left: 0; margin-bottom: 0; background: #fdfdfd; padding: 15px; border-radius: var(--radius-small); border: 1px solid #f5f5f5; }
+        .lc-list li { position: relative; padding-left: 25px; margin-bottom: 8px; font-size: 0.95rem; color: #444; line-height: 1.65; }
+        .lc-list li::before { content: '\f0da'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; left: 5px; top: 3px; color: var(--accent-gold); }
+
+        .vc-thumb { width: 100%; aspect-ratio: 16/9; background-color: #000; background-size: cover; background-position: center; position: relative; cursor: pointer; }
+        .vc-thumb::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.1); transition: background 0.3s ease; pointer-events: none; }
+        .vc-thumb:hover::before { background: rgba(0, 0, 0, 0.2); }
+        .vc-thumb-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 3rem; color: rgba(255, 255, 255, 0.9); text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4); transition: transform 0.3s ease, color 0.3s ease; pointer-events: none; }
+        .vc-thumb:hover .vc-thumb-play { transform: translate(-50%, -50%) scale(1.1); color: #ff0000; }
+        .vc-tag { font-size: 0.75rem; background: var(--accent-light); color: var(--accent-green); font-weight: 700; padding: 3px 10px; border-radius: 20px; border: 1px solid rgba(5,150,105,0.25); display: inline-block; margin-bottom: 8px; }
+        .vc-tag.blue { background: #dbeafe; color: var(--accent-blue); border-color: rgba(37,99,235,0.25); }
+        .vc-tag.gold { background: #fffbeb; color: var(--accent-gold); border-color: rgba(217,119,6,0.25); }
+
+        .flow-map { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 24px 0 30px; }
+        .flow-step { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px 12px; text-align: center; position: relative; box-shadow: var(--shadow-soft); }
+        .flow-step:not(:last-child)::after { content: '\f054'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: -10px; top: 50%; transform: translateY(-50%); color: #94a3b8; z-index: 2; }
+        .flow-step i { color: var(--accent-green); font-size: 1.3rem; margin-bottom: 8px; }
+        .flow-step strong { display: block; font-size: 0.9rem; color: var(--text-main); margin-bottom: 4px; }
+        .flow-step span { display: block; font-size: 0.74rem; color: var(--text-sub); line-height: 1.45; }
+
+        .book-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 22px 0 30px; }
+        .book-card { border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; background: #f8fafc; }
+        .book-card.primary { background: #ecfdf5; border-color: #a7f3d0; }
+        .book-card.assist { background: #eff6ff; border-color: #bfdbfe; }
+        .book-card h4 { color: var(--text-main); font-size: 1.08rem; margin-bottom: 10px; display: flex; gap: 8px; align-items: center; }
+        .book-card p { font-size: 0.92rem; margin-bottom: 0; line-height: 1.65; }
+
+        .ledger-demo { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 22px; margin: 20px 0 30px; }
+        .ledger-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 14px; align-items: stretch; }
+        .journal, .ledger { background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; padding: 16px; }
+        .journal h4, .ledger h4 { margin: 0 0 12px; font-size: 1rem; color: var(--accent-green); }
+        .journal-line { display: flex; justify-content: space-between; gap: 10px; border-bottom: 1px dashed #e2e8f0; padding: 7px 0; font-size: 0.9rem; }
+        .arrow-mid { display: flex; align-items: center; justify-content: center; color: var(--accent-gold); font-size: 1.6rem; }
+        .t-account { width: 100%; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .t-header { background: #1e293b; color: #fff; padding: 8px; text-align: center; font-weight: bold; font-size: 0.9rem; }
+        .t-body { display: flex; border-top: 2px solid #1e293b; min-height: 120px; }
+        .t-left, .t-right { flex: 1; padding: 10px; font-size: 0.82rem; }
+        .t-left { border-right: 2px solid #1e293b; background: #eff6ff; }
+        .t-right { background: #fef2f2; }
+        .t-label { font-size: 0.7rem; color: #64748b; margin-bottom: 5px; display: block; }
+
+        .voucher-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 18px 0 25px; }
+        .voucher-card { border-radius: 16px; padding: 18px; border: 1px solid #e2e8f0; background: #fff; box-shadow: var(--shadow-soft); }
+        .voucher-card h4 { margin: 0 0 8px; color: var(--text-main); font-size: 1rem; }
+        .voucher-card p { margin-bottom: 0; font-size: 0.9rem; line-height: 1.6; }
+        .voucher-card.in { border-top: 5px solid #059669; }
+        .voucher-card.out { border-top: 5px solid #dc2626; }
+        .voucher-card.transfer { border-top: 5px solid #2563eb; }
+
+        .practice-area { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-medium); padding: 30px; margin-top: 30px; }
+        .tool-link-btn { display: inline-flex; align-items: center; gap: 10px; background: #059669; color: white; padding: 12px 24px; border-radius: 30px; text-decoration: none; font-weight: bold; transition: 0.3s; margin-bottom: 20px; border: 0; cursor: pointer; font-size: 0.95rem; }
+        .tool-link-btn:hover { background: #047857; transform: translateY(-2px); }
+        .step-list { list-style: none; padding-left: 0; margin: 14px 0 0; }
+        .step-list li { position: relative; padding-left: 40px; margin-bottom: 15px; font-size: 1.02rem; line-height: 1.65; }
+        .step-list li::before { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; left: 0; top: 3px; width: 25px; height: 25px; background: var(--accent-green); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; }
+
+        .chat-prompt-container { display: flex; flex-direction: column; gap: 15px; margin: 20px auto; max-width: 1000px; background: #fff; padding: 25px; border-radius: var(--radius-large); box-shadow: inset 0 2px 10px rgba(0,0,0,0.02); border: 1px solid #eee; }
+        .chat-bubble { display: flex; align-items: center; justify-content: space-between; background: #f1f5f9; padding: 12px 20px; border-radius: 20px 20px 20px 0; max-width: 95%; align-self: flex-start; gap: 15px; transition: all 0.2s; border: 1px solid transparent; }
+        .chat-bubble:hover { border-color: #cbd5e1; background: #e2e8f0; }
+        .chat-text { font-size: 1rem; color: #1e293b; line-height: 1.55; font-weight: 500; }
+        .copy-btn { background: #fff; border: 1px solid #cbd5e1; color: #059669; padding: 8px 15px; border-radius: 15px; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+        .copy-btn:hover { background: #f8fafc; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .copy-btn.copied { background: #d1fae5; border-color: #a7f3d0; color: #047857; }
+
+        .summary-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin: 25px 0 35px; }
+        .summary-card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: var(--radius-medium); padding: 24px; box-shadow: var(--shadow-soft); }
+        .summary-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: var(--accent-light); color: var(--accent-green); font-size: 1.25rem; margin-bottom: 14px; }
+        .summary-card h3 { margin: 0 0 10px; color: var(--text-main); font-size: 1.1rem; }
+        .summary-card p { margin-bottom: 0; font-size: 0.96rem; line-height: 1.75; }
+
+        .term-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 18px 0 30px; }
+        .term-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; }
+        .term-card strong { display: block; color: var(--accent-green); margin-bottom: 6px; font-size: 1rem; }
+        .term-card span { display: block; color: #475569; font-size: 0.9rem; line-height: 1.55; }
+
+        .check-panel {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-left: 6px solid var(--accent-gold);
+            border-radius: var(--radius-medium);
+            padding: 26px;
+            margin: 28px 0;
+        }
+        .check-panel h3 { color: #b45309; margin-top: 0; }
+        .check-list {
+            margin: 0;
+            padding-left: 1.4rem;
+        }
+        .check-list li {
+            margin-bottom: 12px;
+            line-height: 1.7;
+            color: #44403c;
+        }
+
+        .quiz-panel { background: #fafafa; border: 1px solid #e2e8f0; border-radius: var(--radius-medium); padding: 28px; margin: 28px 0; }
+        .quiz-q { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .quiz-q-text { font-size: 1rem; font-weight: 700; color: var(--text-main); margin-bottom: 14px; }
+        .quiz-q-num { font-size: 0.78rem; color: var(--accent-gold); font-weight: 700; margin-bottom: 6px; }
+        .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+        .quiz-opt {
+            display: flex; align-items: center; gap: 12px;
+            background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 10px;
+            padding: 12px 16px; cursor: pointer; transition: 0.2s;
+            font-size: 0.95rem; color: var(--text-main); text-align: left;
+        }
+        .quiz-opt:hover { background: var(--accent-light); border-color: var(--accent-green); }
+        .quiz-opt.correct { background: #ecfdf5; border-color: #059669; color: #065f46; }
+        .quiz-opt.wrong { background: #fef2f2; border-color: #ef4444; color: #991b1b; }
+        .quiz-opt.disabled { cursor: default; pointer-events: none; }
+        .quiz-opt-icon { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #cbd5e1; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
+        .quiz-feedback { margin-top: 12px; padding: 10px 14px; border-radius: 8px; font-size: 0.88rem; line-height: 1.6; display: none; }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct-fb { background: #ecfdf5; color: #065f46; border-left: 4px solid #059669; }
+        .quiz-feedback.wrong-fb { background: #fef2f2; color: #991b1b; border-left: 4px solid #ef4444; }
+        #quiz-result.pass { background: #ecfdf5; border: 2px solid #059669; border-radius: 12px; }
+        #quiz-result.fail { background: #fff7ed; border: 2px solid #d97706; border-radius: 12px; }
+
+        .nav-links { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; padding: 20px 40px 40px; background: var(--bg-card-solid); }
+        .nav-link {
+            display: inline-flex; align-items: center; gap: 8px; color: var(--text-sub);
+            font-size: 0.9rem; text-decoration: none; border: 1px solid #e2e8f0;
+            padding: 10px 20px; border-radius: 20px; transition: 0.2s;
+        }
+        .nav-link:hover { border-color: var(--accent-green); color: var(--accent-green); }
+        .nav-link.pending { border-style: dashed; }
+
+        /* ===== Bloomコンポーネント（vol01と共通） ===== */
+        .intro-note {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--radius-small);
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            font-size: 0.92rem;
+            color: var(--text-sub);
+            line-height: 1.7;
+        }
+        .intro-note strong { color: var(--text-main); }
+
+        .bloom-story {
+            position: relative;
+            background: linear-gradient(135deg, #ecfdf5 0%, #fef3c7 100%);
+            border-left: 5px solid var(--accent-green);
+            border-radius: var(--radius-small);
+            padding: 20px 24px 20px 28px;
+            margin-bottom: 28px;
+            overflow: hidden;
+            line-height: 1.8;
+        }
+        .bloom-story::before {
+            content: '🌸';
+            position: absolute;
+            right: 16px; top: 10px;
+            font-size: 3rem;
+            opacity: 0.12;
+            pointer-events: none;
+        }
+        .bloom-story-label {
+            display: inline-block;
+            background: var(--accent-green);
+            color: #fff;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            letter-spacing: 0.03em;
+        }
+        .bloom-story p { margin-bottom: 0; color: var(--text-main); font-size: 1rem; }
+
+        .why-box {
+            background: #1e293b;
+            color: #f8fafc;
+            border-radius: var(--radius-small);
+            padding: 20px 24px;
+            margin-bottom: 24px;
+        }
+        .why-box .why-q {
+            color: #fde68a;
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+        }
+        .why-box .why-q::before { content: '❓ '; }
+        .why-box .why-a {
+            font-size: 0.95rem;
+            line-height: 1.75;
+            color: #cbd5e1;
+        }
+        .why-box .why-a strong { color: #6ee7b7; }
+
+        .talk-scene {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+        .talk-scene .talk-bubble {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            max-width: 88%;
+        }
+        .talk-scene .talk-bubble.owner { align-self: flex-start; }
+        .talk-scene .talk-bubble.teacher { align-self: flex-end; flex-direction: row-reverse; }
+        .talk-scene .talk-icon {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; flex-shrink: 0;
+        }
+        .talk-scene .talk-bubble.owner .talk-icon { background: #d1fae5; }
+        .talk-scene .talk-bubble.teacher .talk-icon { background: #fef3c7; }
+        .talk-scene .talk-text {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 0.88rem;
+            line-height: 1.65;
+            color: var(--text-main);
+        }
+        .talk-scene .talk-bubble.owner .talk-text { border-top-left-radius: 2px; }
+        .talk-scene .talk-bubble.teacher .talk-text { border-top-right-radius: 2px; }
+
+        .conclusion-comic {
+            transform: rotate(-0.8deg);
+            border: 3px dashed var(--accent-gold);
+            border-radius: 14px;
+            padding: 22px 26px;
+            margin: 32px 0;
+            background: #fffbeb;
+            box-shadow: 4px 4px 0 rgba(217,119,6,0.15);
+            text-align: center;
+        }
+        .conclusion-comic .comic-label {
+            font-size: 0.78rem;
+            color: var(--accent-gold);
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .conclusion-comic p {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* === レスポンシブ対応（モバイル最適化） === */
+        @media (max-width: 768px) {
+            body { padding: 20px 10px; }
+            .container { padding: 0 10px; margin-top: 20px; border-radius: 18px; }
+            .header { padding: 32px 20px 18px; }
+            .header h1 { font-size: 1.8rem; }
+            .tab-content { padding: 28px 18px; }
+            .tabs { padding: 0 10px; flex-wrap: wrap; }
+            .tab-btn { padding: 15px 10px; font-size: 0.85rem; flex: 1 1 100%; justify-content: center; }
+            .learning-card { flex-direction: column; }
+            .lc-video { width: 100%; flex: none; }
+            .lc-content { padding: 20px; }
+            .flow-map, .book-grid, .voucher-grid, .summary-grid, .term-grid { grid-template-columns: 1fr; }
+            .check-panel { padding: 20px; margin: 20px 0; }
+            .flow-step:not(:last-child)::after { content: '\f078'; right: 50%; top: auto; bottom: -12px; transform: translateX(50%); }
+            .ledger-row { grid-template-columns: 1fr; }
+            .arrow-mid { transform: rotate(90deg); }
+            .chat-bubble { max-width: 100%; flex-direction: column; align-items: stretch; }
+            .talk-scene .talk-bubble { max-width: 100%; align-self: stretch; }
+            .talk-scene .talk-bubble.teacher { flex-direction: row; }
+            .home-btn { width: 52px; height: 52px; bottom: 20px; right: 20px; }
+        }
+    </style>
+</head>
+
+<body>
+    <a href="./index.html" class="home-btn" title="ホームに戻る">
+        <i class="fa-solid fa-house"></i>
+    </a>
+
+    <div class="container">
+        <header class="header">
+            <span class="header-tag">DAY 04</span>
+            <h1>現金・預金の管理</h1>
+            <p style="margin:0; color:var(--text-sub);">May 2026 - Bookkeeping Course</p>
+            <div class="progress-wrap" aria-label="Course progress">
+                <div class="progress-bar"></div>
+            </div>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" onclick="openTab('goal')"><i class="fa-solid fa-bullseye"></i> 今日の目標</button>
+            <button class="tab-btn" onclick="openTab('first')"><i class="fa-solid fa-book-open"></i> 前半：出納帳の記帳</button>
+            <button class="tab-btn" onclick="openTab('second')"><i class="fa-solid fa-triangle-exclamation"></i> 後半：過不足と調整</button>
+            <button class="tab-btn" onclick="openTab('summary')"><i class="fa-solid fa-list-check"></i> まとめ</button>
+        </nav>
+
+        <div id="goal" class="tab-content active">
+
+            <!-- Bloomナラティブ：4日目・朝 -->
+            <div class="bloom-story">
+                <span class="bloom-story-label">📍 Bloom 4日目・朝</span>
+                <p>
+                    Bloomを開いて4日目。<br>
+                    昨日、帳簿の仕組みを学んだあなたは今日、初めてのレジ締めに挑戦します。<br><br>
+                    <strong>「現金が帳簿と1,000円合わない…！」</strong><br>
+                    こういう時、どう処理するか——それが今日のテーマです。
+                </p>
+            </div>
+
+            <!-- Whyボックス -->
+            <div class="why-box">
+                <div class="why-q">なぜ「出納帳」を別に作るの？仕訳帳じゃだめ？</div>
+                <div class="why-a">
+                    仕訳帳は「何が起きたか」の日記。でも「今の現金残高」を即座に知りたい時は不便です。<br>
+                    出納帳は <strong>現金や預金の増減を専用ページで追う</strong> ための補助簿。<br>
+                    「今Bloomにいくら現金があるか」が1秒でわかるのが出納帳の役割です。
+                </div>
+            </div>
+
+            <!-- talk-scene -->
+            <div class="talk-scene">
+                <div class="talk-bubble owner">
+                    <div class="talk-icon">🧑</div>
+                    <div class="talk-text">帳簿って種類が多すぎません？現金出納帳・当座預金出納帳・小口現金出納帳…全部必要ですか？</div>
+                </div>
+                <div class="talk-bubble teacher">
+                    <div class="talk-icon">👩‍🏫</div>
+                    <div class="talk-text">お金の種類ごとに「専用ノート」があると思えばOKです。<br>財布（現金）、銀行口座（当座預金）、各部署の小銭（小口現金）——それぞれ別管理が基本。<br>実務では会計ソフトが自動で作ってくれますが、<strong>中身を知らないと数字を読めません。</strong></div>
+                </div>
+            </div>
+
+            <!-- 既存goal-box -->
+            <div class="goal-box">
+                <i class="fa-solid fa-coins"></i>
+                <h3>「現金・預金の動きを出納帳で追い、ズレを見つけて正しく修正する」</h3>
+                <p>補助簿の中でも出題頻度が高い現金出納帳・当座預金出納帳・小口現金出納帳を学び、<br>現金過不足の仕訳パターンをマスターします。</p>
+            </div>
+
+            <h2>本日の学習マップ</h2>
+            <p>Day 4は「現金・預金管理の実践」です。数字を記録するだけでなく、ズレに気づいて修正するところまで学びます。</p>
+
+            <!-- フローマップ（D：ビジュアルフロー） -->
+            <div class="flow-map">
+                <div class="flow-step">
+                    <i class="fa-solid fa-cash-register"></i>
+                    <strong>現金取引</strong>
+                    <span>入金・出金の発生</span>
+                </div>
+                <div class="flow-step">
+                    <i class="fa-solid fa-book-open"></i>
+                    <strong>出納帳に記帳</strong>
+                    <span>収入・支出・残高</span>
+                </div>
+                <div class="flow-step">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <strong>実際有高と照合</strong>
+                    <span>帳簿 vs 実際</span>
+                </div>
+                <div class="flow-step">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <strong>過不足の発見</strong>
+                    <span>現金過不足で仮処理</span>
+                </div>
+                <div class="flow-step">
+                    <i class="fa-solid fa-check-circle"></i>
+                    <strong>原因判明→修正</strong>
+                    <span>正しい勘定科目へ</span>
+                </div>
+            </div>
+
+            <div style="background:#fffbeb; padding:25px 30px; border-radius:12px; margin:35px 0 20px; border-left:6px solid var(--accent-gold);">
+                <h4 style="color:#b45309; margin:0 0 10px; font-size:1.15rem;"><i class="fa-solid fa-lightbulb"></i> AI時代に「出納帳」を学ぶ意味</h4>
+                <p style="margin:0; font-size:0.95rem; color:#333; line-height:1.7;">会計ソフトは自動で出納帳を生成します。でも「残高が合わない」エラーが出た時、原因を特定できるのは人間だけです。今日学ぶ「現金過不足」のロジックは、AIが出した数字の検証力に直結します。</p>
+            </div>
+
+            <div style="text-align:center; margin-top:30px;">
+                <button class="tool-link-btn" onclick="openTab('first')" style="background:var(--accent-green);">
+                    前半（出納帳の記帳）へ進む <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="first" class="tab-content">
+
+            <!-- Bloomナラティブ：4日目・午前 -->
+            <div class="bloom-story" style="margin-bottom: 24px;">
+                <span class="bloom-story-label">📍 Bloom 4日目・午前</span>
+                <p>
+                    Bloomの今日の取引：コーヒーを売って現金500円、仕入れ代金を小切手で支払い、お釣り用の小銭は小口現金から。<br><br>
+                    同じ「お金」でも、<strong>財布・銀行口座・小口現金</strong>は別々に管理します。<br>
+                    それぞれ専用の出納帳があるので、今日はその書き方を動画で確認してください。
+                </p>
+            </div>
+
+            <h2>セクション1：3種の出納帳</h2>
+            <p>出納帳は「補助簿」の一種。主要簿（仕訳帳・総勘定元帳）の内訳を管理するためのノートです。</p>
+
+            <!-- Learning Card 1: 現金・当座・小口の概要 -->
+            <div class="learning-card">
+                <div class="lc-video">
+                    <div class="vc-thumb" data-video-id="muHUrvssPXk" style="background-image: url('https://img.youtube.com/vi/muHUrvssPXk/maxresdefault.jpg'), url('https://img.youtube.com/vi/muHUrvssPXk/hqdefault.jpg');">
+                        <i class="fa-brands fa-youtube vc-thumb-play"></i>
+                    </div>
+                </div>
+                <div class="lc-content">
+                    <div class="lc-header">
+                        <span class="vc-tag">出納帳3種</span>
+                        <h3 class="lc-title">現金出納帳・当座預金出納帳・小口現金出納帳の記帳</h3>
+                    </div>
+                    <div class="lc-body">
+                        <h4><i class="fa-solid fa-table"></i> 3つの出納帳の役割</h4>
+                        <ul class="lc-list">
+                            <li><strong>現金出納帳</strong>：現金の入金・出金を日付順に記録。月末に次月繰り越し。</li>
+                            <li><strong>当座預金出納帳</strong>：銀行口座の預け入れ・引き出しを管理。残高が借方か貸方かを「借/貸」で表示。</li>
+                            <li><strong>小口現金出納帳</strong>：少額支払い専用の現金を支払い内容（勘定科目）別に記録。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Card 2: 記帳演習 -->
+            <div class="learning-card">
+                <div class="lc-video">
+                    <div class="vc-thumb" data-video-id="SMtcz63KdcQ" style="background-image: url('https://img.youtube.com/vi/SMtcz63KdcQ/maxresdefault.jpg'), url('https://img.youtube.com/vi/SMtcz63KdcQ/hqdefault.jpg');">
+                        <i class="fa-brands fa-youtube vc-thumb-play"></i>
+                    </div>
+                </div>
+                <div class="lc-content">
+                    <div class="lc-header">
+                        <span class="vc-tag">記帳演習</span>
+                        <h3 class="lc-title">現金出納帳・当座預金出納帳の記帳と繰り越し問題</h3>
+                    </div>
+                    <div class="lc-body">
+                        <h4><i class="fa-solid fa-pencil"></i> 記帳の流れ（月末処理）</h4>
+                        <ul class="lc-list">
+                            <li>各取引を仕訳→出納帳に記帳（現金が動く仕訳のみ）。</li>
+                            <li>月末日に「次月繰り越し」を支出欄に記入し、収入・支出の合計が一致することを確認。</li>
+                            <li>二重線で締め切り→翌月1日に「前月繰り越し」を記入して開始。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Card 3: 当座預金出納帳の借残・貸残 -->
+            <div class="learning-card">
+                <div class="lc-video">
+                    <div class="vc-thumb" data-video-id="WH8KHhXYefE" style="background-image: url('https://img.youtube.com/vi/WH8KHhXYefE/maxresdefault.jpg'), url('https://img.youtube.com/vi/WH8KHhXYefE/hqdefault.jpg');">
+                        <i class="fa-brands fa-youtube vc-thumb-play"></i>
+                    </div>
+                </div>
+                <div class="lc-content">
+                    <div class="lc-header">
+                        <span class="vc-tag">重要ポイント</span>
+                        <h3 class="lc-title">当座預金出納帳：借残・貸残と当座借越のしくみ</h3>
+                    </div>
+                    <div class="lc-body">
+                        <h4><i class="fa-solid fa-scale-balanced"></i> 借残・貸残の判定</h4>
+                        <ul class="lc-list">
+                            <li>残高が借方にある（プラス）→「借」と記入。通常の状態。</li>
+                            <li>残高が貸方にある（マイナス）→「貸」と記入。<strong>当座借越</strong>（銀行に借金している状態）。</li>
+                            <li>よくある間違い：「当座預金が借方に来た」から「借」ではなく、<strong>残高がどちらにあるか</strong>で判定する。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- talk-scene：当座預金あるある -->
+            <div class="talk-scene" style="margin: 24px 0;">
+                <div class="talk-bubble owner">
+                    <div class="talk-icon">🧑</div>
+                    <div class="talk-text">当座預金の残高欄に「借」「貸」って書くの、仕訳の借方・貸方と混乱します…</div>
+                </div>
+                <div class="talk-bubble teacher">
+                    <div class="talk-icon">👩‍🏫</div>
+                    <div class="talk-text">これは超頻出の間違いです！<br>出納帳の「借/貸」は<strong>残高がどちら側にあるか</strong>を示すもの。仕訳の借方・貸方とは別物。<br>残高が普通の状態（銀行に預けている）＝借、マイナス（当座借越）＝貸、と覚えてください。</div>
+                </div>
+            </div>
+
+            <!-- NotebookLM 実習：前半 -->
+            <div class="practice-area">
+                <h3><i class="fa-solid fa-robot"></i> 実習：NotebookLMで出納帳を理解する</h3>
+                <p>3本の動画をNotebookLMに読み込ませ、記帳の流れを自分の言葉に変換しましょう。</p>
+                <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:12px; padding:20px; margin-bottom:24px;">
+                    <h4 style="color:#b45309; margin:0 0 12px; display:flex; align-items:center; gap:8px;">
+                        <i class="fa-solid fa-book"></i> NotebookLM へのソース追加手順
+                    </h4>
+                    <ol style="margin:0; padding-left:1.4rem; font-size:0.92rem; line-height:1.9; color:#78350f;">
+                        <li><strong>notebooklm.google.com</strong> にアクセスし「新しいノートブック」を作成</li>
+                        <li>画面左の「ソースを追加」をクリックし「YouTube」または「URL」を選択</li>
+                        <li>動画① <code>https://www.youtube.com/watch?v=muHUrvssPXk</code> を追加</li>
+                        <li>動画② <code>https://www.youtube.com/watch?v=SMtcz63KdcQ</code> を追加</li>
+                        <li>動画③ <code>https://www.youtube.com/watch?v=WH8KHhXYefE</code> を追加</li>
+                        <li>追加完了後、下のプロンプトをコピーして選択式テストを作成する</li>
+                    </ol>
+                </div>
+                <div class="chat-prompt-container">
+                    <div class="chat-bubble">
+                        <div class="chat-text"><span class="prompt-text">読み込んだ動画①〜③の内容をもとに、Day4前半（現金出納帳・当座預金出納帳・小口現金出納帳・月末繰り越し・借残貸残の判定）の理解度を確認する選択式テストを20問作ってください。各問は4択にし、解答は最後にまとめて表示してください。</span></div>
+                        <button class="copy-btn" title="プロンプトをコピー"><i class="fa-regular fa-copy"></i> コピー</button>
+                    </div>
+                    <div class="chat-bubble">
+                        <div class="chat-text"><span class="prompt-text">上の20問テストを、難易度「基礎10問・標準7問・ひっかけ3問」に分けて作り直してください。解答解説では、なぜ他の選択肢が誤りなのかも短く説明してください。</span></div>
+                        <button class="copy-btn" title="プロンプトをコピー"><i class="fa-regular fa-copy"></i> コピー</button>
+                    </div>
+                </div>
+                <div style="text-align:center; margin-top:20px;">
+                    <a href="https://notebooklm.google.com/" target="_blank" class="tool-link-btn" style="background:var(--accent-gold);">
+                        <i class="fa-solid fa-book"></i> NotebookLM を開く
+                    </a>
+                </div>
+            </div>
+
+            <div style="text-align:center; margin-top:30px;">
+                <button class="tool-link-btn" onclick="openTab('second')" style="background:var(--accent-green);">
+                    後半（過不足と調整）へ進む <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="second" class="tab-content">
+
+            <!-- Bloomナラティブ：4日目・午後 -->
+            <div class="bloom-story" style="margin-bottom: 24px;">
+                <span class="bloom-story-label">📍 Bloom 4日目・午後</span>
+                <p>
+                    レジ締めをしたら、帳簿残高と実際の現金が<strong>1,000円合わない</strong>…。<br>
+                    こういう時、慌てて現金を足したり減らしたりするのはNG。<br><br>
+                    まず「現金過不足」という<strong>仮の勘定科目</strong>で処理して、原因がわかったら正しい科目に置き換えます。<br>
+                    この「2ステップ処理」がポイントです。
+                </p>
+            </div>
+
+            <h2>セクション2：現金過不足・小口現金・銀行勘定調整</h2>
+
+            <!-- 現金過不足フロービジュアル（D：ビジュアルフロー） -->
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:24px; margin-bottom:28px;">
+                <h4 style="margin:0 0 16px; color:var(--accent-green);"><i class="fa-solid fa-route"></i> 現金過不足の2ステップ処理</h4>
+                <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; justify-content:center;">
+                    <div style="background:#ecfdf5; border:2px solid var(--accent-green); border-radius:10px; padding:14px 18px; text-align:center; min-width:140px;">
+                        <div style="font-size:0.78rem; color:var(--accent-green); font-weight:700; margin-bottom:6px;">STEP 1：ズレ発見</div>
+                        <div style="font-size:0.9rem; font-weight:700;">現金過不足で<br>仮処理</div>
+                        <div style="font-size:0.78rem; color:var(--text-sub); margin-top:4px;">実際有高に合わせる</div>
+                    </div>
+                    <div style="font-size:1.5rem; color:#94a3b8;">→</div>
+                    <div style="background:#fef3c7; border:2px solid var(--accent-gold); border-radius:10px; padding:14px 18px; text-align:center; min-width:140px;">
+                        <div style="font-size:0.78rem; color:var(--accent-gold); font-weight:700; margin-bottom:6px;">STEP 2：原因判明</div>
+                        <div style="font-size:0.9rem; font-weight:700;">正しい勘定科目に<br>置き換え</div>
+                        <div style="font-size:0.78rem; color:var(--text-sub); margin-top:4px;">現金過不足を消去</div>
+                    </div>
+                    <div style="font-size:1.5rem; color:#94a3b8;">→</div>
+                    <div style="background:#fff0f0; border:2px solid #ef4444; border-radius:10px; padding:14px 18px; text-align:center; min-width:140px;">
+                        <div style="font-size:0.78rem; color:#ef4444; font-weight:700; margin-bottom:6px;">原因不明のまま決算</div>
+                        <div style="font-size:0.9rem; font-weight:700;">雑益 or 雑損<br>に振り替え</div>
+                        <div style="font-size:0.78rem; color:var(--text-sub); margin-top:4px;">現金過不足を残さない</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Card 4: 現金過不足 -->
+            <div class="learning-card">
+                <div class="lc-video">
+                    <div class="vc-thumb" data-video-id="PvlpEKhTuv4" style="background-image: url('https://img.youtube.com/vi/PvlpEKhTuv4/maxresdefault.jpg'), url('https://img.youtube.com/vi/PvlpEKhTuv4/hqdefault.jpg');">
+                        <i class="fa-brands fa-youtube vc-thumb-play"></i>
+                    </div>
+                </div>
+                <div class="lc-content">
+                    <div class="lc-header">
+                        <span class="vc-tag gold">現金過不足</span>
+                        <h3 class="lc-title">現金過不足：帳簿残高 vs 実際有高のズレ処理</h3>
+                    </div>
+                    <div class="lc-body">
+                        <h4><i class="fa-solid fa-code-branch"></i> 仕訳のコツ（2ルール）</h4>
+                        <ul class="lc-list">
+                            <li><strong>ルール①</strong>：必ず実際有高に合わせる（帳簿を現実に寄せる）。</li>
+                            <li><strong>ルール②</strong>：必ず先に「現金」を仕訳してから、反対側に「現金過不足」を書く。</li>
+                            <li>現金過不足は仮勘定（貸借対照表・損益計算書には載らない）。決算日までに必ず取り崩す。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Card 5: 小口現金 -->
+            <div class="learning-card">
+                <div class="lc-video">
+                    <div class="vc-thumb" data-video-id="PN8sp-eY7fc" style="background-image: url('https://img.youtube.com/vi/PN8sp-eY7fc/maxresdefault.jpg'), url('https://img.youtube.com/vi/PN8sp-eY7fc/hqdefault.jpg');">
+                        <i class="fa-brands fa-youtube vc-thumb-play"></i>
+                    </div>
+                </div>
+                <div class="lc-content">
+                    <div class="lc-header">
+                        <span class="vc-tag">小口現金</span>
+                        <h3 class="lc-title">小口現金の仕訳4パターン（前渡し・支払・報告・補給）</h3>
+                    </div>
+                    <div class="lc-body">
+                        <h4><i class="fa-solid fa-list-ol"></i> 4パターンを整理</h4>
+                        <ul class="lc-list">
+                            <li>① 前渡し：小口現金↑／当座預金↓</li>
+                            <li>② 小口係が支払った時：<strong>仕訳なし</strong>（会計係は知らないため）。</li>
+                            <li>③ 報告を受けた時：費用↑／小口現金↓</li>
+                            <li>④ 補給時：小口現金↑／当座預金↓（③と同日なら小口現金を相殺してまとめる）。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- talk-scene：小口現金あるある -->
+            <div class="talk-scene" style="margin: 24px 0;">
+                <div class="talk-bubble owner">
+                    <div class="talk-icon">🧑</div>
+                    <div class="talk-text">小口係が支払った時に仕訳しないのが気持ち悪いです。お金が動いているのに…</div>
+                </div>
+                <div class="talk-bubble teacher">
+                    <div class="talk-icon">👩‍🏫</div>
+                    <div class="talk-text">簿記の仕訳は「<strong>会計係の目線</strong>」で行います。会計係は報告を受けるまでお金が使われたことを知らない——だから仕訳しない。<br>これは会社の規模が大きくなり、担当が分かれた場合に必要な処理です。Bloomの今の規模には必要なくても、試験には確実に出ます！</div>
+                </div>
+            </div>
+
+            <!-- Learning Card 6: 銀行勘定調整票（3級範囲） -->
+            <div class="learning-card">
+                <div class="lc-video">
+                    <div class="vc-thumb" data-video-id="xSeUTCc_l84" style="background-image: url('https://img.youtube.com/vi/xSeUTCc_l84/maxresdefault.jpg'), url('https://img.youtube.com/vi/xSeUTCc_l84/hqdefault.jpg');">
+                        <i class="fa-brands fa-youtube vc-thumb-play"></i>
+                    </div>
+                </div>
+                <div class="lc-content">
+                    <div class="lc-header">
+                        <span class="vc-tag blue">銀行勘定調整</span>
+                        <h3 class="lc-title">銀行勘定調整票：帳簿と銀行残高が合わない6つの原因</h3>
+                    </div>
+                    <div class="lc-body">
+                        <h4><i class="fa-solid fa-building-columns"></i> 3級で押さえる判断軸</h4>
+                        <ul class="lc-list">
+                            <li><strong>修正仕訳が不要</strong>：時間外預け入れ・未取立小切手・未取付小切手（銀行や取引先が処理すれば解決）。</li>
+                            <li><strong>修正仕訳が必要</strong>：連絡未達・誤記入・未渡し小切手（企業側に原因があるため自社で修正）。</li>
+                            <li>「誰の都合でズレているか」で仕訳の要否を判断するのが最速の解き方。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 本日の結論コミック枠 -->
+            <div class="conclusion-comic">
+                <span class="comic-label">✍️ DAY 4 の核心</span>
+                <p>帳簿と現実が合わなくても慌てない。<br>「仮処理→原因究明→正しい科目へ」——この3ステップが簿記の誠実さ。</p>
+            </div>
+
+            <!-- NotebookLM 実習：後半 -->
+            <div class="practice-area">
+                <h3><i class="fa-solid fa-clipboard-check"></i> 実習：現金過不足と小口現金を問題で確認</h3>
+                <p>動画④〜⑥をNotebookLMに追加し、仕訳4パターンと調整票の判断力を鍛えましょう。</p>
+                <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:12px; padding:20px; margin-bottom:24px;">
+                    <h4 style="color:#b45309; margin:0 0 12px; display:flex; align-items:center; gap:8px;">
+                        <i class="fa-solid fa-book"></i> NotebookLM へのソース追加手順
+                    </h4>
+                    <ol style="margin:0; padding-left:1.4rem; font-size:0.92rem; line-height:1.9; color:#78350f;">
+                        <li><strong>notebooklm.google.com</strong> にアクセスし、前半と同じノートブックを開く</li>
+                        <li>画面左の「ソースを追加」をクリックし「YouTube」または「URL」を選択</li>
+                        <li>動画④ <code>https://www.youtube.com/watch?v=PvlpEKhTuv4</code> を追加</li>
+                        <li>動画⑤ <code>https://www.youtube.com/watch?v=PN8sp-eY7fc</code> を追加</li>
+                        <li>動画⑥ <code>https://www.youtube.com/watch?v=xSeUTCc_l84</code> を追加</li>
+                        <li>追加完了後、下のプロンプトをコピーして選択式テストを作成する</li>
+                    </ol>
+                </div>
+                <div class="chat-prompt-container">
+                    <div class="chat-bubble">
+                        <div class="chat-text"><span class="prompt-text">読み込んだ動画④〜⑥の内容をもとに、Day4後半（現金過不足の仕訳・小口現金の4パターン・銀行勘定調整票の修正仕訳要否の判断）の理解度を確認する選択式テストを20問作ってください。各問は4択にし、解答は最後にまとめて表示してください。</span></div>
+                        <button class="copy-btn" title="プロンプトをコピー"><i class="fa-regular fa-copy"></i> コピー</button>
+                    </div>
+                    <div class="chat-bubble">
+                        <div class="chat-text"><span class="prompt-text">上の20問テストのうち、特に間違えやすい「仕訳が必要か不要か」「勘定科目の選択」の問題を10問だけ追加で作ってください。各問に、判断の根拠を1文で添えてください。</span></div>
+                        <button class="copy-btn" title="プロンプトをコピー"><i class="fa-regular fa-copy"></i> コピー</button>
+                    </div>
+                </div>
+                <div style="text-align:center; margin-top:20px;">
+                    <a href="https://notebooklm.google.com/" target="_blank" class="tool-link-btn" style="background:var(--accent-gold);">
+                        <i class="fa-solid fa-book"></i> NotebookLM を開く
+                    </a>
+                </div>
+            </div>
+
+            <div style="text-align:center; margin-top:30px;">
+                <button class="tool-link-btn" onclick="openTab('summary')" style="background:var(--accent-green);">
+                    まとめへ進む <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="summary" class="tab-content">
+
+            <!-- Bloomナラティブ：4日目・夜 -->
+            <div class="bloom-story" style="margin-bottom: 24px;">
+                <span class="bloom-story-label">📍 Bloom 4日目・夜</span>
+                <p>
+                    レジ締めの1,000円のズレ、無事に解決できましたか？<br>
+                    「現金過不足→原因判明→正しい科目へ」——この流れ、体で覚えてください。<br><br>
+                    <strong>ミスを正直に記録する姿勢が、正しい財務諸表を作る。</strong><br>
+                    それが簿記の誠実さです。
+                </p>
+            </div>
+
+            <h2>DAY 4 まとめ</h2>
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-icon"><i class="fa-solid fa-book-open"></i></div>
+                    <h3>出納帳は「残高管理の専用ノート」</h3>
+                    <p>現金・当座預金・小口現金それぞれに専用の出納帳があります。月末に繰り越して翌月に引き継ぎ、常に残高を把握できる状態を保ちます。</p>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <h3>現金過不足は「仮の受け皿」</h3>
+                    <p>ズレを発見したらまず実際有高に合わせ「現金過不足」で仮処理。原因がわかったら正しい科目に置き換えます。決算日まで残ったら雑益・雑損へ振り替えます。</p>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon"><i class="fa-solid fa-coins"></i></div>
+                    <h3>小口現金は「報告ベース」で仕訳</h3>
+                    <p>小口係が支払った時点では仕訳なし。会計係が報告を受けた時に初めて仕訳します。報告と補給が同日なら小口現金を相殺してまとめられます。</p>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon"><i class="fa-solid fa-building-columns"></i></div>
+                    <h3>銀行調整票は「誰の責任か」で判断</h3>
+                    <p>時間外・未取立・未取付は銀行や取引先の都合→修正仕訳不要。連絡未達・誤記入・未渡し小切手は自社の都合→修正仕訳が必要。</p>
+                </div>
+            </div>
+
+            <h2>重要用語チェック</h2>
+            <div class="term-grid">
+                <div class="term-card"><strong>現金出納帳</strong><span>現金の入金・出金を日付順に記録する補助簿。収入欄・支出欄・残高欄で構成。</span></div>
+                <div class="term-card"><strong>当座預金出納帳</strong><span>当座預金の預け入れ・引き出しを管理する補助簿。残高の借/貸を明記する。</span></div>
+                <div class="term-card"><strong>小口現金出納帳</strong><span>小額支払い用現金の使途を勘定科目別に記録する補助簿。</span></div>
+                <div class="term-card"><strong>現金過不足</strong><span>帳簿残高と実際有高のズレを仮処理する勘定科目。仮勘定なので財務諸表には載らない。</span></div>
+                <div class="term-card"><strong>実際有高</strong><span>実際に手元にある現金の金額。帳簿残高ではなくこちらに合わせる。</span></div>
+                <div class="term-card"><strong>雑益・雑損</strong><span>現金過不足の原因が決算日まで不明な場合に振り替える勘定科目。</span></div>
+                <div class="term-card"><strong>定額資金前渡法</strong><span>小口現金を一定金額に保つシステム。使った分だけ補給して常に定額を維持。</span></div>
+                <div class="term-card"><strong>小口現金係・会計係</strong><span>小口現金を管理する担当者と、会社全体の会計を管理する担当者。仕訳は会計係が行う。</span></div>
+                <div class="term-card"><strong>銀行勘定調整票</strong><span>企業の帳簿残高と銀行の残高証明書の不一致原因を整理する表。</span></div>
+                <div class="term-card"><strong>当座借越</strong><span>当座預金残高がマイナスになった状態。銀行に短期借入をしている状態。</span></div>
+                <div class="term-card"><strong>未取立小切手</strong><span>銀行に取立依頼済みだが、まだ銀行が取立処理をしていない小切手。</span></div>
+                <div class="term-card"><strong>未渡し小切手</strong><span>作成済みだが取引先にまだ渡していない小切手。修正仕訳が必要。</span></div>
+            </div>
+
+            <div class="check-panel">
+                <h3><i class="fa-solid fa-clipboard-check"></i> セルフチェック</h3>
+                <ol class="check-list">
+                    <li>現金出納帳の月末繰り越しの手順（次月繰り越し記入→二重線→翌月前月繰り越し）を説明できますか？</li>
+                    <li>現金過不足の2ステップ処理（ズレ発見→原因判明）と、決算まで不明な場合の処理を説明できますか？</li>
+                    <li>銀行勘定調整票で「修正仕訳が必要」なのはどのケースか、3つ答えられますか？</li>
+                </ol>
+            </div>
+
+            <!-- 確認クイズ -->
+            <div class="quiz-panel" id="quizPanel">
+                <h3><i class="fa-solid fa-circle-question"></i> 確認クイズ（全5問）</h3>
+                <p style="color:var(--text-sub); font-size:0.9rem; margin-bottom:20px;">今日の出納帳・現金過不足・小口現金の理解度を確認しましょう。</p>
+                <div id="quiz-container"></div>
+                <div id="quiz-result" style="display:none; margin-top:24px; padding:20px; border-radius:12px; text-align:center;">
+                    <p id="quiz-score" style="font-size:1.6rem; font-weight:900; margin-bottom:8px;"></p>
+                    <p id="quiz-msg" style="font-size:0.95rem; color:var(--text-sub);"></p>
+                    <button onclick="resetQuiz()" class="tool-link-btn" style="margin-top:16px; background:var(--accent-green);">
+                        <i class="fa-solid fa-rotate-right"></i> もう一度
+                    </button>
+                </div>
+            </div>
+
+            <div style="background:#f0fdf4; padding:25px 30px; border-radius:12px; margin:35px 0 20px; border-left:6px solid #059669;">
+                <h4 style="color:#047857; margin:0 0 10px; font-size:1.15rem;"><i class="fa-solid fa-forward"></i> 次回予告：Day 5</h4>
+                <p style="margin:0; font-size:0.95rem; color:#333; line-height:1.6;">次回は「売掛金・買掛金・手形」へ。Bloomが取引先と掛けで取引するようになり、債権・債務の管理を学びます。</p>
+            </div>
+        </div>
+
+        <div style="text-align:center; padding: 3rem 0 2rem; display: flex; flex-direction: column; gap: 1rem; align-items: center;">
+            <button type="button" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:linear-gradient(135deg, #34d399, #059669); border:none; box-shadow: 0 10px 30px rgba(5,150,105, 0.25); cursor:pointer;" onclick="window.location.href='./vol05-1.html'">
+                Day 5 へ進む <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <button type="button" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:#fff; color:#4a4a4a; border:2px solid #e2e8f0; box-shadow:none; cursor:pointer;" onclick="window.location.href='./index.html'">
+                <i class="fa-solid fa-house"></i> 学習記録をつけて Home へ戻る
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            const targetBtn = document.querySelector(`.tab-btn[onclick*="openTab('${tabId}')"]`);
+            if (targetBtn) targetBtn.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const text = button.parentElement.querySelector('.prompt-text').innerText;
+                navigator.clipboard.writeText(text).then(() => {
+                    button.classList.add('copied');
+                    button.innerHTML = '<i class="fa-solid fa-check"></i> コピーしました';
+                    setTimeout(() => {
+                        button.classList.remove('copied');
+                        button.innerHTML = '<i class="fa-regular fa-copy"></i> コピー';
+                    }, 2000);
+                });
+            });
+        });
+
+        document.querySelectorAll('.vc-thumb[data-video-id]').forEach(thumb => {
+            thumb.addEventListener('click', function() {
+                const videoId = this.dataset.videoId;
+                this.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
+                this.style.backgroundImage = 'none';
+                this.style.cursor = 'default';
+                this.onclick = null;
+            }, { once: true });
+        });
+
+        document.querySelectorAll('a[data-check-page="true"]').forEach(link => {
+            link.addEventListener('click', async event => {
+                event.preventDefault();
+                const target = link.getAttribute('href');
+                try {
+                    const response = await fetch(target, { method: 'HEAD', cache: 'no-store' });
+                    if (response.ok) {
+                        window.location.href = target;
+                        return;
+                    }
+                } catch (error) {
+                    // Local file previews may reject HEAD requests; keep users away from a broken link.
+                }
+                alert('Day 5ページはまだ準備中です。公開後にこのリンクから進めます。');
+            });
+        });
+
+        const quizData = [
+            {
+                q: "Bloomのレジを締めたら、帳簿残高より実際の現金が500円多かった。最初に行う仕訳は？",
+                opts: [
+                    "（仕訳なし）原因がわかるまで待つ",
+                    "現金 500 ／ 現金過不足 500",
+                    "現金過不足 500 ／ 現金 500",
+                    "雑益 500 ／ 現金 500"
+                ],
+                ans: 1,
+                fb: "実際有高が多い（超過）場合は現金が増えるので、現金を借方へ。反対の貸方に現金過不足を書きます。まず先に現金を仕訳してから、反対側に現金過不足を書くのがコツです。"
+            },
+            {
+                q: "Bloomの当座預金出納帳。残高が借方にある時の「借/貸」欄の記入は？",
+                opts: ["貸", "借", "±", "記入不要"],
+                ans: 1,
+                fb: "当座預金出納帳の借/貸欄は「残高がある方向」を示します。残高が借方にある＝「借」と記入。仕訳の借方・貸方と混同しないよう注意が必要です。"
+            },
+            {
+                q: "Bloomの小口係が文具代300円を小口現金から支払った。この時点で会計係が行う仕訳は？",
+                opts: [
+                    "消耗品費 300 ／ 小口現金 300",
+                    "小口現金 300 ／ 現金 300",
+                    "（仕訳なし）",
+                    "消耗品費 300 ／ 現金 300"
+                ],
+                ans: 2,
+                fb: "小口現金係が支払った段階では、会計係はまだ知りません。会計係が仕訳するのは「報告を受けた時」です。支払時点での仕訳はなし、が正解です。"
+            },
+            {
+                q: "銀行勘定調整票で「修正仕訳が必要」なのはどれ？",
+                opts: [
+                    "時間外預け入れ（銀行の営業時間後に入金した）",
+                    "未取立小切手（銀行がまだ取立処理をしていない）",
+                    "連絡未達（売掛金の振込があったが会社に通知が来ていない）",
+                    "未取付小切手（振り出した小切手を取引先がまだ持ち込んでいない）"
+                ],
+                ans: 2,
+                fb: "連絡未達は「銀行側は処理済みだが企業に通知が届いていない」ため、企業側で修正仕訳が必要です。時間外・未取立・未取付は銀行や取引先が処理すれば解決するので修正仕訳不要です。"
+            },
+            {
+                q: "Bloomが現金過不足500円（不足）の原因として、家賃500円の支払い記録漏れが判明した。原因判明時の仕訳は？",
+                opts: [
+                    "支払家賃 500 ／ 現金 500",
+                    "現金過不足 500 ／ 支払家賃 500",
+                    "支払家賃 500 ／ 現金過不足 500",
+                    "現金 500 ／ 現金過不足 500"
+                ],
+                ans: 2,
+                fb: "原因判明時は「正しい仕訳をしてから現金を現金過不足に置き換える」のがコツ。家賃支払いの正しい仕訳は「支払家賃 ／ 現金」。この現金を現金過不足に変えると「支払家賃 500 ／ 現金過不足 500」になります。"
+            }
+        ];
+
+        let selectedAnswers = [];
+
+        function buildQuiz() {
+            const container = document.getElementById('quiz-container');
+            if (!container) return;
+            container.innerHTML = '';
+            selectedAnswers = new Array(quizData.length).fill(null);
+            quizData.forEach((q, qi) => {
+                const letters = ['A', 'B', 'C', 'D'];
+                const optsHtml = q.opts.map((o, oi) => `
+                    <button type="button" class="quiz-opt" onclick="answerQuiz(${qi},${oi})" id="opt-${qi}-${oi}">
+                        <span class="quiz-opt-icon">${letters[oi]}</span>${o}
+                    </button>`).join('');
+                container.innerHTML += `
+                    <div class="quiz-q" id="qq-${qi}">
+                        <div class="quiz-q-num">問${qi + 1} / ${quizData.length}</div>
+                        <div class="quiz-q-text">${q.q}</div>
+                        <div class="quiz-options">${optsHtml}</div>
+                        <div class="quiz-feedback" id="fb-${qi}"></div>
+                    </div>`;
+            });
+            document.getElementById('quiz-result').style.display = 'none';
+        }
+
+        function answerQuiz(qi, oi) {
+            if (selectedAnswers[qi] !== null) return;
+            selectedAnswers[qi] = oi;
+            const q = quizData[qi];
+            const isCorrect = oi === q.ans;
+            q.opts.forEach((_, i) => {
+                const btn = document.getElementById(`opt-${qi}-${i}`);
+                btn.classList.add('disabled');
+                if (i === q.ans) btn.classList.add('correct');
+                else if (i === oi && !isCorrect) btn.classList.add('wrong');
+            });
+            const fb = document.getElementById(`fb-${qi}`);
+            fb.textContent = (isCorrect ? '正解！ ' : '不正解。') + q.fb;
+            fb.className = `quiz-feedback show ${isCorrect ? 'correct-fb' : 'wrong-fb'}`;
+            if (selectedAnswers.every(a => a !== null)) {
+                const score = selectedAnswers.reduce((c, a, i) => c + (a === quizData[i].ans ? 1 : 0), 0);
+                showResult(score);
+            }
+        }
+
+        function showResult(score) {
+            const result = document.getElementById('quiz-result');
+            const isPassed = score >= 4;
+            result.style.display = 'block';
+            result.className = isPassed ? 'pass' : 'fail';
+            document.getElementById('quiz-score').textContent = `${score} / ${quizData.length} 正解`;
+            document.getElementById('quiz-msg').textContent = isPassed
+                ? '素晴らしい！Bloomのお金管理、しっかり理解できています。Day5へ進みましょう。'
+                : 'もう一度ページを読み直してから再挑戦しましょう。NotebookLMに解説を頼むのもOKです。';
+            result.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function resetQuiz() {
+            buildQuiz();
+            document.getElementById('quizPanel').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        buildQuiz();
+    </script>
+</body>
+</html>
+<!-- cache-bust: 2026-05-13T12:00:00 -->
