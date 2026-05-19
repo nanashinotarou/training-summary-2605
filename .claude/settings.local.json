@@ -9,7 +9,9 @@
       "Bash(Select-Object Length, LastWriteTime)",
       "Bash(Select-Object LastWriteTime, Length)",
       "Bash(fc /b \"G:\\\\マイドライブ\\\\研修\\\\【202605】簿記コース\\\\vol06-1.html\" \"G:\\\\マイドライブ\\\\研修\\\\【202605】簿記コース\\\\.deploy_tmp\\\\vol06-1.html\")",
-      "Bash(findstr \"cache-bust\" \"G:\\\\マイドライブ\\\\研修\\\\【202605】簿記コース\\\\vol06-1.html\")"
+      "Bash(findstr \"cache-bust\" \"G:\\\\マイドライブ\\\\研修\\\\【202605】簿記コース\\\\vol06-1.html\")",
+      "Bash(findstr \"cache-bust\" \"G:\\\\マイドライブ\\\\研修\\\\【202605】簿記コース\\\\vol07-1.html\")",
+      "Bash(fc /b \"G:\\\\マイドライブ\\\\研修\\\\【202605】簿記コース\\\\vol07-1.html\" \"G:\\\\マイドライブ\\\\研修\\\\【202605】簿記コース\\\\.deploy_tmp\\\\vol07-1.html\")"
     ]
   }
 }
