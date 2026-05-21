@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 9前半 | 給料・消費税・法人税等の基礎仕訳</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Teko:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #f0fdf4;
+            --bg-card: rgba(255, 255, 255, 0.85);
+            --bg-card-solid: #ffffff;
+            --text-main: #1e293b;
+            --text-sub: #64748b;
+            --accent-green: #059669;
+            --accent-gold: #d97706;
+            --accent-blue: #2563eb;
+            --accent-light: #d1fae5;
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 15px 40px rgba(5, 150, 105, 0.2);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.6);
+            --radius-large: 24px;
+            --radius-medium: 16px;
+            --radius-small: 8px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: var(--bg-body);
+            background-image:
+                radial-gradient(at 0% 0%, rgba(255, 255, 255, 0.8) 0, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(209, 250, 229, 0.8) 0, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 20px;
+        }
+
+        .home-btn {
+            position: fixed; bottom: 30px; right: 30px;
+            width: 60px; height: 60px;
+            background: var(--accent-green); color: white;
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 1.5rem; text-decoration: none;
+            box-shadow: 0 10px 25px rgba(5, 150, 105, 0.4);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 1000;
+        }
+        .home-btn:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 15px 30px rgba(5, 150, 105, 0.5); background: #047857; }
+
+        .container {
+            width: 100%; max-width: 900px;
+            background: var(--bg-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: var(--glass-border); border-radius: var(--radius-large);
+            box-shadow: var(--shadow-soft); overflow: hidden;
+            display: flex; flex-direction: column; animation: fadeIn 0.8s ease-out;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .header { padding: 40px 40px 20px; border-bottom: 2px solid var(--accent-light); text-align: center; }
+        .header-tag {
+            display: inline-block; background: var(--accent-green); color: white;
+            font-weight: 700; padding: 4px 12px; border-radius: 20px;
+            font-family: 'Roboto', sans-serif; font-size: 0.85rem; letter-spacing: 1px; margin-bottom: 15px;
+        }
+        .header h1 { font-size: 2.2rem; font-weight: 900; color: var(--accent-green); margin-bottom: 10px; }
+        .progress-wrap { max-width: 520px; height: 8px; background: #e2e8f0; border-radius: 999px; margin: 18px auto 0; overflow: hidden; }
+        .progress-bar { width: 77%; height: 100%; background: linear-gradient(90deg, var(--accent-green), #34d399); border-radius: inherit; }
+
+        .tabs { display: flex; padding: 0 20px; background: rgba(255, 255, 255, 0.5); border-bottom: 1px solid #eee; overflow-x: auto; }
+        .tab-btn {
+            border: none; background: none; padding: 20px 24px; font-size: 1rem; font-weight: 700;
+            color: var(--text-sub); cursor: pointer; position: relative; transition: color 0.3s; white-space: nowrap;
+        }
+        .tab-btn:hover, .tab-btn.active { color: var(--accent-green); }
+        .tab-btn.active::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px;
+            background: var(--accent-green); border-radius: 3px 3px 0 0;
+        }
+
+        .tab-content { display: none; padding: 40px; background: var(--bg-card-solid); min-height: 500px; animation: fadeInTab 0.4s ease-out; }
+        .tab-content.active { display: block; }
+        @keyframes fadeInTab { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h2 { font-size: 1.6rem; color: var(--text-main); border-left: 5px solid var(--accent-gold); padding-left: 15px; margin: 30px 0 20px; }
+        h2:first-child { margin-top: 0; }
+        h3 { font-size: 1.3rem; color: var(--accent-green); margin: 25px 0 15px; display: flex; align-items: center; gap: 10px; }
+        p { line-height: 1.8; margin-bottom: 20px; color: #555; font-size: 1.05rem; max-width: 1000px; }
+
+        .goal-box {
+            background: linear-gradient(135deg, var(--accent-light), #fff);
+            border: 1px solid var(--accent-green); border-radius: var(--radius-medium);
+            padding: 30px; margin-bottom: 30px; text-align: center;
+        }
+        .goal-box i { font-size: 3rem; color: var(--accent-green); margin-bottom: 15px; }
+        .goal-box h3 { justify-content: center; font-size: 1.5rem; margin-top: 0; }
+        .goal-box p { font-size: 1.15rem; font-weight: 500; margin-bottom: 0; color: var(--text-main); }
+
+        .learning-card {
+            display: flex; flex-direction: row; background: rgba(255, 255, 255, 0.9);
+            border-radius: var(--radius-medium); border: var(--glass-border); overflow: hidden;
+            margin-bottom: 30px; box-shadow: var(--shadow-soft); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .learning-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); border-color: var(--accent-light); }
+        .lc-video { flex: 0 0 45%; background: #000; display: flex; flex-direction: column; position: relative; }
+        .lc-content { flex: 1; padding: 30px; display: flex; flex-direction: column; justify-content: center; }
+        .lc-header { border-bottom: 2px dashed var(--accent-light); padding-bottom: 15px; margin-bottom: 20px; }
+        .lc-title { font-size: 1.2rem; font-weight: 900; color: var(--text-main); margin: 10px 0 0 0; line-height: 1.4; }
+        .lc-body h4 { font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .lc-body p { font-size: 1rem; line-height: 1.7; margin-bottom: 15px; color: #555; }
+        .lc-list { list-style: none; padding-left: 0; margin-bottom: 0; background: #fdfdfd; padding: 15px; border-radius: var(--radius-small); border: 1px solid #f5f5f5; }
+        .lc-list li { position: relative; padding-left: 25px; margin-bottom: 8px; font-size: 0.95rem; color: #444; line-height: 1.65; }
+        .lc-list li::before { content: '\f0da'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; left: 5px; top: 3px; color: var(--accent-gold); }
+
+        .vc-thumb { width: 100%; aspect-ratio: 16/9; background-color: #000; background-size: cover; background-position: center; position: relative; cursor: pointer; }
+        .vc-thumb::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.1); transition: background 0.3s ease; pointer-events: none; }
+        .vc-thumb:hover::before { background: rgba(0, 0, 0, 0.2); }
+        .vc-thumb-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 3rem; color: rgba(255, 255, 255, 0.9); text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4); transition: transform 0.3s ease, color 0.3s ease; pointer-events: none; }
+        .vc-thumb:hover .vc-thumb-play { transform: translate(-50%, -50%) scale(1.1); color: #ff0000; }
+        .vc-tag { font-size: 0.75rem; background: var(--accent-light); color: var(--accent-green); font-weight: 700; padding: 3px 10px; border-radius: 20px; border: 1px solid rgba(5,150,105,0.25); display: inline-block; margin-bottom: 8px; }
+        .vc-tag.blue { background: #dbeafe; color: var(--accent-blue); border-color: rgba(37,99,235,0.25); }
+        .vc-tag.gold { background: #fffbeb; color: var(--accent-gold); border-color: rgba(217,119,6,0.25); }
+
+        .flow-map { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 24px 0 30px; }
+        .flow-step { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px 12px; text-align: center; position: relative; box-shadow: var(--shadow-soft); }
+        .flow-step:not(:last-child)::after { content: '\f054'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: -10px; top: 50%; transform: translateY(-50%); color: #94a3b8; z-index: 2; }
+        .flow-step i { color: var(--accent-green); font-size: 1.3rem; margin-bottom: 8px; }
+        .flow-step strong { display: block; font-size: 0.9rem; color: var(--text-main); margin-bottom: 4px; }
+        .flow-step span { display: block; font-size: 0.74rem; color: var(--text-sub); line-height: 1.45; }
+
+        .book-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 22px 0 30px; }
+        .book-card { border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; background: #f8fafc; }
+        .book-card.primary { background: #ecfdf5; border-color: #a7f3d0; }
+        .book-card.assist { background: #eff6ff; border-color: #bfdbfe; }
+        .book-card h4 { color: var(--text-main); font-size: 1.08rem; margin-bottom: 10px; display: flex; gap: 8px; align-items: center; }
+        .book-card p { font-size: 0.92rem; margin-bottom: 0; line-height: 1.65; }
+
+        .ledger-demo { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 22px; margin: 20px 0 30px; }
+        .ledger-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 14px; align-items: stretch; }
+        .journal, .ledger { background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; padding: 16px; }
+        .journal h4, .ledger h4 { margin: 0 0 12px; font-size: 1rem; color: var(--accent-green); }
+        .journal-line { display: flex; justify-content: space-between; gap: 10px; border-bottom: 1px dashed #e2e8f0; padding: 7px 0; font-size: 0.9rem; }
+        .arrow-mid { display: flex; align-items: center; justify-content: center; color: var(--accent-gold); font-size: 1.6rem; }
+        .t-account { width: 100%; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .t-header { background: #1e293b; color: #fff; padding: 8px; text-align: center; font-weight: bold; font-size: 0.9rem; }
+        .t-body { display: flex; border-top: 2px solid #1e293b; min-height: 120px; }
+        .t-left, .t-right { flex: 1; padding: 10px; font-size: 0.82rem; }
+        .t-left { border-right: 2px solid #1e293b; background: #eff6ff; }
+        .t-right { background: #fef2f2; }
+        .t-label { font-size: 0.7rem; color: #64748b; margin-bottom: 5px; display: block; }
+
+        .voucher-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 18px 0 25px; }
+        .voucher-card { border-radius: 16px; padding: 18px; border: 1px solid #e2e8f0; background: #fff; box-shadow: var(--shadow-soft); }
+        .voucher-card h4 { margin: 0 0 8px; color: var(--text-main); font-size: 1rem; }
+        .voucher-card p { margin-bottom: 0; font-size: 0.9rem; line-height: 1.6; }
+        .voucher-card.in { border-top: 5px solid #059669; }
+        .voucher-card.out { border-top: 5px solid #dc2626; }
+        .voucher-card.transfer { border-top: 5px solid #2563eb; }
+
+        .practice-area { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-medium); padding: 30px; margin-top: 30px; }
+        .tool-link-btn { display: inline-flex; align-items: center; gap: 10px; background: #059669; color: white; padding: 12px 24px; border-radius: 30px; text-decoration: none; font-weight: bold; transition: 0.3s; margin-bottom: 20px; border: 0; cursor: pointer; font-size: 0.95rem; }
+        .tool-link-btn:hover { background: #047857; transform: translateY(-2px); }
+        .step-list { list-style: none; padding-left: 0; margin: 14px 0 0; }
+        .step-list li { position: relative; padding-left: 40px; margin-bottom: 15px; font-size: 1.02rem; line-height: 1.65; }
+        .step-list li::before { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; left: 0; top: 3px; width: 25px; height: 25px; background: var(--accent-green); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; }
+
+        .chat-prompt-container { display: flex; flex-direction: column; gap: 15px; margin: 20px auto; max-width: 1000px; background: #fff; padding: 25px; border-radius: var(--radius-large); box-shadow: inset 0 2px 10px rgba(0,0,0,0.02); border: 1px solid #eee; }
+        .chat-bubble { display: flex; align-items: center; justify-content: space-between; background: #f1f5f9; padding: 12px 20px; border-radius: 20px 20px 20px 0; max-width: 95%; align-self: flex-start; gap: 15px; transition: all 0.2s; border: 1px solid transparent; }
+        .chat-bubble:hover { border-color: #cbd5e1; background: #e2e8f0; }
+        .chat-text { font-size: 1rem; color: #1e293b; line-height: 1.55; font-weight: 500; }
+        .copy-btn { background: #fff; border: 1px solid #cbd5e1; color: #059669; padding: 8px 15px; border-radius: 15px; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+        .copy-btn:hover { background: #f8fafc; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .copy-btn.copied { background: #d1fae5; border-color: #a7f3d0; color: #047857; }
+
+        .summary-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin: 25px 0 35px; }
+        .summary-card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: var(--radius-medium); padding: 24px; box-shadow: var(--shadow-soft); }
+        .summary-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: var(--accent-light); color: var(--accent-green); font-size: 1.25rem; margin-bottom: 14px; }
+        .summary-card h3 { margin: 0 0 10px; color: var(--text-main); font-size: 1.1rem; }
+        .summary-card p { margin-bottom: 0; font-size: 0.96rem; line-height: 1.75; }
+
+        .term-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 18px 0 30px; }
+        .term-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; }
+        .term-card strong { display: block; color: var(--accent-green); margin-bottom: 6px; font-size: 1rem; }
+        .term-card span { display: block; color: #475569; font-size: 0.9rem; line-height: 1.55; }
+
+        .check-panel {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-left: 6px solid var(--accent-gold);
+            border-radius: var(--radius-medium);
+            padding: 26px;
+            margin: 28px 0;
+        }
+        .check-panel h3 { color: #b45309; margin-top: 0; }
+        .check-list {
+            margin: 0;
+            padding-left: 1.4rem;
+        }
+        .check-list li {
+            margin-bottom: 12px;
+            line-height: 1.7;
+            color: #44403c;
+        }
+
+        .quiz-panel { background: #fafafa; border: 1px solid #e2e8f0; border-radius: var(--radius-medium); padding: 28px; margin: 28px 0; }
+        .quiz-q { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .quiz-q-text { font-size: 1rem; font-weight: 700; color: var(--text-main); margin-bottom: 14px; }
+        .quiz-q-num { font-size: 0.78rem; color: var(--accent-gold); font-weight: 700; margin-bottom: 6px; }
+        .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+        .quiz-opt {
+            display: flex; align-items: center; gap: 12px;
+            background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 10px;
+            padding: 12px 16px; cursor: pointer; transition: 0.2s;
+            font-size: 0.95rem; color: var(--text-main); text-align: left;
+        }
+        .quiz-opt:hover { background: var(--accent-light); border-color: var(--accent-green); }
+        .quiz-opt.correct { background: #ecfdf5; border-color: #059669; color: #065f46; }
+        .quiz-opt.wrong { background: #fef2f2; border-color: #ef4444; color: #991b1b; }
+        .quiz-opt.disabled { cursor: default; pointer-events: none; }
+        .quiz-opt-icon { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #cbd5e1; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
+        .quiz-feedback { margin-top: 12px; padding: 10px 14px; border-radius: 8px; font-size: 0.88rem; line-height: 1.6; display: none; }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct-fb { background: #ecfdf5; color: #065f46; border-left: 4px solid #059669; }
+        .quiz-feedback.wrong-fb { background: #fef2f2; color: #991b1b; border-left: 4px solid #ef4444; }
+        #quiz-result.pass { background: #ecfdf5; border: 2px solid #059669; border-radius: 12px; }
+        #quiz-result.fail { background: #fff7ed; border: 2px solid #d97706; border-radius: 12px; }
+
+        .nav-links { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; padding: 20px 40px 40px; background: var(--bg-card-solid); }
+        .nav-link {
+            display: inline-flex; align-items: center; gap: 8px; color: var(--text-sub);
+            font-size: 0.9rem; text-decoration: none; border: 1px solid #e2e8f0;
+            padding: 10px 20px; border-radius: 20px; transition: 0.2s;
+        }
+        .nav-link:hover { border-color: var(--accent-green); color: var(--accent-green); }
+        .nav-link.pending { border-style: dashed; }
+
+        /* ===== Bloomコンポーネント（vol01と共通） ===== */
+        .intro-note {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--radius-small);
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            font-size: 0.92rem;
+            color: var(--text-sub);
+            line-height: 1.7;
+        }
+        .intro-note strong { color: var(--text-main); }
+
+        .bloom-story {
+            position: relative;
+            background: linear-gradient(135deg, #ecfdf5 0%, #fef3c7 100%);
+            border-left: 5px solid var(--accent-green);
+            border-radius: var(--radius-small);
+            padding: 20px 24px 20px 28px;
+            margin-bottom: 28px;
+            overflow: hidden;
+            line-height: 1.8;
+        }
+        .bloom-story::before {
+            content: '🌸';
+            position: absolute;
+            right: 16px; top: 10px;
+            font-size: 3rem;
+            opacity: 0.12;
+            pointer-events: none;
+        }
+        .bloom-story-label {
+            display: inline-block;
+            background: var(--accent-green);
+            color: #fff;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            letter-spacing: 0.03em;
+        }
+        .bloom-story p { margin-bottom: 0; color: var(--text-main); font-size: 1rem; }
+
+        .why-box {
+            background: #1e293b;
+            color: #f8fafc;
+            border-radius: var(--radius-small);
+            padding: 20px 24px;
+            margin-bottom: 24px;
+        }
+        .why-box .why-q {
+            color: #fde68a;
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+        }
+        .why-box .why-q::before { content: '❓ '; }
+        .why-box .why-a {
+            font-size: 0.95rem;
+            line-height: 1.75;
+            color: #cbd5e1;
+        }
+        .why-box .why-a strong { color: #6ee7b7; }
+
+        .talk-scene {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+        .talk-scene .talk-bubble {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            max-width: 88%;
+        }
+        .talk-scene .talk-bubble.owner { align-self: flex-start; }
+        .talk-scene .talk-bubble.teacher { align-self: flex-end; flex-direction: row-reverse; }
+        .talk-scene .talk-icon {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; flex-shrink: 0;
+        }
+        .talk-scene .talk-bubble.owner .talk-icon { background: #d1fae5; }
+        .talk-scene .talk-bubble.teacher .talk-icon { background: #fef3c7; }
+        .talk-scene .talk-text {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 0.88rem;
+            line-height: 1.65;
+            color: var(--text-main);
+        }
+        .talk-scene .talk-bubble.owner .talk-text { border-top-left-radius: 2px; }
+        .talk-scene .talk-bubble.teacher .talk-text { border-top-right-radius: 2px; }
+
+        .conclusion-comic {
+            transform: rotate(-0.8deg);
+            border: 3px dashed var(--accent-gold);
+            border-radius: 14px;
+            padding: 22px 26px;
+            margin: 32px 0;
+            background: #fffbeb;
+            box-shadow: 4px 4px 0 rgba(217,119,6,0.15);
+            text-align: center;
+        }
+        .conclusion-comic .comic-label {
+            font-size: 0.78rem;
+            color: var(--accent-gold);
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .conclusion-comic p {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* === レスポンシブ対応（モバイル最適化） === */
+        @media (max-width: 768px) {
+            body { padding: 20px 10px; }
+            .container { padding: 0 10px; margin-top: 20px; border-radius: 18px; }
+            .header { padding: 32px 20px 18px; }
+            .header h1 { font-size: 1.8rem; }
+            .tab-content { padding: 28px 18px; }
+            .tabs { padding: 0 10px; flex-wrap: wrap; }
+            .tab-btn { padding: 15px 10px; font-size: 0.85rem; flex: 1 1 100%; justify-content: center; }
+            .learning-card { flex-direction: column; }
+            .lc-video { width: 100%; flex: none; }
+            .lc-content { padding: 20px; }
+            .flow-map, .book-grid, .voucher-grid, .summary-grid, .term-grid { grid-template-columns: 1fr; }
+            .check-panel { padding: 20px; margin: 20px 0; }
+            .flow-step:not(:last-child)::after { content: '\f078'; right: 50%; top: auto; bottom: -12px; transform: translateX(50%); }
+            .ledger-row { grid-template-columns: 1fr; }
+            .arrow-mid { transform: rotate(90deg); }
+            .chat-bubble { max-width: 100%; flex-direction: column; align-items: stretch; }
+            .talk-scene .talk-bubble { max-width: 100%; align-self: stretch; }
+            .talk-scene .talk-bubble.teacher { flex-direction: row; }
+            .home-btn { width: 52px; height: 52px; bottom: 20px; right: 20px; }
+        }
+    </style>
+</head>
+
+<body>
+    <a href="./index.html" class="home-btn" title="ホームに戻る">
+        <i class="fa-solid fa-house"></i>
+    </a>
+
+    <div class="container">
+        <header class="header">
+            <span class="header-tag">DAY 09（前半）</span>
+            <h1>給料・消費税・法人税等の基礎仕訳</h1>
+            <p style="margin:0; color:var(--text-sub);">May 2026 - Bookkeeping Course</p>
+            <div class="progress-wrap" aria-label="Course progress">
+                <div class="progress-bar"></div>
+            </div>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" onclick="openTab('goal')"><i class="fa-solid fa-bullseye"></i> 今日の目標</button>
+            <button class="tab-btn" onclick="openTab('first')"><i class="fa-solid fa-money-bill-wave"></i> 給料と所得税</button>
+            <button class="tab-btn" onclick="openTab('second')"><i class="fa-solid fa-receipt"></i> 消費税と法人税等</button>
+            <button class="tab-btn" onclick="openTab('summary')"><i class="fa-solid fa-list-check"></i> まとめ</button>
+        </nav>
+
+                <div id="goal" class="tab-content active">
+            <div class="bloom-story">
+                <span class="bloom-story-label">📍 Bloom 9日目・朝</span>
+                <p>給与明細を初めて見たHarukaさんが「え、20万円のはずなのに振込が18万円？何が引かれてるんですか？！」と驚く場面。<br>先輩経理：「その差額の正体こそ、今日学ぶ<strong>税金の核心</strong>なんです」</p>
+            </div>
+            <div class="why-box">
+                <div class="why-q">消費税って企業が国に納める税金って聞いたけど、うちの会社は消費者から預かってるだけ？</div>
+                <div class="why-a">その通り。消費税は消費者が負担し企業が仲介して国へ納める<strong>間接税</strong>。仮払消費税と仮受消費税の差額だけを納めればよい。<strong>この仕組みを理解しないと決算の消費税整理で必ずミス</strong>する。</div>
+            </div>
+            <div class="talk-scene">
+                <div class="talk-bubble owner"><div class="talk-icon">🧑</div><div class="talk-text">給料明細で"所得税"と"社会保険料"が引かれてるけど、簿記ではどう仕訳するんですか？</div></div>
+                <div class="talk-bubble teacher"><div class="talk-icon">👩‍🏫</div><div class="talk-text">所得税は<strong>所得税預り金</strong>（負債）、健康保険・厚生年金は<strong>従業員立替金</strong>（資産）として計上。国や組合へ払うまで一時的に預かっているイメージです。</div></div>
+            </div>
+            <div class="goal-box">
+                <i class="fa-solid fa-receipt"></i>
+                <h3>「給料・消費税・法人税等の仕訳パターンを完全習得する」</h3>
+                <p>所得税預り金・従業員立替金・仮払/仮受消費税・仮払法人税等の属性と、日々の仕訳から決算整理まで一気通貫で学びます。</p>
+            </div>
+            <h2>本日の学習ルート</h2>
+            <div class="flow-map">
+                <div class="flow-step"><i class="fa-solid fa-money-bill-wave"></i><strong>期中の仕訳</strong><span>給料・売買時の消費税・中間納付</span></div>
+                <div class="flow-step"><i class="fa-solid fa-file-invoice"></i><strong>決算整理</strong><span>仮払/仮受を0にして未払へ</span></div>
+                <div class="flow-step"><i class="fa-solid fa-hand-holding-dollar"></i><strong>納付</strong><span>負債・資産を消す</span></div>
+            </div>
+            <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:24px;margin:28px 0;overflow-x:auto;">
+                <h4 style="margin:0 0 16px;color:var(--accent-green);"><i class="fa-solid fa-table-list"></i> 勘定科目一覧（最重要）</h4>
+                <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+                    <thead><tr style="background:#ecfdf5;">
+                        <th style="padding:8px;border:1px solid #d1fae5;text-align:left;">勘定科目</th><th style="padding:8px;border:1px solid #d1fae5;">属性</th>
+                        <th style="padding:8px;border:1px solid #d1fae5;">前TB</th><th style="padding:8px;border:1px solid #d1fae5;">決算での動き</th>
+                        <th style="padding:8px;border:1px solid #d1fae5;">表示名</th>
+                    </tr></thead>
+                    <tbody>
+                        <tr><td style="padding:6px;border:1px solid #e2e8f0;">所得税預り金</td><td>負債</td><td>右</td><td>納付後に消去</td><td>—</td></tr>
+                        <tr><td style="padding:6px;border:1px solid #e2e8f0;">従業員立替金</td><td>資産</td><td>左</td><td>天引きで回収</td><td>—</td></tr>
+                        <tr><td style="padding:6px;border:1px solid #e2e8f0;">仮払消費税</td><td>資産</td><td>左</td><td>決算で0</td><td>—</td></tr>
+                        <tr><td style="padding:6px;border:1px solid #e2e8f0;">仮受消費税</td><td>負債</td><td>右</td><td>決算で0</td><td>—</td></tr>
+                        <tr><td style="padding:6px;border:1px solid #e2e8f0;">未払消費税</td><td>負債</td><td>—</td><td>仮受&gt;仮払の差額</td><td><strong>未払消費税</strong></td></tr>
+                        <tr><td style="padding:6px;border:1px solid #e2e8f0;">未収消費税</td><td>資産</td><td>—</td><td>仮払&gt;仮受の差額</td><td><strong>未収消費税</strong></td></tr>
+                        <tr><td style="padding:6px;border:1px solid #e2e8f0;">仮払法人税等</td><td>資産</td><td>左</td><td>決算で0</td><td>—</td></tr>
+                        <tr><td style="padding:6px;border:1px solid #e2e8f0;">法人税等</td><td>費用</td><td>—</td><td>確定額を借方</td><td><strong>法人税、住民税及び事業税</strong></td></tr>
+                        <tr><td style="padding:6px;border:1px solid #e2e8f0;">未払法人税等</td><td>負債</td><td>—</td><td>確定−仮払</td><td><strong>未払法人税等</strong></td></tr>
+                        <tr><td style="padding:6px;border:1px solid #e2e8f0;">租税公課</td><td>費用</td><td>左</td><td>固定資産税等</td><td><strong>租税公課</strong></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="text-align:center;margin-top:30px;">
+                <button class="tool-link-btn" onclick="openTab('first')" style="background:var(--accent-green);">給料と所得税へ <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+                <div id="first" class="tab-content">
+            <div class="bloom-story" style="margin-bottom:24px;">
+                <span class="bloom-story-label">📍 Bloom 9日目・午前</span>
+                <p>初めての給与計算業務。「総支給額200,000円なのに…控除が多すぎて手取りが計算できない！」と悩むHarukaさん。</p>
+            </div>
+            <div style="background:#f8fafc;border:2px solid var(--accent-green);border-radius:12px;padding:24px;margin-bottom:28px;">
+                <h4 style="margin:0 0 16px;color:var(--accent-green);"><i class="fa-solid fa-money-bill-wave"></i> 給料の仕組み3層構造</h4>
+                <div style="background:#ecfdf5;border-radius:8px;padding:14px;text-align:center;font-weight:700;margin-bottom:10px;">総支給額 200,000円</div>
+                <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:14px;margin-bottom:10px;font-size:0.9rem;">
+                    控除：所得税預り金 15,000円 ／ 従業員立替金 5,000円
+                </div>
+                <div style="background:#fef3c7;border-radius:8px;padding:14px;text-align:center;font-weight:700;">
+                    手取り額（振込）<strong>180,000円</strong> ＝ 200,000 − 15,000 − 5,000
+                </div>
+            </div>
+            <div class="learning-card">
+                <div class="lc-video">
+                    <div class="vc-thumb" data-video-id="aCw1RWErEZU" style="background-image:url('https://img.youtube.com/vi/aCw1RWErEZU/maxresdefault.jpg'),url('https://img.youtube.com/vi/aCw1RWErEZU/hqdefault.jpg');">
+                        <i class="fa-brands fa-youtube vc-thumb-play"></i>
+                    </div>
+                </div>
+                <div class="lc-content">
+                    <div class="lc-header"><span class="vc-tag">論点①</span><h3 class="lc-title">給料の仕組みと所得税預り金の仕訳</h3></div>
+                    <div class="lc-body"><ul class="lc-list"><li>所得税預り金＝源泉徴収した所得税（負債）</li><li>従業員立替金＝社保等の立替（資産）</li><li>(借)給料 / (貸)所得税預り金・従業員立替金・現金（差額）</li><li>翌月納付：(借)所得税預り金 / (貸)現金</li></ul></div>
+                </div>
+            </div>
+            <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px;margin-bottom:14px;">
+                <h4 style="margin:0 0 10px;color:var(--accent-green);font-size:1rem;">パターン①：給料の支払い</h4>
+                <pre style="margin:0;font-size:0.88rem;line-height:1.7;white-space:pre-wrap;font-family:inherit;color:#334155;">(借) 給料  200,000  /  (貸) 所得税預り金  15,000
+                                   従業員立替金    5,000
+                                   現金          180,000</pre>
+            </div>
+            <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px;margin-bottom:14px;">
+                <h4 style="margin:0 0 10px;color:var(--accent-green);font-size:1rem;">パターン②：源泉所得税の納付</h4>
+                <pre style="margin:0;font-size:0.88rem;line-height:1.7;white-space:pre-wrap;font-family:inherit;color:#334155;">(借) 所得税預り金  15,000  /  (貸) 現金  15,000</pre>
+            </div>
+            <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px;margin-bottom:14px;">
+                <h4 style="margin:0 0 10px;color:var(--accent-green);font-size:1rem;">パターン③：従業員立替金の精算</h4>
+                <pre style="margin:0;font-size:0.88rem;line-height:1.7;white-space:pre-wrap;font-family:inherit;color:#334155;">(借) 従業員立替金    5,000  /  (貸) 普通預金  10,000
+             法定福利費      5,000</pre><p style="margin:10px 0 0;font-size:0.88rem;color:#64748b;">会社負担分は法定福利費（費用）。従業員負担分は立替金の回収。</p>
+            </div>
+            <div class="talk-scene" style="margin:24px 0;">
+                <div class="talk-bubble owner"><div class="talk-icon">🧑</div><div class="talk-text">従業員立替金って資産なんですか？なんか変な感じがする…</div></div>
+                <div class="talk-bubble teacher"><div class="talk-icon">👩‍🏫</div><div class="talk-text">会社が先に払って後で回収するから<strong>資産</strong>です。給与天引きで受け取ると資産が消えます。家賃の前払いと同じ考え方ですね。</div></div>
+            </div>
+            <div style="text-align:center;margin-top:30px;">
+                <button class="tool-link-btn" onclick="openTab('second')" style="background:var(--accent-green);">消費税と法人税等へ <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+                <div id="second" class="tab-content">
+            <div class="bloom-story" style="margin-bottom:24px;">
+                <span class="bloom-story-label">📍 Bloom 9日目・午後</span>
+                <p>「給料は分かった！次は消費税と法人税…帳簿ではどう記録するんだろう？」と前を向くHarukaさん。</p>
+            </div>
+            <div class="learning-card">
+                <div class="lc-video">
+                    <div class="vc-thumb" data-video-id="bCgeXm0zgrg" style="background-image:url('https://img.youtube.com/vi/bCgeXm0zgrg/maxresdefault.jpg'),url('https://img.youtube.com/vi/bCgeXm0zgrg/hqdefault.jpg');">
+                        <i class="fa-brands fa-youtube vc-thumb-play"></i>
+                    </div>
+                </div>
+                <div class="lc-content">
+                    <div class="lc-header"><span class="vc-tag">論点②</span><h3 class="lc-title">消費税の仕訳：仮払・仮受・決算整理の流れ</h3></div>
+                    <div class="lc-body"><ul class="lc-list"><li>税抜方式：売買ごとに仮払消費税（資産）・仮受消費税（負債）を計上</li><li>決算：相殺し差額を未払消費税または未収消費税へ</li><li>「仮」のついた科目は決算で必ず0にする</li></ul></div>
+                </div>
+            </div>
+            <div class="learning-card">
+                <div class="lc-video">
+                    <div class="vc-thumb" data-video-id="RZBzb7YdBRo" style="background-image:url('https://img.youtube.com/vi/RZBzb7YdBRo/maxresdefault.jpg'),url('https://img.youtube.com/vi/RZBzb7YdBRo/hqdefault.jpg');">
+                        <i class="fa-brands fa-youtube vc-thumb-play"></i>
+                    </div>
+                </div>
+                <div class="lc-content">
+                    <div class="lc-header"><span class="vc-tag">論点③</span><h3 class="lc-title">法人税等の仕訳：中間納付から確定申告まで</h3></div>
+                    <div class="lc-body"><ul class="lc-list"><li>中間納付：(借)仮払法人税等 / (貸)普通預金</li><li>決算：確定額を費用計上＋仮払取り崩し＋差額を未払法人税等へ</li><li>仮払法人税等は資産なので決算でゼロにする</li></ul></div>
+                </div>
+            </div><h2>消費税仕訳パターン</h2>
+            <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px;margin-bottom:14px;">
+                <h4 style="margin:0 0 10px;color:var(--accent-green);font-size:1rem;">①税抜・商品購入</h4>
+                <pre style="margin:0;font-size:0.88rem;line-height:1.7;white-space:pre-wrap;font-family:inherit;color:#334155;">(借) 消耗品費   1,000  /  (貸) 現金  1,100
+             仮払消費税    100</pre>
+            </div>
+            <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px;margin-bottom:14px;">
+                <h4 style="margin:0 0 10px;color:var(--accent-green);font-size:1rem;">②税抜・商品販売</h4>
+                <pre style="margin:0;font-size:0.88rem;line-height:1.7;white-space:pre-wrap;font-family:inherit;color:#334155;">(借) 現金  3,300  /  (貸) 売上       3,000
+                                  仮受消費税    300</pre>
+            </div>
+            <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px;margin-bottom:14px;">
+                <h4 style="margin:0 0 10px;color:var(--accent-green);font-size:1rem;">③決算（仮受>仮払）</h4>
+                <pre style="margin:0;font-size:0.88rem;line-height:1.7;white-space:pre-wrap;font-family:inherit;color:#334155;">(借) 仮受消費税  180,000  /  (貸) 仮払消費税  130,000
+                                          未払消費税    50,000</pre>
+            </div>
+            <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px;margin-bottom:14px;">
+                <h4 style="margin:0 0 10px;color:var(--accent-green);font-size:1rem;">④決算（仮払>仮受・還付）</h4>
+                <pre style="margin:0;font-size:0.88rem;line-height:1.7;white-space:pre-wrap;font-family:inherit;color:#334155;">(借) 仮受消費税   80  /  (貸) 仮払消費税  100
+             未収消費税   20</pre>
+            </div><h2>法人税等仕訳パターン</h2>
+            <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px;margin-bottom:14px;">
+                <h4 style="margin:0 0 10px;color:var(--accent-green);font-size:1rem;">①中間納付</h4>
+                <pre style="margin:0;font-size:0.88rem;line-height:1.7;white-space:pre-wrap;font-family:inherit;color:#334155;">(借) 仮払法人税等  150,000  /  (貸) 普通預金  150,000</pre>
+            </div>
+            <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px;margin-bottom:14px;">
+                <h4 style="margin:0 0 10px;color:var(--accent-green);font-size:1rem;">②決算（中間あり）</h4>
+                <pre style="margin:0;font-size:0.88rem;line-height:1.7;white-space:pre-wrap;font-family:inherit;color:#334155;">(借) 法人税、住民税及び事業税  290,000  /  (貸) 仮払法人税等   160,000
+                                                       未払法人税等   130,000</pre>
+            </div>
+            <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px;margin-bottom:14px;">
+                <h4 style="margin:0 0 10px;color:var(--accent-green);font-size:1rem;">③決算（中間なし）</h4>
+                <pre style="margin:0;font-size:0.88rem;line-height:1.7;white-space:pre-wrap;font-family:inherit;color:#334155;">(借) 法人税、住民税及び事業税  20,000  /  (貸) 未払法人税等  20,000</pre>
+            </div>
+            <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:20px;margin:20px 0;">
+                <h4 style="margin:0 0 12px;color:#b45309;">租税公課との違い</h4>
+                <p style="margin:0 0 12px;font-size:0.9rem;">固定資産税・印紙税・自動車税は<strong>租税公課</strong>（費用）。法人税等は利益に課税される3税専用。</p>
+                <table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
+                    <tr style="background:#fef3c7;"><th style="padding:8px;border:1px solid #fde68a;">種類</th><th style="padding:8px;border:1px solid #fde68a;">勘定</th><th style="padding:8px;border:1px solid #fde68a;">P/L</th></tr>
+                    <tr><td style="padding:6px;border:1px solid #e2e8f0;">法人税・住民税・事業税</td><td>法人税等</td><td>費用</td></tr>
+                    <tr><td style="padding:6px;border:1px solid #e2e8f0;">固定資産税・印紙税等</td><td>租税公課</td><td>費用</td></tr>
+                </table>
+            </div>
+            <div class="talk-scene" style="margin:24px 0;">
+                <div class="talk-bubble owner"><div class="talk-icon">🧑</div><div class="talk-text">売るたびに仮受消費税を計上するって、仕訳が増えませんか？</div></div>
+                <div class="talk-bubble teacher"><div class="talk-icon">👩‍🏫</div><div class="talk-text">会計ソフトが自動計算します。でも<strong>なぜそう計上するのか</strong>を理解しないと、ソフトの間違いに気づけません。</div></div>
+            </div>
+            <div style="text-align:center;margin-top:30px;">
+                <button class="tool-link-btn" onclick="openTab('summary')" style="background:var(--accent-green);">まとめへ <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+                <div id="summary" class="tab-content">
+            <div class="bloom-story" style="margin-bottom:24px;">
+                <span class="bloom-story-label">📍 Bloom 9日目・夕方</span>
+                <p>給料・消費税・法人税等の仕訳パターンを学んだHarukaさん。「試験ではどんな形で出るんだろう…」→<strong>Day 9後半</strong>で実践演習へ。</p>
+            </div>
+            <h2>DAY 9前半 まとめ</h2>
+            <div class="summary-grid">
+                <div class="summary-card"><div class="summary-icon"><i class="fa-solid fa-money-bill-wave"></i></div><h3>給料と所得税</h3><p>所得税預り金（負債）＋従業員立替金（資産）。手取り＝総支給額−控除合計。</p></div>
+                <div class="summary-card"><div class="summary-icon"><i class="fa-solid fa-receipt"></i></div><h3>消費税の2ステップ</h3><p>期中は仮払/仮受。決算で相殺し未払へ。「仮」は決算でゼロ。</p></div>
+                <div class="summary-card"><div class="summary-icon"><i class="fa-solid fa-building-columns"></i></div><h3>法人税等の3ステップ</h3><p>中間納付→決算確定→納付。仮払法人税等は決算で消去。</p></div>
+                <div class="summary-card"><div class="summary-icon"><i class="fa-solid fa-scale-balanced"></i></div><h3>租税公課との区別</h3><p>法人税等は3税専用。固定資産税・印紙税は租税公課。</p></div>
+            </div>
+            <h2>重要用語チェック</h2>
+            <div class="term-grid">
+                <div class="term-card"><strong>所得税預り金</strong><span>源泉徴収所得税。翌月税務署へ納付。</span></div>
+                <div class="term-card"><strong>従業員立替金</strong><span>社保等の立替を天引きで回収する資産。</span></div>
+                <div class="term-card"><strong>仮払消費税</strong><span>仕入時に支払った消費税（資産）。</span></div>
+                <div class="term-card"><strong>仮受消費税</strong><span>販売時に受け取った消費税（負債）。</span></div>
+                <div class="term-card"><strong>未払消費税</strong><span>仮受&gt;仮払の差額（負債）。</span></div>
+                <div class="term-card"><strong>未収消費税</strong><span>仮払&gt;仮受の差額（還付・資産）。</span></div>
+                <div class="term-card"><strong>仮払法人税等</strong><span>中間納付時の資産。</span></div>
+                <div class="term-card"><strong>法人税等</strong><span>法人税・住民税・事業税の費用科目。</span></div>
+                <div class="term-card"><strong>未払法人税等</strong><span>確定額−仮払の残額。</span></div>
+                <div class="term-card"><strong>租税公課</strong><span>固定資産税・印紙税等（法人税等とは別）。</span></div>
+            </div>
+            <div class="check-panel">
+                <h3><i class="fa-solid fa-clipboard-check"></i> セルフチェック</h3>
+                <ol class="check-list">
+                    <li>仮払消費税・仮受消費税の属性を答えられますか？</li>
+                    <li>仮払50,000・仮受80,000のとき未払消費税は？（答え：30,000円）</li>
+                    <li>確定200,000・仮払80,000のとき未払法人税等は？（答え：120,000円）</li>
+                </ol>
+            </div>
+            <div class="quiz-panel" id="quizPanel">
+                <h3><i class="fa-solid fa-circle-question"></i> 確認クイズ（全5問）</h3>
+                <div id="quiz-container"></div>
+                <div id="quiz-result" style="display:none;margin-top:24px;padding:20px;border-radius:12px;text-align:center;">
+                    <p id="quiz-score" style="font-size:1.6rem;font-weight:900;"></p>
+                    <p id="quiz-msg" style="font-size:0.95rem;color:var(--text-sub);"></p>
+                    <button onclick="resetQuiz()" class="tool-link-btn" style="margin-top:16px;background:var(--accent-green);"><i class="fa-solid fa-rotate-right"></i> もう一度</button>
+                </div>
+            </div>
+            <div style="background:#f0fdf4;padding:25px 30px;border-radius:12px;margin:35px 0 20px;border-left:6px solid #059669;">
+                <h4 style="color:#047857;margin:0 0 10px;"><i class="fa-solid fa-forward"></i> 次のステップ：Day 9後半へ</h4>
+                <p style="margin:0;font-size:0.95rem;line-height:1.6;">法人税3種の違い（均等割含む）と、消費税の軽減税率・非課税・第3問対策を後半で学びます。</p>
+            </div>
+        </div>
+
+        <div style="text-align:center; padding: 3rem 0 2rem; display: flex; flex-direction: column; gap: 1rem; align-items: center;">
+    <button type="button" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:linear-gradient(135deg, #34d399, #059669); border:none; box-shadow: 0 10px 30px rgba(5,150,105, 0.25); cursor:pointer;" onclick="(async function(){try{const r=await fetch('./vol09-2.html',{method:'HEAD',cache:'no-store'});if(r.ok){window.location.href='./vol09-2.html';return;}}catch(e){}alert('Day 9後半は準備中です。もうしばらくお待ちください。');})()">
+        Day 9後半へ進む <i class="fa-solid fa-arrow-right"></i>
+    </button>
+    <button type="button" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:#fff; color:#4a4a4a; border:2px solid #e2e8f0; box-shadow:none; cursor:pointer;" onclick="window.location.href='./index.html'">
+        <i class="fa-solid fa-house"></i> 学習記録をつけて Home へ戻る
+    </button>
+</div>
+    </div>
+
+    <script>
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            const targetBtn = document.querySelector(`.tab-btn[onclick*="openTab('${tabId}')"]`);
+            if (targetBtn) targetBtn.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const text = button.parentElement.querySelector('.prompt-text').innerText;
+                navigator.clipboard.writeText(text).then(() => {
+                    button.classList.add('copied');
+                    button.innerHTML = '<i class="fa-solid fa-check"></i> コピーしました';
+                    setTimeout(() => {
+                        button.classList.remove('copied');
+                        button.innerHTML = '<i class="fa-regular fa-copy"></i> コピー';
+                    }, 2000);
+                });
+            });
+        });
+
+        document.querySelectorAll('.vc-thumb[data-video-id]').forEach(thumb => {
+            thumb.addEventListener('click', function() {
+                const videoId = this.dataset.videoId;
+                this.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
+                this.style.backgroundImage = 'none';
+                this.style.cursor = 'default';
+                this.onclick = null;
+            }, { once: true });
+        });
+
+        document.querySelectorAll('a[data-check-page="true"]').forEach(link => {
+            link.addEventListener('click', async event => {
+                event.preventDefault();
+                const target = link.getAttribute('href');
+                try {
+                    const response = await fetch(target, { method: 'HEAD', cache: 'no-store' });
+                    if (response.ok) {
+                        window.location.href = target;
+                        return;
+                    }
+                } catch (error) {
+                    // Local file previews may reject HEAD requests; keep users away from a broken link.
+                }
+                alert('Day 8後半ページはまだ準備中です。公開後にこのリンクから進めます。');
+            });
+        });
+
+        const quizData = [
+    { q: "給料200,000円。所得税預り金15,000・従業員立替金5,000を控除した手取り額は？", opts: ["185,000円", "180,000円", "195,000円", "200,000円"], ans: 1, fb: "200,000−15,000−5,000=180,000円。" },
+    { q: "税抜で商品1,000円（消費税10%）を現金販売。正しい貸方は？", opts: ["売上1,100円", "売上1,000円／仮受消費税100円", "売上1,000円／仮払消費税100円", "売上1,100円／仮受消費税110円"], ans: 1, fb: "本体1,000円は売上、消費税100円は仮受消費税（負債）。" },
+    { q: "仮払130,000・仮受180,000を相殺。未払消費税は？", opts: ["310,000円", "50,000円", "130,000円", "180,000円"], ans: 1, fb: "180,000−130,000=50,000円。" },
+    { q: "法人税等確定300,000。仮払法人税等120,000。未払法人税等は？", opts: ["300,000円", "180,000円", "120,000円", "420,000円"], ans: 1, fb: "300,000−120,000=180,000円。" },
+    { q: "固定資産税・収入印紙の勘定科目は？", opts: ["法人税等", "未払法人税等", "租税公課", "仮払法人税等"], ans: 2, fb: "租税公課で処理。法人税等は3税専用。" }
+];
+
+        let selectedAnswers = [];
+
+        function buildQuiz() {
+            const container = document.getElementById('quiz-container');
+            if (!container) return;
+            container.innerHTML = '';
+            selectedAnswers = new Array(quizData.length).fill(null);
+            quizData.forEach((q, qi) => {
+                const letters = ['A', 'B', 'C', 'D'];
+                const optsHtml = q.opts.map((o, oi) => `
+                    <button type="button" class="quiz-opt" onclick="answerQuiz(${qi},${oi})" id="opt-${qi}-${oi}">
+                        <span class="quiz-opt-icon">${letters[oi]}</span>${o}
+                    </button>`).join('');
+                container.innerHTML += `
+                    <div class="quiz-q" id="qq-${qi}">
+                        <div class="quiz-q-num">問${qi + 1} / ${quizData.length}</div>
+                        <div class="quiz-q-text">${q.q}</div>
+                        <div class="quiz-options">${optsHtml}</div>
+                        <div class="quiz-feedback" id="fb-${qi}"></div>
+                    </div>`;
+            });
+            document.getElementById('quiz-result').style.display = 'none';
+        }
+
+        function answerQuiz(qi, oi) {
+            if (selectedAnswers[qi] !== null) return;
+            selectedAnswers[qi] = oi;
+            const q = quizData[qi];
+            const isCorrect = oi === q.ans;
+            q.opts.forEach((_, i) => {
+                const btn = document.getElementById(`opt-${qi}-${i}`);
+                btn.classList.add('disabled');
+                if (i === q.ans) btn.classList.add('correct');
+                else if (i === oi && !isCorrect) btn.classList.add('wrong');
+            });
+            const fb = document.getElementById(`fb-${qi}`);
+            fb.textContent = (isCorrect ? '正解！ ' : '不正解。') + q.fb;
+            fb.className = `quiz-feedback show ${isCorrect ? 'correct-fb' : 'wrong-fb'}`;
+            if (selectedAnswers.every(a => a !== null)) {
+                const score = selectedAnswers.reduce((c, a, i) => c + (a === quizData[i].ans ? 1 : 0), 0);
+                showResult(score);
+            }
+        }
+
+        function showResult(score) {
+            const result = document.getElementById('quiz-result');
+            const isPassed = score >= 4;
+            result.style.display = 'block';
+            result.className = isPassed ? 'pass' : 'fail';
+            document.getElementById('quiz-score').textContent = `${score} / ${quizData.length} 正解`;
+            document.getElementById('quiz-msg').textContent = isPassed
+                ? '素晴らしい！給料・消費税・法人税等の基礎仕訳、しっかり理解できています。Day9後半へ進みましょう。'
+                : 'もう一度ページを読み直してから再挑戦しましょう。NotebookLMに解説を頼むのもOKです。';
+            result.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function resetQuiz() {
+            buildQuiz();
+            document.getElementById('quizPanel').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        buildQuiz();
+    </script>
+</body>
+</html>
+<!-- cache-bust: 2026-05-22T09:00:00 -->

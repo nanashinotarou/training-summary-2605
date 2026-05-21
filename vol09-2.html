@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 9後半 | 法人税3種の深掘りと消費税発展演習</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Teko:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #f0fdf4;
+            --bg-card: rgba(255, 255, 255, 0.85);
+            --bg-card-solid: #ffffff;
+            --text-main: #1e293b;
+            --text-sub: #64748b;
+            --accent-green: #059669;
+            --accent-gold: #d97706;
+            --accent-blue: #2563eb;
+            --accent-light: #d1fae5;
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 15px 40px rgba(5, 150, 105, 0.2);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.6);
+            --radius-large: 24px;
+            --radius-medium: 16px;
+            --radius-small: 8px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: var(--bg-body);
+            background-image:
+                radial-gradient(at 0% 0%, rgba(255, 255, 255, 0.8) 0, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(209, 250, 229, 0.8) 0, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 20px;
+        }
+
+        .home-btn {
+            position: fixed; bottom: 30px; right: 30px;
+            width: 60px; height: 60px;
+            background: var(--accent-green); color: white;
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 1.5rem; text-decoration: none;
+            box-shadow: 0 10px 25px rgba(5, 150, 105, 0.4);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 1000;
+        }
+        .home-btn:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 15px 30px rgba(5, 150, 105, 0.5); background: #047857; }
+
+        .container {
+            width: 100%; max-width: 900px;
+            background: var(--bg-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: var(--glass-border); border-radius: var(--radius-large);
+            box-shadow: var(--shadow-soft); overflow: hidden;
+            display: flex; flex-direction: column; animation: fadeIn 0.8s ease-out;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .header { padding: 40px 40px 20px; border-bottom: 2px solid var(--accent-light); text-align: center; }
+        .header-tag {
+            display: inline-block; background: var(--accent-green); color: white;
+            font-weight: 700; padding: 4px 12px; border-radius: 20px;
+            font-family: 'Roboto', sans-serif; font-size: 0.85rem; letter-spacing: 1px; margin-bottom: 15px;
+        }
+        .header h1 { font-size: 2.2rem; font-weight: 900; color: var(--accent-green); margin-bottom: 10px; }
+        .progress-wrap { max-width: 520px; height: 8px; background: #e2e8f0; border-radius: 999px; margin: 18px auto 0; overflow: hidden; }
+        .progress-bar { width: 85%; height: 100%; background: linear-gradient(90deg, var(--accent-green), #34d399); border-radius: inherit; }
+
+        .tabs { display: flex; padding: 0 20px; background: rgba(255, 255, 255, 0.5); border-bottom: 1px solid #eee; overflow-x: auto; }
+        .tab-btn {
+            border: none; background: none; padding: 20px 24px; font-size: 1rem; font-weight: 700;
+            color: var(--text-sub); cursor: pointer; position: relative; transition: color 0.3s; white-space: nowrap;
+        }
+        .tab-btn:hover, .tab-btn.active { color: var(--accent-green); }
+        .tab-btn.active::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px;
+            background: var(--accent-green); border-radius: 3px 3px 0 0;
+        }
+
+        .tab-content { display: none; padding: 40px; background: var(--bg-card-solid); min-height: 500px; animation: fadeInTab 0.4s ease-out; }
+        .tab-content.active { display: block; }
+        @keyframes fadeInTab { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h2 { font-size: 1.6rem; color: var(--text-main); border-left: 5px solid var(--accent-gold); padding-left: 15px; margin: 30px 0 20px; }
+        h2:first-child { margin-top: 0; }
+        h3 { font-size: 1.3rem; color: var(--accent-green); margin: 25px 0 15px; display: flex; align-items: center; gap: 10px; }
+        p { line-height: 1.8; margin-bottom: 20px; color: #555; font-size: 1.05rem; max-width: 1000px; }
+
+        .goal-box {
+            background: linear-gradient(135deg, var(--accent-light), #fff);
+            border: 1px solid var(--accent-green); border-radius: var(--radius-medium);
+            padding: 30px; margin-bottom: 30px; text-align: center;
+        }
+        .goal-box i { font-size: 3rem; color: var(--accent-green); margin-bottom: 15px; }
+        .goal-box h3 { justify-content: center; font-size: 1.5rem; margin-top: 0; }
+        .goal-box p { font-size: 1.15rem; font-weight: 500; margin-bottom: 0; color: var(--text-main); }
+
+        .learning-card {
+            display: flex; flex-direction: row; background: rgba(255, 255, 255, 0.9);
+            border-radius: var(--radius-medium); border: var(--glass-border); overflow: hidden;
+            margin-bottom: 30px; box-shadow: var(--shadow-soft); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .learning-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); border-color: var(--accent-light); }
+        .lc-video { flex: 0 0 45%; background: #000; display: flex; flex-direction: column; position: relative; }
+        .lc-content { flex: 1; padding: 30px; display: flex; flex-direction: column; justify-content: center; }
+        .lc-header { border-bottom: 2px dashed var(--accent-light); padding-bottom: 15px; margin-bottom: 20px; }
+        .lc-title { font-size: 1.2rem; font-weight: 900; color: var(--text-main); margin: 10px 0 0 0; line-height: 1.4; }
+        .lc-body h4 { font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .lc-body p { font-size: 1rem; line-height: 1.7; margin-bottom: 15px; color: #555; }
+        .lc-list { list-style: none; padding-left: 0; margin-bottom: 0; background: #fdfdfd; padding: 15px; border-radius: var(--radius-small); border: 1px solid #f5f5f5; }
+        .lc-list li { position: relative; padding-left: 25px; margin-bottom: 8px; font-size: 0.95rem; color: #444; line-height: 1.65; }
+        .lc-list li::before { content: '\f0da'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; left: 5px; top: 3px; color: var(--accent-gold); }
+
+        .vc-thumb { width: 100%; aspect-ratio: 16/9; background-color: #000; background-size: cover; background-position: center; position: relative; cursor: pointer; }
+        .vc-thumb::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.1); transition: background 0.3s ease; pointer-events: none; }
+        .vc-thumb:hover::before { background: rgba(0, 0, 0, 0.2); }
+        .vc-thumb-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 3rem; color: rgba(255, 255, 255, 0.9); text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4); transition: transform 0.3s ease, color 0.3s ease; pointer-events: none; }
+        .vc-thumb:hover .vc-thumb-play { transform: translate(-50%, -50%) scale(1.1); color: #ff0000; }
+        .vc-tag { font-size: 0.75rem; background: var(--accent-light); color: var(--accent-green); font-weight: 700; padding: 3px 10px; border-radius: 20px; border: 1px solid rgba(5,150,105,0.25); display: inline-block; margin-bottom: 8px; }
+        .vc-tag.blue { background: #dbeafe; color: var(--accent-blue); border-color: rgba(37,99,235,0.25); }
+        .vc-tag.gold { background: #fffbeb; color: var(--accent-gold); border-color: rgba(217,119,6,0.25); }
+
+        .flow-map { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 24px 0 30px; }
+        .flow-step { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px 12px; text-align: center; position: relative; box-shadow: var(--shadow-soft); }
+        .flow-step:not(:last-child)::after { content: '\f054'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: -10px; top: 50%; transform: translateY(-50%); color: #94a3b8; z-index: 2; }
+        .flow-step i { color: var(--accent-green); font-size: 1.3rem; margin-bottom: 8px; }
+        .flow-step strong { display: block; font-size: 0.9rem; color: var(--text-main); margin-bottom: 4px; }
+        .flow-step span { display: block; font-size: 0.74rem; color: var(--text-sub); line-height: 1.45; }
+
+        .book-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 22px 0 30px; }
+        .book-card { border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; background: #f8fafc; }
+        .book-card.primary { background: #ecfdf5; border-color: #a7f3d0; }
+        .book-card.assist { background: #eff6ff; border-color: #bfdbfe; }
+        .book-card h4 { color: var(--text-main); font-size: 1.08rem; margin-bottom: 10px; display: flex; gap: 8px; align-items: center; }
+        .book-card p { font-size: 0.92rem; margin-bottom: 0; line-height: 1.65; }
+
+        .ledger-demo { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 22px; margin: 20px 0 30px; }
+        .ledger-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 14px; align-items: stretch; }
+        .journal, .ledger { background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; padding: 16px; }
+        .journal h4, .ledger h4 { margin: 0 0 12px; font-size: 1rem; color: var(--accent-green); }
+        .journal-line { display: flex; justify-content: space-between; gap: 10px; border-bottom: 1px dashed #e2e8f0; padding: 7px 0; font-size: 0.9rem; }
+        .arrow-mid { display: flex; align-items: center; justify-content: center; color: var(--accent-gold); font-size: 1.6rem; }
+        .t-account { width: 100%; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .t-header { background: #1e293b; color: #fff; padding: 8px; text-align: center; font-weight: bold; font-size: 0.9rem; }
+        .t-body { display: flex; border-top: 2px solid #1e293b; min-height: 120px; }
+        .t-left, .t-right { flex: 1; padding: 10px; font-size: 0.82rem; }
+        .t-left { border-right: 2px solid #1e293b; background: #eff6ff; }
+        .t-right { background: #fef2f2; }
+        .t-label { font-size: 0.7rem; color: #64748b; margin-bottom: 5px; display: block; }
+
+        .voucher-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 18px 0 25px; }
+        .voucher-card { border-radius: 16px; padding: 18px; border: 1px solid #e2e8f0; background: #fff; box-shadow: var(--shadow-soft); }
+        .voucher-card h4 { margin: 0 0 8px; color: var(--text-main); font-size: 1rem; }
+        .voucher-card p { margin-bottom: 0; font-size: 0.9rem; line-height: 1.6; }
+        .voucher-card.in { border-top: 5px solid #059669; }
+        .voucher-card.out { border-top: 5px solid #dc2626; }
+        .voucher-card.transfer { border-top: 5px solid #2563eb; }
+
+        .practice-area { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-medium); padding: 30px; margin-top: 30px; }
+        .tool-link-btn { display: inline-flex; align-items: center; gap: 10px; background: #059669; color: white; padding: 12px 24px; border-radius: 30px; text-decoration: none; font-weight: bold; transition: 0.3s; margin-bottom: 20px; border: 0; cursor: pointer; font-size: 0.95rem; }
+        .tool-link-btn:hover { background: #047857; transform: translateY(-2px); }
+        .step-list { list-style: none; padding-left: 0; margin: 14px 0 0; }
+        .step-list li { position: relative; padding-left: 40px; margin-bottom: 15px; font-size: 1.02rem; line-height: 1.65; }
+        .step-list li::before { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; left: 0; top: 3px; width: 25px; height: 25px; background: var(--accent-green); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; }
+
+        .chat-prompt-container { display: flex; flex-direction: column; gap: 15px; margin: 20px auto; max-width: 1000px; background: #fff; padding: 25px; border-radius: var(--radius-large); box-shadow: inset 0 2px 10px rgba(0,0,0,0.02); border: 1px solid #eee; }
+        .chat-bubble { display: flex; align-items: center; justify-content: space-between; background: #f1f5f9; padding: 12px 20px; border-radius: 20px 20px 20px 0; max-width: 95%; align-self: flex-start; gap: 15px; transition: all 0.2s; border: 1px solid transparent; }
+        .chat-bubble:hover { border-color: #cbd5e1; background: #e2e8f0; }
+        .chat-text { font-size: 1rem; color: #1e293b; line-height: 1.55; font-weight: 500; }
+        .copy-btn { background: #fff; border: 1px solid #cbd5e1; color: #059669; padding: 8px 15px; border-radius: 15px; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+        .copy-btn:hover { background: #f8fafc; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .copy-btn.copied { background: #d1fae5; border-color: #a7f3d0; color: #047857; }
+
+        .summary-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin: 25px 0 35px; }
+        .summary-card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: var(--radius-medium); padding: 24px; box-shadow: var(--shadow-soft); }
+        .summary-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: var(--accent-light); color: var(--accent-green); font-size: 1.25rem; margin-bottom: 14px; }
+        .summary-card h3 { margin: 0 0 10px; color: var(--text-main); font-size: 1.1rem; }
+        .summary-card p { margin-bottom: 0; font-size: 0.96rem; line-height: 1.75; }
+
+        .term-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 18px 0 30px; }
+        .term-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; }
+        .term-card strong { display: block; color: var(--accent-green); margin-bottom: 6px; font-size: 1rem; }
+        .term-card span { display: block; color: #475569; font-size: 0.9rem; line-height: 1.55; }
+
+        .check-panel {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-left: 6px solid var(--accent-gold);
+            border-radius: var(--radius-medium);
+            padding: 26px;
+            margin: 28px 0;
+        }
+        .check-panel h3 { color: #b45309; margin-top: 0; }
+        .check-list {
+            margin: 0;
+            padding-left: 1.4rem;
+        }
+        .check-list li {
+            margin-bottom: 12px;
+            line-height: 1.7;
+            color: #44403c;
+        }
+
+        .quiz-panel { background: #fafafa; border: 1px solid #e2e8f0; border-radius: var(--radius-medium); padding: 28px; margin: 28px 0; }
+        .quiz-q { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .quiz-q-text { font-size: 1rem; font-weight: 700; color: var(--text-main); margin-bottom: 14px; }
+        .quiz-q-num { font-size: 0.78rem; color: var(--accent-gold); font-weight: 700; margin-bottom: 6px; }
+        .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+        .quiz-opt {
+            display: flex; align-items: center; gap: 12px;
+            background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 10px;
+            padding: 12px 16px; cursor: pointer; transition: 0.2s;
+            font-size: 0.95rem; color: var(--text-main); text-align: left;
+        }
+        .quiz-opt:hover { background: var(--accent-light); border-color: var(--accent-green); }
+        .quiz-opt.correct { background: #ecfdf5; border-color: #059669; color: #065f46; }
+        .quiz-opt.wrong { background: #fef2f2; border-color: #ef4444; color: #991b1b; }
+        .quiz-opt.disabled { cursor: default; pointer-events: none; }
+        .quiz-opt-icon { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #cbd5e1; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
+        .quiz-feedback { margin-top: 12px; padding: 10px 14px; border-radius: 8px; font-size: 0.88rem; line-height: 1.6; display: none; }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct-fb { background: #ecfdf5; color: #065f46; border-left: 4px solid #059669; }
+        .quiz-feedback.wrong-fb { background: #fef2f2; color: #991b1b; border-left: 4px solid #ef4444; }
+        #quiz-result.pass { background: #ecfdf5; border: 2px solid #059669; border-radius: 12px; }
+        #quiz-result.fail { background: #fff7ed; border: 2px solid #d97706; border-radius: 12px; }
+
+        .nav-links { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; padding: 20px 40px 40px; background: var(--bg-card-solid); }
+        .nav-link {
+            display: inline-flex; align-items: center; gap: 8px; color: var(--text-sub);
+            font-size: 0.9rem; text-decoration: none; border: 1px solid #e2e8f0;
+            padding: 10px 20px; border-radius: 20px; transition: 0.2s;
+        }
+        .nav-link:hover { border-color: var(--accent-green); color: var(--accent-green); }
+        .nav-link.pending { border-style: dashed; }
+
+        /* ===== Bloomコンポーネント（vol01と共通） ===== */
+        .intro-note {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--radius-small);
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            font-size: 0.92rem;
+            color: var(--text-sub);
+            line-height: 1.7;
+        }
+        .intro-note strong { color: var(--text-main); }
+
+        .bloom-story {
+            position: relative;
+            background: linear-gradient(135deg, #ecfdf5 0%, #fef3c7 100%);
+            border-left: 5px solid var(--accent-green);
+            border-radius: var(--radius-small);
+            padding: 20px 24px 20px 28px;
+            margin-bottom: 28px;
+            overflow: hidden;
+            line-height: 1.8;
+        }
+        .bloom-story::before {
+            content: '🌸';
+            position: absolute;
+            right: 16px; top: 10px;
+            font-size: 3rem;
+            opacity: 0.12;
+            pointer-events: none;
+        }
+        .bloom-story-label {
+            display: inline-block;
+            background: var(--accent-green);
+            color: #fff;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            letter-spacing: 0.03em;
+        }
+        .bloom-story p { margin-bottom: 0; color: var(--text-main); font-size: 1rem; }
+
+        .why-box {
+            background: #1e293b;
+            color: #f8fafc;
+            border-radius: var(--radius-small);
+            padding: 20px 24px;
+            margin-bottom: 24px;
+        }
+        .why-box .why-q {
+            color: #fde68a;
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+        }
+        .why-box .why-q::before { content: '❓ '; }
+        .why-box .why-a {
+            font-size: 0.95rem;
+            line-height: 1.75;
+            color: #cbd5e1;
+        }
+        .why-box .why-a strong { color: #6ee7b7; }
+
+        .talk-scene {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+        .talk-scene .talk-bubble {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            max-width: 88%;
+        }
+        .talk-scene .talk-bubble.owner { align-self: flex-start; }
+        .talk-scene .talk-bubble.teacher { align-self: flex-end; flex-direction: row-reverse; }
+        .talk-scene .talk-icon {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; flex-shrink: 0;
+        }
+        .talk-scene .talk-bubble.owner .talk-icon { background: #d1fae5; }
+        .talk-scene .talk-bubble.teacher .talk-icon { background: #fef3c7; }
+        .talk-scene .talk-text {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 0.88rem;
+            line-height: 1.65;
+            color: var(--text-main);
+        }
+        .talk-scene .talk-bubble.owner .talk-text { border-top-left-radius: 2px; }
+        .talk-scene .talk-bubble.teacher .talk-text { border-top-right-radius: 2px; }
+
+        .conclusion-comic {
+            transform: rotate(-0.8deg);
+            border: 3px dashed var(--accent-gold);
+            border-radius: 14px;
+            padding: 22px 26px;
+            margin: 32px 0;
+            background: #fffbeb;
+            box-shadow: 4px 4px 0 rgba(217,119,6,0.15);
+            text-align: center;
+        }
+        .conclusion-comic .comic-label {
+            font-size: 0.78rem;
+            color: var(--accent-gold);
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .conclusion-comic p {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* === レスポンシブ対応（モバイル最適化） === */
+        @media (max-width: 768px) {
+            body { padding: 20px 10px; }
+            .container { padding: 0 10px; margin-top: 20px; border-radius: 18px; }
+            .header { padding: 32px 20px 18px; }
+            .header h1 { font-size: 1.8rem; }
+            .tab-content { padding: 28px 18px; }
+            .tabs { padding: 0 10px; flex-wrap: wrap; }
+            .tab-btn { padding: 15px 10px; font-size: 0.85rem; flex: 1 1 100%; justify-content: center; }
+            .learning-card { flex-direction: column; }
+            .lc-video { width: 100%; flex: none; }
+            .lc-content { padding: 20px; }
+            .flow-map, .book-grid, .voucher-grid, .summary-grid, .term-grid { grid-template-columns: 1fr; }
+            .check-panel { padding: 20px; margin: 20px 0; }
+            .flow-step:not(:last-child)::after { content: '\f078'; right: 50%; top: auto; bottom: -12px; transform: translateX(50%); }
+            .ledger-row { grid-template-columns: 1fr; }
+            .arrow-mid { transform: rotate(90deg); }
+            .chat-bubble { max-width: 100%; flex-direction: column; align-items: stretch; }
+            .talk-scene .talk-bubble { max-width: 100%; align-self: stretch; }
+            .talk-scene .talk-bubble.teacher { flex-direction: row; }
+            .home-btn { width: 52px; height: 52px; bottom: 20px; right: 20px; }
+        }
+
+        /* ===== 合格スタンプアニメーション ===== */
+        .stamp-overlay {
+            position: fixed; top:0; left:0; right:0; bottom:0;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+            display: none; align-items: center; justify-content: center; z-index: 9999;
+        }
+        .stamp-overlay.show { display: flex; }
+        .stamp-modal {
+            background: #fff; border-radius: 24px; padding: 48px 40px;
+            text-align: center; max-width: 400px; width: 90%;
+            position: relative; overflow: hidden;
+            animation: stampModalIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes stampModalIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .stamp-mark {
+            width: 160px; height: 160px;
+            border: 10px solid #dc2626; border-radius: 50%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            margin: 0 auto 20px;
+            transform: rotate(-12deg);
+            box-shadow: 0 0 0 4px rgba(220,38,38,0.15);
+            animation: stampDrop 0.5s 0.3s both cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes stampDrop {
+            from { transform: rotate(-12deg) scale(4); opacity: 0; }
+            to   { transform: rotate(-12deg) scale(1); opacity: 1; }
+        }
+        .stamp-kanji { font-size: 3rem; font-weight: 900; color: #dc2626; line-height: 1; }
+        .stamp-sub { font-size: 0.65rem; color: #dc2626; font-weight: 700; letter-spacing: 0.1em; margin-top: 4px; }
+        .sakura-confetti { position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; overflow: hidden; }
+        @keyframes sakuraFall { to { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
+
+
+    </style>
+</head>
+
+<body>
+    <a href="./index.html" class="home-btn" title="ホームに戻る">
+        <i class="fa-solid fa-house"></i>
+    </a>
+
+    <div class="container">
+        <header class="header">
+            <span class="header-tag">DAY 09（後半）</span>
+            <h1>法人税3種の深掘りと消費税発展演習</h1>
+            <p style="margin:0; color:var(--text-sub);">May 2026 - Bookkeeping Course</p>
+            <div class="progress-wrap" aria-label="Course progress">
+                <div class="progress-bar"></div>
+            </div>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" onclick="openTab('goal')"><i class="fa-solid fa-building-columns"></i> 後半スタート</button>
+            <button class="tab-btn" onclick="openTab('first')"><i class="fa-solid fa-landmark"></i> 法人税3種の理解</button>
+            <button class="tab-btn" onclick="openTab('second')"><i class="fa-solid fa-percent"></i> 消費税の発展</button>
+            <button class="tab-btn" onclick="openTab('summary')"><i class="fa-solid fa-list-check"></i> まとめ</button>
+        </nav>
+
+                        <div id="goal" class="tab-content active">
+            <div class="bloom-story">
+                <span class="bloom-story-label">📍 Bloom 9日目・後半スタート</span>
+                <p>「法人税等って3種類あるって聞いたけど、法人税・住民税・事業税…それぞれ何が違うの？」と疑問を持つHarukaさん。今日は<strong>誰に・何に・なぜ課税されるか</strong>から整理する後半戦。</p>
+            </div>
+            <div class="why-box">
+                <div class="why-q">消費税って8%と10%の2種類あるけど、どっちを使うか判断できる自信がない…</div>
+                <div class="why-a">軽減税率8%は<strong>食品（外食・酒除く）＋定期購読新聞</strong>のみ。「外食10%・持ち帰り8%」で試験の9割はカバー。非課税（土地・有価証券・商品券・収入印紙）も今日で整理。</div>
+            </div>
+            <div class="talk-scene">
+                <div class="talk-bubble owner"><div class="talk-icon">🧑</div><div class="talk-text">赤字でも税金を払わないといけないって本当ですか？</div></div>
+                <div class="talk-bubble teacher"><div class="talk-icon">👩‍🏫</div><div class="talk-text">法人住民税の<strong>均等割</strong>だけは赤字でも支払義務があります。地域インフラを使う以上の最低負担という考え方です。</div></div>
+            </div>
+            <div style="text-align:center;margin-top:30px;">
+                <button class="tool-link-btn" onclick="openTab('first')" style="background:var(--accent-green);">法人税3種の理解へ <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+                <div id="first" class="tab-content">
+            <div class="bloom-story" style="margin-bottom:24px;">
+                <span class="bloom-story-label">📍 Bloom 9日目・後半①</span>
+                <p>白板に「法人税・住民税・事業税の3つを整理」と書き始める先輩。「事業税は<strong>損金算入</strong>ってどういう意味？」とHarukaさん。</p>
+            </div>
+            <div class="learning-card">
+                <div class="lc-video">
+                    <div class="vc-thumb" data-video-id="LG5_UlikCAI" style="background-image:url('https://img.youtube.com/vi/LG5_UlikCAI/maxresdefault.jpg'),url('https://img.youtube.com/vi/LG5_UlikCAI/hqdefault.jpg');">
+                        <i class="fa-brands fa-youtube vc-thumb-play"></i>
+                    </div>
+                </div>
+                <div class="lc-content">
+                    <div class="lc-header"><span class="vc-tag">実務深掘り</span><h3 class="lc-title">法人税・住民税・事業税の役割と計算の仕組み</h3></div>
+                    <div class="lc-body"><ul class="lc-list"><li>法人税：国税。所得に課税（中小15%・超過23.2%など）</li><li>法人住民税：地方税。法人税割＋均等割。均等割は赤字でも発生</li><li>法人事業税：都道府県税。<strong>損金算入できる</strong>（他2税と異なる）</li><li>※正しい計算：所得金額×法人事業税率（スライド誤記に注意）</li></ul></div>
+                </div>
+            </div>
+            <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:24px;margin-bottom:24px;overflow-x:auto;">
+                <h4 style="margin:0 0 16px;color:var(--accent-green);"><i class="fa-solid fa-landmark"></i> 法人税3種 比較</h4>
+                <table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
+                    <thead><tr style="background:#ecfdf5;">
+                        <th style="padding:8px;border:1px solid #d1fae5;">税</th><th style="padding:8px;border:1px solid #d1fae5;">納付先</th>
+                        <th style="padding:8px;border:1px solid #d1fae5;">課税ベース</th><th style="padding:8px;border:1px solid #d1fae5;">赤字時</th>
+                        <th style="padding:8px;border:1px solid #d1fae5;">損金算入</th>
+                    </tr></thead>
+                    <tbody>
+                        <tr><td style="padding:8px;border:1px solid #e2e8f0;"><strong>法人税</strong></td><td>国</td><td>所得金額</td><td>免除</td><td>不可</td></tr>
+                        <tr><td style="padding:8px;border:1px solid #e2e8f0;"><strong>法人住民税</strong></td><td>地方</td><td>法人税割＋均等割</td><td>均等割のみ</td><td>不可</td></tr>
+                        <tr><td style="padding:8px;border:1px solid #e2e8f0;"><strong>法人事業税</strong></td><td>都道府県</td><td>所得金額</td><td>免除</td><td><strong>可</strong></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:12px;padding:20px;margin-bottom:24px;">
+                <h4 style="margin:0 0 10px;color:#b45309;">均等割 = 赤字でも払う最低税額</h4>
+                <p style="margin:0;font-size:0.9rem;line-height:1.7;">資本金と従業員数で固定額が決まる。利益ゼロ・赤字でも必ず発生。創業間もない法人・赤字事業者も要注意。</p>
+            </div>
+            <div style="background:#fffbeb;border-left:6px solid var(--accent-gold);padding:20px;border-radius:12px;margin-bottom:24px;">
+                <h4 style="margin:0 0 10px;color:#b45309;"><i class="fa-solid fa-lightbulb"></i> AI Director's Eye：法人化のタイミング</h4>
+                <p style="margin:0;font-size:0.9rem;line-height:1.7;">個人は所得税（累進最高45%）。法人は実効税率25〜30%程度。利益600〜800万円超で法人化を検討するケースが多い理由がここにある。</p>
+            </div>
+            <div style="text-align:center;margin-top:30px;">
+                <button class="tool-link-btn" onclick="openTab('second')" style="background:var(--accent-green);">消費税の発展へ <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+                <div id="second" class="tab-content">
+            <div class="bloom-story" style="margin-bottom:24px;">
+                <span class="bloom-story-label">📍 Bloom 9日目・後半②</span>
+                <p>「食品8%・外食10%ってレシートで毎回確認？」——試験では税率判断が頻出。ここでパターンを固める。</p>
+            </div>
+            <div class="learning-card">
+                <div class="lc-video">
+                    <div class="vc-thumb" data-video-id="ssh4POSgru4" style="background-image:url('https://img.youtube.com/vi/ssh4POSgru4/maxresdefault.jpg'),url('https://img.youtube.com/vi/ssh4POSgru4/hqdefault.jpg');">
+                        <i class="fa-brands fa-youtube vc-thumb-play"></i>
+                    </div>
+                </div>
+                <div class="lc-content">
+                    <div class="lc-header"><span class="vc-tag">消費税の発展</span><h3 class="lc-title">税率の種類と税抜・税込方式の違い</h3></div>
+                    <div class="lc-body"><ul class="lc-list"><li>軽減8%：飲食料品（外食・酒除く）＋週2回以上の定期購読新聞</li><li>標準10%：その他・外食・消耗品</li><li>非課税：土地・有価証券・商品券・収入印紙・郵便切手</li><li>仮払/仮受は<strong>取引発生時</strong>に計上（支払時ではない）</li></ul></div>
+                </div>
+            </div>
+            <div class="learning-card">
+                <div class="lc-video">
+                    <div class="vc-thumb" data-video-id="QEQnzYa3N54" style="background-image:url('https://img.youtube.com/vi/QEQnzYa3N54/maxresdefault.jpg'),url('https://img.youtube.com/vi/QEQnzYa3N54/hqdefault.jpg');">
+                        <i class="fa-brands fa-youtube vc-thumb-play"></i>
+                    </div>
+                </div>
+                <div class="lc-content">
+                    <div class="lc-header"><span class="vc-tag">試験対策</span><h3 class="lc-title">第3問頻出：決算整理仕訳の3ステップ解法</h3></div>
+                    <div class="lc-body"><ul class="lc-list"><li>前TBから仮払・仮受消費税を読み取る</li><li>相殺して未払消費税を計上</li><li>法人税等：確定額→仮払取り崩し→未払法人税等へ</li></ul></div>
+                </div>
+            </div>
+            <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:24px;margin-bottom:20px;overflow-x:auto;">
+                <h4 style="margin:0 0 16px;color:var(--accent-green);"><i class="fa-solid fa-percent"></i> 消費税率・非課税 判定</h4>
+                <table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
+                    <tr style="background:#ecfdf5;"><th style="padding:8px;border:1px solid #d1fae5;">分類</th><th style="padding:8px;border:1px solid #d1fae5;">例</th><th style="padding:8px;border:1px solid #d1fae5;">税率</th></tr>
+                    <tr><td style="padding:8px;border:1px solid #e2e8f0;">標準</td><td>消耗品・外食・サービス</td><td><strong>10%</strong></td></tr>
+                    <tr><td style="padding:8px;border:1px solid #e2e8f0;">軽減</td><td>食品持ち帰り・定期購読新聞</td><td><strong>8%</strong></td></tr>
+                    <tr><td style="padding:8px;border:1px solid #e2e8f0;">非課税</td><td>土地・有価証券・商品券・印紙</td><td><strong>0%</strong></td></tr>
+                </table>
+                <p style="margin:14px 0 0;font-size:0.88rem;color:#065f46;"><strong>ポイント</strong>：外食10%、持ち帰り8%。試験で「食品の仕入れ」→まず8%でOK。</p>
+            </div>
+            <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:20px;margin-bottom:20px;">
+                <h4 style="margin:0 0 10px;color:#1d4ed8;">消費税の計上タイミング = 取引発生時</h4>
+                <pre style="margin:0 0 10px;font-size:0.88rem;white-space:pre-wrap;">(借) 備品 100,000 / 仮払消費税 10,000 / (貸) 未払金 110,000</pre>
+                <p style="margin:0;font-size:0.88rem;">翌月現金支払でも、仮払消費税は<strong>購入した時</strong>に計上する。</p>
+            </div>
+            <div style="background:#f0fdf4;border:1px solid #d1fae5;border-radius:12px;padding:20px;margin-bottom:20px;">
+                <h4 style="margin:0 0 12px;color:#047857;"><i class="fa-solid fa-pen-to-square"></i> 第3問：決算整理3ステップ</h4>
+                <ol style="margin:0;padding-left:1.3rem;font-size:0.9rem;line-height:1.8;">
+                    <li>前TBで仮払・仮受消費税を確認</li>
+                    <li>「仮」科目を0にし、差額を未払消費税へ</li>
+                    <li>法人税等：確定額借方→仮払消去→未払法人税等</li>
+                </ol>
+                <p style="margin:12px 0 0;font-size:0.88rem;">例：仮払470,000・仮受930,000 → 未払460,000</p>
+            </div>
+            <div class="talk-scene" style="margin:24px 0;">
+                <div class="talk-bubble owner"><div class="talk-icon">🧑</div><div class="talk-text">商品券を買うとき消費税がかからないって知らなかったです。</div></div>
+                <div class="talk-bubble teacher"><div class="talk-icon">👩‍🏫</div><div class="talk-text">まだ消費していないから非課税。使うときに課税。収入印紙は購入時非課税、使用時に租税公課として費用計上。</div></div>
+            </div>
+            <div style="text-align:center;margin-top:30px;">
+                <button class="tool-link-btn" onclick="openTab('summary')" style="background:var(--accent-green);">まとめへ <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+                <div id="summary" class="tab-content">
+            <div class="bloom-story" style="margin-bottom:24px;">
+                <span class="bloom-story-label">📍 Bloom 9日目・夜</span>
+                <p>法人税3種と消費税のパターンを習得。「Day9が終わった…試験まであと少し」——<strong>Day 9修了</strong>を称える。</p>
+            </div>
+            <h2>DAY 9後半 まとめ</h2>
+            <div class="summary-grid">
+                <div class="summary-card"><div class="summary-icon"><i class="fa-solid fa-money-bill-wave"></i></div><h3>給料・所得税・社保</h3><p>天引き→納付で消去。立替金は天引きで回収。</p></div>
+                <div class="summary-card"><div class="summary-icon"><i class="fa-solid fa-receipt"></i></div><h3>消費税の完全整理</h3><p>8%・10%・非課税。仮科目は決算でゼロ。</p></div>
+                <div class="summary-card"><div class="summary-icon"><i class="fa-solid fa-building-columns"></i></div><h3>法人税等3種</h3><p>均等割は赤字でも発生。事業税は損金算入可。</p></div>
+                <div class="summary-card"><div class="summary-icon"><i class="fa-solid fa-pen-to-square"></i></div><h3>試験第3問</h3><p>前TB確認→相殺→未払へ。「仮は決算でゼロ」。</p></div>
+            </div>
+            <h2>重要用語チェック</h2>
+            <div class="term-grid">
+                <div class="term-card"><strong>軽減税率</strong><span>8%。食品（外食・酒除く）と定期購読新聞。</span></div>
+                <div class="term-card"><strong>非課税取引</strong><span>土地・有価証券・商品券・印紙など。</span></div>
+                <div class="term-card"><strong>法人税割</strong><span>法人住民税の一部。法人税額×税率。</span></div>
+                <div class="term-card"><strong>均等割</strong><span>固定額。赤字でも支払義務。</span></div>
+                <div class="term-card"><strong>損金算入</strong><span>法人事業税のみ損金算入可。</span></div>
+                <div class="term-card"><strong>税抜方式</strong><span>本体と消費税を分けて計上。</span></div>
+                <div class="term-card"><strong>税込方式</strong><span>込みで計上（減少傾向）。</span></div>
+                <div class="term-card"><strong>前TB</strong><span>決算整理前残高試算表。第3問で必須。</span></div>
+            </div>
+            <div class="check-panel">
+                <h3><i class="fa-solid fa-clipboard-check"></i> セルフチェック</h3>
+                <ol class="check-list">
+                    <li>均等割と法人税割の違い、赤字時どちらが発生するか説明できますか？</li>
+                    <li>食品持ち帰りと文具の税率は？（答え：8%と10%）</li>
+                    <li>未払購入時、仮払消費税は購入時と支払時どちら？（答え：購入時）</li>
+                </ol>
+            </div>
+            <div class="quiz-panel" id="quizPanel">
+                <h3><i class="fa-solid fa-circle-question"></i> 確認クイズ（全5問）</h3>
+                <div id="quiz-container"></div>
+                <div id="quiz-result" style="display:none;margin-top:24px;padding:20px;border-radius:12px;text-align:center;">
+                    <p id="quiz-score" style="font-size:1.6rem;font-weight:900;"></p>
+                    <p id="quiz-msg" style="font-size:0.95rem;color:var(--text-sub);"></p>
+                    <button onclick="resetQuiz()" class="tool-link-btn" style="margin-top:16px;background:var(--accent-green);"><i class="fa-solid fa-rotate-right"></i> もう一度</button>
+                </div>
+            </div>
+            <div style="text-align:center;margin:40px 0 20px;">
+                <button class="tool-link-btn" onclick="showStamp()" style="background:linear-gradient(135deg,#dc2626,#b91c1c);padding:1.2rem 3rem;font-size:1.15rem;border:none;cursor:pointer;">
+                    <i class="fa-solid fa-stamp"></i> Day 9 コンプリートチェック！
+                </button>
+            </div>
+            <div class="stamp-overlay" id="stampOverlay" onclick="hideStamp()">
+                <div class="stamp-modal" onclick="event.stopPropagation()">
+                    <div class="sakura-confetti" id="sakuraConfetti"></div>
+                    <div class="stamp-mark">
+                        <div class="stamp-kanji">合格</div>
+                        <div class="stamp-sub">DAY 9 COMPLETE</div>
+                    </div>
+                    <h3 style="color:#1e293b;margin:16px 0 8px;font-size:1.4rem;">Day 9 修了おめでとう！</h3>
+                    <p style="color:#64748b;font-size:0.95rem;line-height:1.7;margin-bottom:20px;">税金の全論点を完全習得したあなたは<br>もう<strong>簿記3級の試験範囲</strong>をほぼ制覇しました。</p>
+                    <button class="tool-link-btn" onclick="hideStamp()" style="background:var(--accent-green);"><i class="fa-solid fa-xmark"></i> 閉じる</button>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align:center; padding: 3rem 0 2rem; display: flex; flex-direction: column; gap: 1rem; align-items: center;">
+    <button type="button" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:#fff; color:#059669; border:2px solid var(--accent-green); box-shadow:none; cursor:pointer;" onclick="window.location.href='./vol09-1.html'">
+        <i class="fa-solid fa-arrow-left"></i> Day 9前半へ戻る
+    </button>
+    <button type="button" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:#fff; color:#4a4a4a; border:2px solid #e2e8f0; box-shadow:none; cursor:pointer;" onclick="window.location.href='./index.html'">
+        <i class="fa-solid fa-house"></i> 学習記録をつけて Home へ戻る
+    </button>
+</div>
+    </div>
+
+    <script>
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            const targetBtn = document.querySelector(`.tab-btn[onclick*="openTab('${tabId}')"]`);
+            if (targetBtn) targetBtn.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const text = button.parentElement.querySelector('.prompt-text').innerText;
+                navigator.clipboard.writeText(text).then(() => {
+                    button.classList.add('copied');
+                    button.innerHTML = '<i class="fa-solid fa-check"></i> コピーしました';
+                    setTimeout(() => {
+                        button.classList.remove('copied');
+                        button.innerHTML = '<i class="fa-regular fa-copy"></i> コピー';
+                    }, 2000);
+                });
+            });
+        });
+
+        document.querySelectorAll('.vc-thumb[data-video-id]').forEach(thumb => {
+            thumb.addEventListener('click', function() {
+                const videoId = this.dataset.videoId;
+                this.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
+                this.style.backgroundImage = 'none';
+                this.style.cursor = 'default';
+                this.onclick = null;
+            }, { once: true });
+        });
+
+        document.querySelectorAll('a[data-check-page="true"]').forEach(link => {
+            link.addEventListener('click', async event => {
+                event.preventDefault();
+                const target = link.getAttribute('href');
+                try {
+                    const response = await fetch(target, { method: 'HEAD', cache: 'no-store' });
+                    if (response.ok) {
+                        window.location.href = target;
+                        return;
+                    }
+                } catch (error) {
+                    // Local file previews may reject HEAD requests; keep users away from a broken link.
+                }
+                alert('Day 8後半ページはまだ準備中です。公開後にこのリンクから進めます。');
+            });
+        });
+
+        const quizData = [
+    { q: "消費税の軽減税率8%が適用されるのは？", opts: ["コンビニ店内飲食コーヒー", "スーパー食料品（持ち帰り）", "レストランランチ", "お酒の購入"], ans: 1, fb: "8%は飲食料品（外食・酒除く）と定期購読新聞のみ。" },
+    { q: "消費税が非課税となる取引は？", opts: ["文具購入", "土地の売却", "商品仕入れ", "広告費"], ans: 1, fb: "土地の売買は原則非課税。" },
+    { q: "法人住民税の「均等割」について正しいのは？", opts: ["利益に税率をかける", "赤字でも支払い義務がある", "法人税額に税率をかける", "大企業のみ"], ans: 1, fb: "均等割は固定額。赤字でも発生。" },
+    { q: "損金算入できる法人税等は？", opts: ["法人税のみ", "法人事業税のみ", "法人住民税のみ", "3つすべて"], ans: 1, fb: "法人事業税のみ損金算入可。" },
+    { q: "未払購入110,000円（税抜100,000+消費税10,000）。仮払消費税を計上するのは？", opts: ["翌月支払時", "購入（取引発生）時", "決算時", "未払消去時"], ans: 1, fb: "取引発生時に仮払消費税を計上。" }
+];
+
+
+        function showStamp() {
+            const overlay = document.getElementById('stampOverlay');
+            overlay.classList.add('show');
+            const container = document.getElementById('sakuraConfetti');
+            container.innerHTML = '';
+            for (let i = 0; i < 24; i++) {
+                const p = document.createElement('span');
+                p.textContent = '🌸';
+                p.style.cssText = `position:absolute;left:${Math.random()*100}%;top:-30px;font-size:${0.8+Math.random()*1.2}rem;animation:sakuraFall ${2+Math.random()*3}s ${Math.random()*1.5}s ease-in forwards;`;
+                container.appendChild(p);
+            }
+        }
+        function hideStamp() {
+            document.getElementById('stampOverlay').classList.remove('show');
+        }
+
+        let selectedAnswers = [];
+
+        function buildQuiz() {
+            const container = document.getElementById('quiz-container');
+            if (!container) return;
+            container.innerHTML = '';
+            selectedAnswers = new Array(quizData.length).fill(null);
+            quizData.forEach((q, qi) => {
+                const letters = ['A', 'B', 'C', 'D'];
+                const optsHtml = q.opts.map((o, oi) => `
+                    <button type="button" class="quiz-opt" onclick="answerQuiz(${qi},${oi})" id="opt-${qi}-${oi}">
+                        <span class="quiz-opt-icon">${letters[oi]}</span>${o}
+                    </button>`).join('');
+                container.innerHTML += `
+                    <div class="quiz-q" id="qq-${qi}">
+                        <div class="quiz-q-num">問${qi + 1} / ${quizData.length}</div>
+                        <div class="quiz-q-text">${q.q}</div>
+                        <div class="quiz-options">${optsHtml}</div>
+                        <div class="quiz-feedback" id="fb-${qi}"></div>
+                    </div>`;
+            });
+            document.getElementById('quiz-result').style.display = 'none';
+        }
+
+        function answerQuiz(qi, oi) {
+            if (selectedAnswers[qi] !== null) return;
+            selectedAnswers[qi] = oi;
+            const q = quizData[qi];
+            const isCorrect = oi === q.ans;
+            q.opts.forEach((_, i) => {
+                const btn = document.getElementById(`opt-${qi}-${i}`);
+                btn.classList.add('disabled');
+                if (i === q.ans) btn.classList.add('correct');
+                else if (i === oi && !isCorrect) btn.classList.add('wrong');
+            });
+            const fb = document.getElementById(`fb-${qi}`);
+            fb.textContent = (isCorrect ? '正解！ ' : '不正解。') + q.fb;
+            fb.className = `quiz-feedback show ${isCorrect ? 'correct-fb' : 'wrong-fb'}`;
+            if (selectedAnswers.every(a => a !== null)) {
+                const score = selectedAnswers.reduce((c, a, i) => c + (a === quizData[i].ans ? 1 : 0), 0);
+                showResult(score);
+            }
+        }
+
+        function showResult(score) {
+            const result = document.getElementById('quiz-result');
+            const isPassed = score >= 4;
+            result.style.display = 'block';
+            result.className = isPassed ? 'pass' : 'fail';
+            document.getElementById('quiz-score').textContent = `${score} / ${quizData.length} 正解`;
+            document.getElementById('quiz-msg').textContent = isPassed
+                ? '素晴らしい！法人税3種の深掘りと消費税発展演習、しっかり理解できています。Day9後半へ進みましょう。'
+                : 'もう一度ページを読み直してから再挑戦しましょう。NotebookLMに解説を頼むのもOKです。';
+            result.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function resetQuiz() {
+            buildQuiz();
+            document.getElementById('quizPanel').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        buildQuiz();
+    </script>
+</body>
+</html>
+<!-- cache-bust: 2026-05-22T15:00:00 -->
