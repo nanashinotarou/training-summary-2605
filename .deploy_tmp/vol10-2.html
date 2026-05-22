@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Day 9後半 | 法人税3種の深掘りと消費税発展演習</title>
+    <title>Day 10後半 | 貸借対照表の本質と財務分析5大アプローチ</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Teko:wght@600&display=swap" rel="stylesheet">
     <style>
@@ -70,7 +70,7 @@
         }
         .header h1 { font-size: 2.2rem; font-weight: 900; color: var(--accent-green); margin-bottom: 10px; }
         .progress-wrap { max-width: 520px; height: 8px; background: #e2e8f0; border-radius: 999px; margin: 18px auto 0; overflow: hidden; }
-        .progress-bar { width: 85%; height: 100%; background: linear-gradient(90deg, var(--accent-green), #34d399); border-radius: inherit; }
+        .progress-bar { width: 100%; height: 100%; background: linear-gradient(90deg, var(--accent-green), #34d399); border-radius: inherit; }
 
         .tabs { display: flex; padding: 0 20px; background: rgba(255, 255, 255, 0.5); border-bottom: 1px solid #eee; overflow-x: auto; }
         .tab-btn {
@@ -420,6 +420,21 @@
         @keyframes sakuraFall { to { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
 
 
+
+        .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 20px 0; }
+        .step-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; min-width: 480px; }
+        .step-table th, .step-table td { padding: 10px; border: 1px solid #d1fae5; text-align: left; }
+        .step-table thead tr { background: #ecfdf5; }
+        .metric-cards { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 8px; margin: 20px 0; }
+        .metric-card { flex: 0 0 260px; background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px; box-shadow: var(--shadow-soft); }
+        .metric-card h4 { color: var(--accent-green); font-size: 0.95rem; margin: 0 0 8px; }
+        .metric-card .formula { font-size: 0.82rem; color: #64748b; margin-bottom: 8px; font-family: monospace; }
+        .metric-card p { font-size: 0.88rem; margin: 0; line-height: 1.55; color: #475569; }
+        .bs-diagram { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; min-width: 520px; font-size: 0.85rem; }
+        .bs-col { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; }
+        .bs-col h4 { margin: 0 0 12px; color: var(--accent-green); font-size: 0.95rem; }
+        .bs-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px dashed #e2e8f0; }
+        .bs-total { font-weight: 700; margin-top: 10px; padding-top: 8px; border-top: 2px solid #1e293b; }
     </style>
 </head>
 
@@ -430,8 +445,8 @@
 
     <div class="container">
         <header class="header">
-            <span class="header-tag">DAY 09（後半）</span>
-            <h1>法人税3種の深掘りと消費税発展演習</h1>
+            <span class="header-tag">DAY 10（後半）</span>
+            <h1>貸借対照表の本質と財務分析5大アプローチ</h1>
             <p style="margin:0; color:var(--text-sub);">May 2026 - Bookkeeping Course</p>
             <div class="progress-wrap" aria-label="Course progress">
                 <div class="progress-bar"></div>
@@ -440,162 +455,170 @@
 
         <nav class="tabs">
             <button class="tab-btn active" onclick="openTab('goal')"><i class="fa-solid fa-building-columns"></i> 後半スタート</button>
-            <button class="tab-btn" onclick="openTab('first')"><i class="fa-solid fa-landmark"></i> 法人税3種の理解</button>
-            <button class="tab-btn" onclick="openTab('second')"><i class="fa-solid fa-percent"></i> 消費税の発展</button>
+            <button class="tab-btn" onclick="openTab('first')"><i class="fa-solid fa-scale-balanced"></i> B/Sの本質</button>
+            <button class="tab-btn" onclick="openTab('second')"><i class="fa-solid fa-chart-line"></i> 財務分析5大アプローチ</button>
             <button class="tab-btn" onclick="openTab('summary')"><i class="fa-solid fa-list-check"></i> まとめ</button>
         </nav>
 
-                        <div id="goal" class="tab-content active">
+        <div id="goal" class="tab-content active">
             <div class="bloom-story">
-                <span class="bloom-story-label">📍 Bloom 9日目・後半スタート</span>
-                <p>「法人税等って3種類あるって聞いたけど、法人税・住民税・事業税…それぞれ何が違うの？」と疑問を持つHarukaさん。今日は<strong>誰に・何に・なぜ課税されるか</strong>から整理する後半戦。</p>
+                <span class="bloom-story-label">📍 Bloom 10日目・後半</span>
+                <p>「帳簿の締め切りが終わったら、<strong>貸借対照表（B/S）</strong>の完成です！」とHarukaさんが達成感に浸っていると、先輩が一枚の財務諸表を差し出す。「この数字が何を意味しているか、読めるようになろう。B/Sは企業の"お金の旅"を写した地図なんだ」</p>
             </div>
             <div class="why-box">
-                <div class="why-q">消費税って8%と10%の2種類あるけど、どっちを使うか判断できる自信がない…</div>
-                <div class="why-a">軽減税率8%は<strong>食品（外食・酒除く）＋定期購読新聞</strong>のみ。「外食10%・持ち帰り8%」で試験の9割はカバー。非課税（土地・有価証券・商品券・収入印紙）も今日で整理。</div>
+                <div class="why-q">貸借対照表って、左が資産・右が負債と純資産って覚えればいいんでしょ？</div>
+                <div class="why-a">形だけ覚えると本質を見失う。右側（負債・純資産）は「どこからお金を調達したか」、左側（資産）は「そのお金をどう使っているか」。<strong>負債が多い＝危ない、は必ずしも正しくない。</strong>借入金は手元キャッシュを増やし、事業拡大の武器になる。</div>
             </div>
             <div class="talk-scene">
-                <div class="talk-bubble owner"><div class="talk-icon">🧑</div><div class="talk-text">赤字でも税金を払わないといけないって本当ですか？</div></div>
-                <div class="talk-bubble teacher"><div class="talk-icon">👩‍🏫</div><div class="talk-text">法人住民税の<strong>均等割</strong>だけは赤字でも支払義務があります。地域インフラを使う以上の最低負担という考え方です。</div></div>
+                <div class="talk-bubble owner"><div class="talk-icon">🧑</div><div class="talk-text">自己資本比率が高い会社の方が安全って、どこかで読みましたよ？</div></div>
+                <div class="talk-bubble teacher"><div class="talk-icon">👩‍🏫</div><div class="talk-text">業界によって適正水準は全然違います。銀行・不動産は負債を使って利益を出すモデルなので、自己資本比率が低くて当然。大事なのは<strong>同業他社10社の平均</strong>と比べることです。</div></div>
+            </div>
+            <div class="goal-box">
+                <i class="fa-solid fa-scale-balanced"></i>
+                <h3>「貸借対照表をキャッシュ視点で読み解き、財務分析5大アプローチを使えるようになる」</h3>
+                <p>資金調達と運用の本質、固定費6ヶ月分の現金確保、収益性・生産性・効率性・成長性・安全性の5軸を学びます。</p>
             </div>
             <div style="text-align:center;margin-top:30px;">
-                <button class="tool-link-btn" onclick="openTab('first')" style="background:var(--accent-green);">法人税3種の理解へ <i class="fa-solid fa-arrow-right"></i></button>
+                <button class="tool-link-btn" onclick="openTab('first')" style="background:var(--accent-green);">B/Sの本質へ <i class="fa-solid fa-arrow-right"></i></button>
             </div>
         </div>
 
-                <div id="first" class="tab-content">
+        <div id="first" class="tab-content">
             <div class="bloom-story" style="margin-bottom:24px;">
-                <span class="bloom-story-label">📍 Bloom 9日目・後半①</span>
-                <p>白板に「法人税・住民税・事業税の3つを整理」と書き始める先輩。「事業税は<strong>損金算入</strong>ってどういう意味？」とHarukaさん。</p>
+                <span class="bloom-story-label">📍 Bloom 10日目・後半①</span>
+                <p>「売掛金って、お客さんへの貸し付け状態なんですね…現金が手元にない状態」——キャッシュ視点でB/Sを見直すHarukaさん。</p>
             </div>
             <div class="learning-card">
                 <div class="lc-video">
-                    <div class="vc-thumb" data-video-id="LG5_UlikCAI" style="background-image:url('https://img.youtube.com/vi/LG5_UlikCAI/maxresdefault.jpg'),url('https://img.youtube.com/vi/LG5_UlikCAI/hqdefault.jpg');">
+                    <div class="vc-thumb" data-video-id="kLgNIAO7GGk" style="background-image:url('https://img.youtube.com/vi/kLgNIAO7GGk/maxresdefault.jpg'),url('https://img.youtube.com/vi/kLgNIAO7GGk/hqdefault.jpg');">
                         <i class="fa-brands fa-youtube vc-thumb-play"></i>
                     </div>
                 </div>
                 <div class="lc-content">
-                    <div class="lc-header"><span class="vc-tag">実務深掘り</span><h3 class="lc-title">法人税・住民税・事業税の役割と計算の仕組み</h3></div>
-                    <div class="lc-body"><ul class="lc-list"><li>法人税：国税。所得に課税（中小15%・超過23.2%など）</li><li>法人住民税：地方税。法人税割＋均等割。均等割は赤字でも発生</li><li>法人事業税：都道府県税。<strong>損金算入できる</strong>（他2税と異なる）</li><li>※正しい計算：所得金額×法人事業税率（スライド誤記に注意）</li></ul></div>
+                    <div class="lc-header"><span class="vc-tag">B/Sの本質</span><h3 class="lc-title">資金調達と運用、キャッシュ視点の資産</h3></div>
+                    <div class="lc-body"><ul class="lc-list"><li>右側（負債・純資産）＝資金の調達方法</li><li>左側（資産）＝資金の運用方法</li><li>現金・預金以外の資産は「現金を減らしている要素」</li></ul></div>
                 </div>
             </div>
-            <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:24px;margin-bottom:24px;overflow-x:auto;">
-                <h4 style="margin:0 0 16px;color:var(--accent-green);"><i class="fa-solid fa-landmark"></i> 法人税3種 比較</h4>
-                <table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
-                    <thead><tr style="background:#ecfdf5;">
-                        <th style="padding:8px;border:1px solid #d1fae5;">税</th><th style="padding:8px;border:1px solid #d1fae5;">納付先</th>
-                        <th style="padding:8px;border:1px solid #d1fae5;">課税ベース</th><th style="padding:8px;border:1px solid #d1fae5;">赤字時</th>
-                        <th style="padding:8px;border:1px solid #d1fae5;">損金算入</th>
-                    </tr></thead>
+            <div class="scroll-x" style="margin:20px 0;">
+                <table class="step-table" style="min-width:480px;">
+                    <thead><tr><th>側</th><th>区分</th><th>本質的な意味</th></tr></thead>
                     <tbody>
-                        <tr><td style="padding:8px;border:1px solid #e2e8f0;"><strong>法人税</strong></td><td>国</td><td>所得金額</td><td>免除</td><td>不可</td></tr>
-                        <tr><td style="padding:8px;border:1px solid #e2e8f0;"><strong>法人住民税</strong></td><td>地方</td><td>法人税割＋均等割</td><td>均等割のみ</td><td>不可</td></tr>
-                        <tr><td style="padding:8px;border:1px solid #e2e8f0;"><strong>法人事業税</strong></td><td>都道府県</td><td>所得金額</td><td>免除</td><td><strong>可</strong></td></tr>
+                        <tr><td><strong>右側</strong></td><td>負債・純資産</td><td>資金の調達方法（どこから集めたか）</td></tr>
+                        <tr><td><strong>左側</strong></td><td>資産</td><td>資金の運用方法（どう使っているか）</td></tr>
                     </tbody>
                 </table>
             </div>
-            <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:12px;padding:20px;margin-bottom:24px;">
-                <h4 style="margin:0 0 10px;color:#b45309;">均等割 = 赤字でも払う最低税額</h4>
-                <p style="margin:0;font-size:0.9rem;line-height:1.7;">資本金と従業員数で固定額が決まる。利益ゼロ・赤字でも必ず発生。創業間もない法人・赤字事業者も要注意。</p>
+            <h3>キャッシュ視点での資産</h3>
+            <div class="scroll-x">
+                <table class="step-table">
+                    <thead><tr><th>資産科目</th><th>キャッシュ的な意味</th></tr></thead>
+                    <tbody>
+                        <tr><td>売掛金</td><td>顧客への貸し付け → 回収まで現金が手元にない</td></tr>
+                        <tr><td>商品（在庫）</td><td>売れるまで現金が"眠っている"</td></tr>
+                        <tr><td>建物・車両</td><td>投資時に現金流出。土地は減価償却0円</td></tr>
+                    </tbody>
+                </table>
             </div>
-            <div style="background:#fffbeb;border-left:6px solid var(--accent-gold);padding:20px;border-radius:12px;margin-bottom:24px;">
-                <h4 style="margin:0 0 10px;color:#b45309;"><i class="fa-solid fa-lightbulb"></i> AI Director's Eye：法人化のタイミング</h4>
-                <p style="margin:0;font-size:0.9rem;line-height:1.7;">個人は所得税（累進最高45%）。法人は実効税率25〜30%程度。利益600〜800万円超で法人化を検討するケースが多い理由がここにある。</p>
+            <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:20px;margin:24px 0;">
+                <h4 style="margin:0 0 10px;color:#b45309;"><i class="fa-solid fa-shield-halved"></i> 実務で最重視する現金水準</h4>
+                <p style="margin:0;font-size:0.95rem;line-height:1.7;"><strong>固定費（家賃・人件費等）の6ヶ月分</strong>を手元に確保することが最優先。自己資本比率が高くても、現預金がなければ翌月の支払いで詰みます（黒字倒産）。</p>
+            </div>
+            <p style="font-size:0.9rem;color:#64748b;">借入金を返済すると現預金も同額減少。負債はゼロが正義ではなく、一定額を回転・維持させることが重要（例：トヨタは負債35〜40兆円でも手元現金7兆円で安全性は高い）。</p>
+            <h3>簡易B/S構造（単位：万円）</h3>
+            <div class="scroll-x">
+                <div class="bs-diagram">
+                    <div class="bs-col">
+                        <h4>【資産の部】</h4>
+                        <div class="bs-row"><span>現金預金</span><span>1,000</span></div>
+                        <div class="bs-row"><span>売掛金</span><span>2,500</span></div>
+                        <div class="bs-row"><span>貸付金</span><span>500</span></div>
+                        <div class="bs-row"><span>商品</span><span>2,000</span></div>
+                        <div class="bs-row"><span>建物</span><span>1,300</span></div>
+                        <div class="bs-row"><span>車両</span><span>500</span></div>
+                        <div class="bs-row"><span>土地</span><span>2,000</span></div>
+                        <div class="bs-row"><span>敷金</span><span>200</span></div>
+                        <div class="bs-total">資産合計 10,000</div>
+                    </div>
+                    <div class="bs-col">
+                        <h4>【負債の部】</h4>
+                        <div class="bs-row"><span>買掛金</span><span>2,000</span></div>
+                        <div class="bs-row"><span>未払金</span><span>1,000</span></div>
+                        <div class="bs-row"><span>長期借入</span><span>3,000</span></div>
+                        <div class="bs-row"><span>役員借入</span><span>1,000</span></div>
+                        <div class="bs-total">負債合計 7,000</div>
+                        <h4 style="margin-top:16px;">【純資産の部】</h4>
+                        <div class="bs-row"><span>資本金</span><span>300</span></div>
+                        <div class="bs-row"><span>利益剰余</span><span>2,700</span></div>
+                        <div class="bs-total">純資産計 3,000</div>
+                        <div class="bs-total" style="margin-top:12px;">負債純資合計 10,000</div>
+                    </div>
+                </div>
             </div>
             <div style="text-align:center;margin-top:30px;">
-                <button class="tool-link-btn" onclick="openTab('second')" style="background:var(--accent-green);">消費税の発展へ <i class="fa-solid fa-arrow-right"></i></button>
+                <button class="tool-link-btn" onclick="openTab('second')" style="background:var(--accent-green);">財務分析5大アプローチへ <i class="fa-solid fa-arrow-right"></i></button>
             </div>
         </div>
 
-                <div id="second" class="tab-content">
+        <div id="second" class="tab-content">
             <div class="bloom-story" style="margin-bottom:24px;">
-                <span class="bloom-story-label">📍 Bloom 9日目・後半②</span>
-                <p>「食品8%・外食10%ってレシートで毎回確認？」——試験では税率判断が頻出。ここでパターンを固める。</p>
+                <span class="bloom-story-label">📍 Bloom 10日目・後半②</span>
+                <p>「自己資本比率、何%くらいが良いんですか？」——先輩が答える。「数字の前に、<strong>同じ業界の会社と比べる</strong>習慣をつけよう」</p>
             </div>
             <div class="learning-card">
                 <div class="lc-video">
-                    <div class="vc-thumb" data-video-id="ssh4POSgru4" style="background-image:url('https://img.youtube.com/vi/ssh4POSgru4/maxresdefault.jpg'),url('https://img.youtube.com/vi/ssh4POSgru4/hqdefault.jpg');">
+                    <div class="vc-thumb" data-video-id="FGmVWgmBe1s" style="background-image:url('https://img.youtube.com/vi/FGmVWgmBe1s/maxresdefault.jpg'),url('https://img.youtube.com/vi/FGmVWgmBe1s/hqdefault.jpg');">
                         <i class="fa-brands fa-youtube vc-thumb-play"></i>
                     </div>
                 </div>
                 <div class="lc-content">
-                    <div class="lc-header"><span class="vc-tag">消費税の発展</span><h3 class="lc-title">税率の種類と税抜・税込方式の違い</h3></div>
-                    <div class="lc-body"><ul class="lc-list"><li>軽減8%：飲食料品（外食・酒除く）＋週2回以上の定期購読新聞</li><li>標準10%：その他・外食・消耗品</li><li>非課税：土地・有価証券・商品券・収入印紙・郵便切手</li><li>仮払/仮受は<strong>取引発生時</strong>に計上（支払時ではない）</li></ul></div>
+                    <div class="lc-header"><span class="vc-tag">5大アプローチ</span><h3 class="lc-title">収益性・生産性・効率性・成長性・安全性</h3></div>
+                    <div class="lc-body"><ul class="lc-list"><li>収益性：売上高営業利益率 ＝ 営業利益÷売上高×100</li><li>生産性：労働生産性 ＝ 粗利益÷従業員数</li><li>効率性：総資産回転率 ＝ 売上高÷総資産</li><li>成長性：CAGRでトレンド評価（M&Aとオーガニックを切り分け）</li><li>安全性：自己資本比率は業界10社平均と比較</li></ul></div>
                 </div>
             </div>
-            <div class="learning-card">
-                <div class="lc-video">
-                    <div class="vc-thumb" data-video-id="QEQnzYa3N54" style="background-image:url('https://img.youtube.com/vi/QEQnzYa3N54/maxresdefault.jpg'),url('https://img.youtube.com/vi/QEQnzYa3N54/hqdefault.jpg');">
-                        <i class="fa-brands fa-youtube vc-thumb-play"></i>
-                    </div>
-                </div>
-                <div class="lc-content">
-                    <div class="lc-header"><span class="vc-tag">試験対策</span><h3 class="lc-title">第3問頻出：決算整理仕訳の3ステップ解法</h3></div>
-                    <div class="lc-body"><ul class="lc-list"><li>前TBから仮払・仮受消費税を読み取る</li><li>相殺して未払消費税を計上</li><li>法人税等：確定額→仮払取り崩し→未払法人税等へ</li></ul></div>
-                </div>
-            </div>
-            <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:24px;margin-bottom:20px;overflow-x:auto;">
-                <h4 style="margin:0 0 16px;color:var(--accent-green);"><i class="fa-solid fa-percent"></i> 消費税率・非課税 判定</h4>
-                <table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
-                    <tr style="background:#ecfdf5;"><th style="padding:8px;border:1px solid #d1fae5;">分類</th><th style="padding:8px;border:1px solid #d1fae5;">例</th><th style="padding:8px;border:1px solid #d1fae5;">税率</th></tr>
-                    <tr><td style="padding:8px;border:1px solid #e2e8f0;">標準</td><td>消耗品・外食・サービス</td><td><strong>10%</strong></td></tr>
-                    <tr><td style="padding:8px;border:1px solid #e2e8f0;">軽減</td><td>食品持ち帰り・定期購読新聞</td><td><strong>8%</strong></td></tr>
-                    <tr><td style="padding:8px;border:1px solid #e2e8f0;">非課税</td><td>土地・有価証券・商品券・印紙</td><td><strong>0%</strong></td></tr>
-                </table>
-                <p style="margin:14px 0 0;font-size:0.88rem;color:#065f46;"><strong>ポイント</strong>：外食10%、持ち帰り8%。試験で「食品の仕入れ」→まず8%でOK。</p>
-            </div>
-            <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:20px;margin-bottom:20px;">
-                <h4 style="margin:0 0 10px;color:#1d4ed8;">消費税の計上タイミング = 取引発生時</h4>
-                <pre style="margin:0 0 10px;font-size:0.88rem;white-space:pre-wrap;">(借) 備品 100,000 / 仮払消費税 10,000 / (貸) 未払金 110,000</pre>
-                <p style="margin:0;font-size:0.88rem;">翌月現金支払でも、仮払消費税は<strong>購入した時</strong>に計上する。</p>
-            </div>
-            <div style="background:#f0fdf4;border:1px solid #d1fae5;border-radius:12px;padding:20px;margin-bottom:20px;">
-                <h4 style="margin:0 0 12px;color:#047857;"><i class="fa-solid fa-pen-to-square"></i> 第3問：決算整理3ステップ</h4>
-                <ol style="margin:0;padding-left:1.3rem;font-size:0.9rem;line-height:1.8;">
-                    <li>前TBで仮払・仮受消費税を確認</li>
-                    <li>「仮」科目を0にし、差額を未払消費税へ</li>
-                    <li>法人税等：確定額借方→仮払消去→未払法人税等</li>
-                </ol>
-                <p style="margin:12px 0 0;font-size:0.88rem;">例：仮払470,000・仮受930,000 → 未払460,000</p>
+            <h2>財務分析5大アプローチ</h2>
+            <div class="metric-cards">
+                <div class="metric-card"><h4>① 収益性</h4><div class="formula">営業利益 ÷ 売上高 × 100</div><p>売上高営業利益率。一時的特別損失は除外してトレンド評価。</p></div>
+                <div class="metric-card"><h4>② 生産性</h4><div class="formula">粗利益 ÷ 従業員数</div><p>労働生産性。非正規のカウント基準を他社と統一。</p></div>
+                <div class="metric-card"><h4>③ 効率性</h4><div class="formula">売上高 ÷ 総資産</div><p>総資産回転率。業界ごとに適正水準が異なる。</p></div>
+                <div class="metric-card"><h4>④ 成長性</h4><div class="formula">CAGR（年平均成長率）</div><p>M&A成長とオーガニック成長を切り分けて判断。</p></div>
+                <div class="metric-card"><h4>⑤ 安全性</h4><div class="formula">自己資本 ÷ 総資産 × 100</div><p>自己資本比率。ネット目安の鵜呑みは危険。同業比較必須。</p></div>
             </div>
             <div class="talk-scene" style="margin:24px 0;">
-                <div class="talk-bubble owner"><div class="talk-icon">🧑</div><div class="talk-text">商品券を買うとき消費税がかからないって知らなかったです。</div></div>
-                <div class="talk-bubble teacher"><div class="talk-icon">👩‍🏫</div><div class="talk-text">まだ消費していないから非課税。使うときに課税。収入印紙は購入時非課税、使用時に租税公課として費用計上。</div></div>
+                <div class="talk-bubble owner"><div class="talk-icon">🧑</div><div class="talk-text">ネットに「自己資本比率40%以上が良い」って書いてあったんですが…</div></div>
+                <div class="talk-bubble teacher"><div class="talk-icon">👩‍🏫</div><div class="talk-text">業界特性を無視した一般論です。銀行・不動産は低くて当然。<strong>10社平均と10ポイント以上の乖離</strong>があれば要因分析を。</div></div>
             </div>
             <div style="text-align:center;margin-top:30px;">
                 <button class="tool-link-btn" onclick="openTab('summary')" style="background:var(--accent-green);">まとめへ <i class="fa-solid fa-arrow-right"></i></button>
             </div>
         </div>
 
-                <div id="summary" class="tab-content">
+        <div id="summary" class="tab-content">
             <div class="bloom-story" style="margin-bottom:24px;">
-                <span class="bloom-story-label">📍 Bloom 9日目・夜</span>
-                <p>法人税3種と消費税のパターンを習得。「Day9が終わった…試験まであと少し」——<strong>Day 9修了</strong>を称える。</p>
+                <span class="bloom-story-label">📍 Bloom 10日目・夜</span>
+                <p>貸借対照表と財務分析5軸を習得。「<strong>Day 10が最終日</strong>…これで全10日、完走だ」</p>
             </div>
-            <h2>DAY 9後半 まとめ</h2>
+            <h2>DAY 10後半 まとめ</h2>
             <div class="summary-grid">
-                <div class="summary-card"><div class="summary-icon"><i class="fa-solid fa-money-bill-wave"></i></div><h3>給料・所得税・社保</h3><p>天引き→納付で消去。立替金は天引きで回収。</p></div>
-                <div class="summary-card"><div class="summary-icon"><i class="fa-solid fa-receipt"></i></div><h3>消費税の完全整理</h3><p>8%・10%・非課税。仮科目は決算でゼロ。</p></div>
-                <div class="summary-card"><div class="summary-icon"><i class="fa-solid fa-building-columns"></i></div><h3>法人税等3種</h3><p>均等割は赤字でも発生。事業税は損金算入可。</p></div>
-                <div class="summary-card"><div class="summary-icon"><i class="fa-solid fa-pen-to-square"></i></div><h3>試験第3問</h3><p>前TB確認→相殺→未払へ。「仮は決算でゼロ」。</p></div>
+                <div class="summary-card"><div class="summary-icon"><i class="fa-solid fa-scale-balanced"></i></div><h3>B/Sの2側面</h3><p>右＝調達、左＝運用。形だけでなく本質を読む。</p></div>
+                <div class="summary-card"><div class="summary-icon"><i class="fa-solid fa-coins"></i></div><h3>キャッシュ視点</h3><p>現金・預金以外の資産は現金を減らす要素。</p></div>
+                <div class="summary-card"><div class="summary-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div><h3>負債は武器</h3><p>返済でゼロが正義ではない。固定費6ヶ月分の現金が最優先。</p></div>
+                <div class="summary-card"><div class="summary-icon"><i class="fa-solid fa-chart-line"></i></div><h3>5大アプローチ</h3><p>収益性・生産性・効率性・成長性・安全性。業界比較必須。</p></div>
             </div>
             <h2>重要用語チェック</h2>
             <div class="term-grid">
-                <div class="term-card"><strong>軽減税率</strong><span>8%。食品（外食・酒除く）と定期購読新聞。</span></div>
-                <div class="term-card"><strong>非課税取引</strong><span>土地・有価証券・商品券・印紙など。</span></div>
-                <div class="term-card"><strong>法人税割</strong><span>法人住民税の一部。法人税額×税率。</span></div>
-                <div class="term-card"><strong>均等割</strong><span>固定額。赤字でも支払義務。</span></div>
-                <div class="term-card"><strong>損金算入</strong><span>法人事業税のみ損金算入可。</span></div>
-                <div class="term-card"><strong>税抜方式</strong><span>本体と消費税を分けて計上。</span></div>
-                <div class="term-card"><strong>税込方式</strong><span>込みで計上（減少傾向）。</span></div>
-                <div class="term-card"><strong>前TB</strong><span>決算整理前残高試算表。第3問で必須。</span></div>
+                <div class="term-card"><strong>資金調達</strong><span>B/S右側。負債＋純資産。</span></div>
+                <div class="term-card"><strong>資金運用</strong><span>B/S左側。資産。</span></div>
+                <div class="term-card"><strong>他人資本</strong><span>負債。銀行・仕入先等からの借入。</span></div>
+                <div class="term-card"><strong>自己資本</strong><span>純資産。返済不要の自己資金＋利益蓄積。</span></div>
+                <div class="term-card"><strong>売上高営業利益率</strong><span>収益性の主要指標。</span></div>
+                <div class="term-card"><strong>自己資本比率</strong><span>安全性。業界平均と比較。</span></div>
             </div>
             <div class="check-panel">
                 <h3><i class="fa-solid fa-clipboard-check"></i> セルフチェック</h3>
                 <ol class="check-list">
-                    <li>均等割と法人税割の違い、赤字時どちらが発生するか説明できますか？</li>
-                    <li>食品持ち帰りと文具の税率は？（答え：8%と10%）</li>
-                    <li>未払購入時、仮払消費税は購入時と支払時どちら？（答え：購入時）</li>
+                    <li>B/S右側と左側が表す情報を説明できますか？</li>
+                    <li>実務で最優先の手元現金水準は？（答え：固定費6ヶ月分）</li>
+                    <li>総資産回転率は5大アプローチのどれ？（答え：効率性）</li>
                 </ol>
             </div>
             <div class="quiz-panel" id="quizPanel">
@@ -609,7 +632,7 @@
             </div>
             <div style="text-align:center;margin:40px 0 20px;">
                 <button class="tool-link-btn" onclick="showStamp()" style="background:linear-gradient(135deg,#dc2626,#b91c1c);padding:1.2rem 3rem;font-size:1.15rem;border:none;cursor:pointer;">
-                    <i class="fa-solid fa-stamp"></i> Day 9 コンプリートチェック！
+                    <i class="fa-solid fa-stamp"></i> 簿記3級コース 全課程コンプリート！
                 </button>
             </div>
             <div class="stamp-overlay" id="stampOverlay" onclick="hideStamp()">
@@ -617,21 +640,18 @@
                     <div class="sakura-confetti" id="sakuraConfetti"></div>
                     <div class="stamp-mark">
                         <div class="stamp-kanji">合格</div>
-                        <div class="stamp-sub">DAY 9 COMPLETE</div>
+                        <div class="stamp-sub">DAY 10 COMPLETE</div>
                     </div>
-                    <h3 style="color:#1e293b;margin:16px 0 8px;font-size:1.4rem;">Day 9 修了おめでとう！</h3>
-                    <p style="color:#64748b;font-size:0.95rem;line-height:1.7;margin-bottom:20px;">税金の全論点を完全習得したあなたは<br>もう<strong>簿記3級の試験範囲</strong>をほぼ制覇しました。</p>
+                    <h3 id="stampModalTitle" style="color:#1e293b;margin:16px 0 8px;font-size:1.4rem;">簿記3級コース 全課程修了！</h3>
+                    <p id="stampModalBody" style="color:#64748b;font-size:0.95rem;line-height:1.7;margin-bottom:20px;">Day 1 から Day 10 まで、お疲れ様でした！帳簿の締め切りから財務分析まで、簿記3級の全論点を完走しました。自信を持って本番に臨んでください。</p>
                     <button class="tool-link-btn" onclick="hideStamp()" style="background:var(--accent-green);"><i class="fa-solid fa-xmark"></i> 閉じる</button>
                 </div>
             </div>
         </div>
 
         <div style="text-align:center; padding: 3rem 0 2rem; display: flex; flex-direction: column; gap: 1rem; align-items: center;">
-    <button type="button" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:linear-gradient(135deg, #34d399, #059669); border:none; box-shadow: 0 10px 30px rgba(5,150,105, 0.25); cursor:pointer;" onclick="(async function(){try{const r=await fetch('./vol10-1.html',{method:'HEAD',cache:'no-store'});if(r.ok){window.location.href='./vol10-1.html';return;}}catch(e){}alert('Day 10前半は準備中です。もうしばらくお待ちください。');})()">
-        Day 10前半へ進む <i class="fa-solid fa-arrow-right"></i>
-    </button>
-    <button type="button" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:#fff; color:#059669; border:2px solid var(--accent-green); box-shadow:none; cursor:pointer;" onclick="window.location.href='./vol09-1.html'">
-        <i class="fa-solid fa-arrow-left"></i> Day 9前半へ戻る
+    <button type="button" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:#fff; color:#059669; border:2px solid var(--accent-green); box-shadow:none; cursor:pointer;" onclick="window.location.href='./vol10-1.html'">
+        <i class="fa-solid fa-arrow-left"></i> Day 10前半へ戻る
     </button>
     <button type="button" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:#fff; color:#4a4a4a; border:2px solid #e2e8f0; box-shadow:none; cursor:pointer;" onclick="window.location.href='./index.html'">
         <i class="fa-solid fa-house"></i> 学習記録をつけて Home へ戻る
@@ -649,20 +669,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        document.querySelectorAll('.copy-btn').forEach(button => {
-            button.addEventListener('click', () => {
-                const text = button.parentElement.querySelector('.prompt-text').innerText;
-                navigator.clipboard.writeText(text).then(() => {
-                    button.classList.add('copied');
-                    button.innerHTML = '<i class="fa-solid fa-check"></i> コピーしました';
-                    setTimeout(() => {
-                        button.classList.remove('copied');
-                        button.innerHTML = '<i class="fa-regular fa-copy"></i> コピー';
-                    }, 2000);
-                });
-            });
-        });
-
         document.querySelectorAll('.vc-thumb[data-video-id]').forEach(thumb => {
             thumb.addEventListener('click', function() {
                 const videoId = this.dataset.videoId;
@@ -673,31 +679,13 @@
             }, { once: true });
         });
 
-        document.querySelectorAll('a[data-check-page="true"]').forEach(link => {
-            link.addEventListener('click', async event => {
-                event.preventDefault();
-                const target = link.getAttribute('href');
-                try {
-                    const response = await fetch(target, { method: 'HEAD', cache: 'no-store' });
-                    if (response.ok) {
-                        window.location.href = target;
-                        return;
-                    }
-                } catch (error) {
-                    // Local file previews may reject HEAD requests; keep users away from a broken link.
-                }
-                alert('Day 8後半ページはまだ準備中です。公開後にこのリンクから進めます。');
-            });
-        });
-
         const quizData = [
-    { q: "消費税の軽減税率8%が適用されるのは？", opts: ["コンビニ店内飲食コーヒー", "スーパー食料品（持ち帰り）", "レストランランチ", "お酒の購入"], ans: 1, fb: "8%は飲食料品（外食・酒除く）と定期購読新聞のみ。" },
-    { q: "消費税が非課税となる取引は？", opts: ["文具購入", "土地の売却", "商品仕入れ", "広告費"], ans: 1, fb: "土地の売買は原則非課税。" },
-    { q: "法人住民税の「均等割」について正しいのは？", opts: ["利益に税率をかける", "赤字でも支払い義務がある", "法人税額に税率をかける", "大企業のみ"], ans: 1, fb: "均等割は固定額。赤字でも発生。" },
-    { q: "損金算入できる法人税等は？", opts: ["法人税のみ", "法人事業税のみ", "法人住民税のみ", "3つすべて"], ans: 1, fb: "法人事業税のみ損金算入可。" },
-    { q: "未払購入110,000円（税抜100,000+消費税10,000）。仮払消費税を計上するのは？", opts: ["翌月支払時", "購入（取引発生）時", "決算時", "未払消去時"], ans: 1, fb: "取引発生時に仮払消費税を計上。" }
+    { q: "貸借対照表（B/S）の右側（負債・純資産）が表す情報として正しいのはどれか？", opts: ["資金の運用方法", "資金の調達方法", "当期の損益", "翌期への繰越額"], ans: 1, fb: "右側はどこからお金を調達したか（調達方法）。左側（資産）が運用方法です。" },
+    { q: "キャッシュ視点での資産の正しい解釈として適切なのはどれか？", opts: ["資産が多いほど現金も多い", "負債があると資産は減少する", "現金・預金以外の資産は現金を減らしている要素である", "土地は毎年減価償却されるため資産価値が下がる"], ans: 2, fb: "売掛金・商品・建物等は現金を使って保有している状態。土地は減価償却対象外です。" },
+    { q: "実務で最も優先すべき手元現金の水準として適切とされるのはどれか？", opts: ["月次売上の3ヶ月分", "固定費の6ヶ月分", "総資産の10%", "流動負債の全額"], ans: 1, fb: "固定費（家賃・人件費等）の6ヶ月分を手元に確保することが最優先です。" },
+    { q: "財務分析の収益性分析で使われる主要指標として正しいのはどれか？", opts: ["総資産回転率", "売上高営業利益率", "労働生産性", "自己資本比率"], ans: 1, fb: "売上高営業利益率＝営業利益÷売上高×100。回転率は効率性、労働生産性は生産性、自己資本比率は安全性。" },
+    { q: "安全性分析において業界平均との比較が重要とされる主な理由はどれか？", opts: ["業界によって負債活用モデルが異なり適正水準が大きく異なるため", "自己資本比率は高いほど常に良いが業界ごとに上限があるため", "銀行が業界別融資基準を公表しているため", "税務上業界ごとの係数が使われるため"], ans: 0, fb: "銀行・不動産等は負債活用モデルのため自己資本比率が低くなりやすい。同業10社平均との比較が正しいアプローチです。" }
 ];
-
 
         function showStamp() {
             const overlay = document.getElementById('stampOverlay');
@@ -766,8 +754,8 @@
             result.className = isPassed ? 'pass' : 'fail';
             document.getElementById('quiz-score').textContent = `${score} / ${quizData.length} 正解`;
             document.getElementById('quiz-msg').textContent = isPassed
-                ? '素晴らしい！法人税3種の深掘りと消費税発展演習、しっかり理解できています。Day9後半へ進みましょう。'
-                : 'もう一度ページを読み直してから再挑戦しましょう。NotebookLMに解説を頼むのもOKです。';
+                ? 'おめでとうございます！簿記3級コース全10日を完走しました。全課程コンプリートスタンプを押しましょう！'
+                : 'もう一度ページを読み直してから再挑戦しましょう。';
             result.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
@@ -780,4 +768,4 @@
     </script>
 </body>
 </html>
-<!-- cache-bust: 2026-05-22T15:00:00 -->
+<!-- cache-bust: 2026-05-23T15:00:00 -->

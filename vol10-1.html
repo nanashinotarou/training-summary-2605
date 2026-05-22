@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Day 9後半 | 法人税3種の深掘りと消費税発展演習</title>
+    <title>Day 10前半 | 帳簿の締め切り（英米式決算法）</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Teko:wght@600&display=swap" rel="stylesheet">
     <style>
@@ -70,7 +70,7 @@
         }
         .header h1 { font-size: 2.2rem; font-weight: 900; color: var(--accent-green); margin-bottom: 10px; }
         .progress-wrap { max-width: 520px; height: 8px; background: #e2e8f0; border-radius: 999px; margin: 18px auto 0; overflow: hidden; }
-        .progress-bar { width: 85%; height: 100%; background: linear-gradient(90deg, var(--accent-green), #34d399); border-radius: inherit; }
+        .progress-bar { width: 92%; height: 100%; background: linear-gradient(90deg, var(--accent-green), #34d399); border-radius: inherit; }
 
         .tabs { display: flex; padding: 0 20px; background: rgba(255, 255, 255, 0.5); border-bottom: 1px solid #eee; overflow-x: auto; }
         .tab-btn {
@@ -387,39 +387,20 @@
             .home-btn { width: 52px; height: 52px; bottom: 20px; right: 20px; }
         }
 
-        /* ===== 合格スタンプアニメーション ===== */
-        .stamp-overlay {
-            position: fixed; top:0; left:0; right:0; bottom:0;
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
-            display: none; align-items: center; justify-content: center; z-index: 9999;
-        }
-        .stamp-overlay.show { display: flex; }
-        .stamp-modal {
-            background: #fff; border-radius: 24px; padding: 48px 40px;
-            text-align: center; max-width: 400px; width: 90%;
-            position: relative; overflow: hidden;
-            animation: stampModalIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        @keyframes stampModalIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .stamp-mark {
-            width: 160px; height: 160px;
-            border: 10px solid #dc2626; border-radius: 50%;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            margin: 0 auto 20px;
-            transform: rotate(-12deg);
-            box-shadow: 0 0 0 4px rgba(220,38,38,0.15);
-            animation: stampDrop 0.5s 0.3s both cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        @keyframes stampDrop {
-            from { transform: rotate(-12deg) scale(4); opacity: 0; }
-            to   { transform: rotate(-12deg) scale(1); opacity: 1; }
-        }
-        .stamp-kanji { font-size: 3rem; font-weight: 900; color: #dc2626; line-height: 1; }
-        .stamp-sub { font-size: 0.65rem; color: #dc2626; font-weight: 700; letter-spacing: 0.1em; margin-top: 4px; }
-        .sakura-confetti { position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; overflow: hidden; }
-        @keyframes sakuraFall { to { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
-
-
+        .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 20px 0; }
+        .step-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; min-width: 480px; }
+        .step-table th, .step-table td { padding: 10px; border: 1px solid #d1fae5; text-align: left; }
+        .step-table thead tr { background: #ecfdf5; }
+        .metric-cards { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 8px; margin: 20px 0; }
+        .metric-card { flex: 0 0 260px; background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px; box-shadow: var(--shadow-soft); }
+        .metric-card h4 { color: var(--accent-green); font-size: 0.95rem; margin: 0 0 8px; }
+        .metric-card .formula { font-size: 0.82rem; color: #64748b; margin-bottom: 8px; font-family: monospace; }
+        .metric-card p { font-size: 0.88rem; margin: 0; line-height: 1.55; color: #475569; }
+        .bs-diagram { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; min-width: 520px; font-size: 0.85rem; }
+        .bs-col { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; }
+        .bs-col h4 { margin: 0 0 12px; color: var(--accent-green); font-size: 0.95rem; }
+        .bs-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px dashed #e2e8f0; }
+        .bs-total { font-weight: 700; margin-top: 10px; padding-top: 8px; border-top: 2px solid #1e293b; }
     </style>
 </head>
 
@@ -430,8 +411,8 @@
 
     <div class="container">
         <header class="header">
-            <span class="header-tag">DAY 09（後半）</span>
-            <h1>法人税3種の深掘りと消費税発展演習</h1>
+            <span class="header-tag">DAY 10（前半）</span>
+            <h1>帳簿の締め切り（英米式決算法）</h1>
             <p style="margin:0; color:var(--text-sub);">May 2026 - Bookkeeping Course</p>
             <div class="progress-wrap" aria-label="Course progress">
                 <div class="progress-bar"></div>
@@ -439,163 +420,168 @@
         </header>
 
         <nav class="tabs">
-            <button class="tab-btn active" onclick="openTab('goal')"><i class="fa-solid fa-building-columns"></i> 後半スタート</button>
-            <button class="tab-btn" onclick="openTab('first')"><i class="fa-solid fa-landmark"></i> 法人税3種の理解</button>
-            <button class="tab-btn" onclick="openTab('second')"><i class="fa-solid fa-percent"></i> 消費税の発展</button>
+            <button class="tab-btn active" onclick="openTab('goal')"><i class="fa-solid fa-bullseye"></i> 今日の目標</button>
+            <button class="tab-btn" onclick="openTab('first')"><i class="fa-solid fa-book-open"></i> 帳簿の締め切り</button>
+            <button class="tab-btn" onclick="openTab('second')"><i class="fa-solid fa-rotate"></i> 3ステップ演習</button>
             <button class="tab-btn" onclick="openTab('summary')"><i class="fa-solid fa-list-check"></i> まとめ</button>
         </nav>
 
-                        <div id="goal" class="tab-content active">
+        <div id="goal" class="tab-content active">
             <div class="bloom-story">
-                <span class="bloom-story-label">📍 Bloom 9日目・後半スタート</span>
-                <p>「法人税等って3種類あるって聞いたけど、法人税・住民税・事業税…それぞれ何が違うの？」と疑問を持つHarukaさん。今日は<strong>誰に・何に・なぜ課税されるか</strong>から整理する後半戦。</p>
+                <span class="bloom-story-label">📍 Bloom 10日目・朝</span>
+                <p>決算期末の夕方、Harukaさんがデスクに積み上がった1年分の伝票を前に「…これ、全部今日で終わらせるんですか？」と呟く。先輩が静かに答える。「そう。<strong>帳簿の締め切り</strong>っていうのは、1年間の記録に『終わり』を刻む儀式みたいなものなんだ。これをやって初めて、損益計算書も貸借対照表も生まれるんだよ」</p>
             </div>
             <div class="why-box">
-                <div class="why-q">消費税って8%と10%の2種類あるけど、どっちを使うか判断できる自信がない…</div>
-                <div class="why-a">軽減税率8%は<strong>食品（外食・酒除く）＋定期購読新聞</strong>のみ。「外食10%・持ち帰り8%」で試験の9割はカバー。非課税（土地・有価証券・商品券・収入印紙）も今日で整理。</div>
+                <div class="why-q">なぜわざわざ帳簿を「締め切る」必要があるの？記録し続ければいいんじゃないの？</div>
+                <div class="why-a">収益・費用の勘定は「今期だけ」の成績を表す。締め切らないと今期の売上が翌期の財務諸表にも混入し、損益が正確に計算できなくなる。資産・負債・純資産は逆に「翌期へ引き継ぐ」必要がある。<strong>この2種類の勘定で扱いが真逆であることが帳簿の締め切りのコア</strong>である。</div>
             </div>
             <div class="talk-scene">
-                <div class="talk-bubble owner"><div class="talk-icon">🧑</div><div class="talk-text">赤字でも税金を払わないといけないって本当ですか？</div></div>
-                <div class="talk-bubble teacher"><div class="talk-icon">👩‍🏫</div><div class="talk-text">法人住民税の<strong>均等割</strong>だけは赤字でも支払義務があります。地域インフラを使う以上の最低負担という考え方です。</div></div>
+                <div class="talk-bubble owner"><div class="talk-icon">🧑</div><div class="talk-text">損益勘定って何ですか？費用でも収益でもないのに急に出てくるから混乱します</div></div>
+                <div class="talk-bubble teacher"><div class="talk-icon">👩‍🏫</div><div class="talk-text">損益勘定は<strong>集合勘定</strong>と呼ばれる特殊な勘定。収益と費用を一か所に集めて差し引きすれば純利益が出ます。その計算専用の道具が損益勘定です。決算時にだけ登場して、役割が終わると残高をゼロにして消えます。</div></div>
             </div>
+            <div class="goal-box">
+                <i class="fa-solid fa-book-open"></i>
+                <h3>「帳簿の締め切り3ステップを完全マスターし、決算振替仕訳を自力で書けるようになる」</h3>
+                <p>英米式決算法のStep1〜3と、収益・費用の振替から繰越利益剰余金への振替、T字勘定の締め切り線まで一気通貫で学びます。</p>
+            </div>
+            <h2>簿記一巡における位置づけ</h2>
+            <div class="scroll-x">
+                <div style="display:flex;gap:10px;min-width:720px;padding:8px 4px;font-size:0.82rem;">
+                    <div class="flow-step" style="flex:1;"><i class="fa-solid fa-pen"></i><strong>取引発生</strong></div>
+                    <div class="flow-step" style="flex:1;"><i class="fa-solid fa-book"></i><strong>仕訳帳</strong></div>
+                    <div class="flow-step" style="flex:1;"><i class="fa-solid fa-table"></i><strong>総勘定元帳</strong></div>
+                    <div class="flow-step" style="flex:1;"><i class="fa-solid fa-file-lines"></i><strong>決算整理前TB</strong></div>
+                    <div class="flow-step" style="flex:1;"><i class="fa-solid fa-wrench"></i><strong>決算整理仕訳</strong></div>
+                    <div class="flow-step" style="flex:1;"><i class="fa-solid fa-file-invoice"></i><strong>決算整理後TB</strong></div>
+                    <div class="flow-step" style="flex:1;background:#ecfdf5;border-color:#059669;"><i class="fa-solid fa-lock"></i><strong>帳簿の締め切り</strong><span>決算振替仕訳</span></div>
+                    <div class="flow-step" style="flex:1;"><i class="fa-solid fa-chart-pie"></i><strong>財務諸表</strong></div>
+                </div>
+            </div>
+            <p style="font-size:0.88rem;color:#64748b;">※「<strong>簿記一巡（ぼきいちじゅん）</strong>」と正確に記載。簿記3級で出題されるのは<strong>英米式決算法</strong>のみ（大陸式は対象外）。</p>
             <div style="text-align:center;margin-top:30px;">
-                <button class="tool-link-btn" onclick="openTab('first')" style="background:var(--accent-green);">法人税3種の理解へ <i class="fa-solid fa-arrow-right"></i></button>
+                <button class="tool-link-btn" onclick="openTab('first')" style="background:var(--accent-green);">帳簿の締め切りへ <i class="fa-solid fa-arrow-right"></i></button>
             </div>
         </div>
 
-                <div id="first" class="tab-content">
+        <div id="first" class="tab-content">
             <div class="bloom-story" style="margin-bottom:24px;">
-                <span class="bloom-story-label">📍 Bloom 9日目・後半①</span>
-                <p>白板に「法人税・住民税・事業税の3つを整理」と書き始める先輩。「事業税は<strong>損金算入</strong>ってどういう意味？」とHarukaさん。</p>
+                <span class="bloom-story-label">📍 Bloom 10日目・午前</span>
+                <p>「収益と費用をゼロにして、損益勘定に集めるんですね…」HarukaさんがStep1の仕訳をノートに書き写す。</p>
             </div>
             <div class="learning-card">
                 <div class="lc-video">
-                    <div class="vc-thumb" data-video-id="LG5_UlikCAI" style="background-image:url('https://img.youtube.com/vi/LG5_UlikCAI/maxresdefault.jpg'),url('https://img.youtube.com/vi/LG5_UlikCAI/hqdefault.jpg');">
+                    <div class="vc-thumb" data-video-id="X3rBFpFaoiE" style="background-image:url('https://img.youtube.com/vi/X3rBFpFaoiE/maxresdefault.jpg'),url('https://img.youtube.com/vi/X3rBFpFaoiE/hqdefault.jpg');">
                         <i class="fa-brands fa-youtube vc-thumb-play"></i>
                     </div>
                 </div>
                 <div class="lc-content">
-                    <div class="lc-header"><span class="vc-tag">実務深掘り</span><h3 class="lc-title">法人税・住民税・事業税の役割と計算の仕組み</h3></div>
-                    <div class="lc-body"><ul class="lc-list"><li>法人税：国税。所得に課税（中小15%・超過23.2%など）</li><li>法人住民税：地方税。法人税割＋均等割。均等割は赤字でも発生</li><li>法人事業税：都道府県税。<strong>損金算入できる</strong>（他2税と異なる）</li><li>※正しい計算：所得金額×法人事業税率（スライド誤記に注意）</li></ul></div>
+                    <div class="lc-header"><span class="vc-tag">英米式3ステップ</span><h3 class="lc-title">帳簿の締め切りと決算振替仕訳</h3></div>
+                    <div class="lc-body"><ul class="lc-list"><li>Step1: 収益・費用 → 損益勘定へ振替（各勘定をゼロに）</li><li>Step2: 損益勘定残高 → 繰越利益剰余金へ振替</li><li>Step3: 合計線 → 縦合計 → 締め切り線（二重線）</li></ul></div>
                 </div>
             </div>
-            <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:24px;margin-bottom:24px;overflow-x:auto;">
-                <h4 style="margin:0 0 16px;color:var(--accent-green);"><i class="fa-solid fa-landmark"></i> 法人税3種 比較</h4>
-                <table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
-                    <thead><tr style="background:#ecfdf5;">
-                        <th style="padding:8px;border:1px solid #d1fae5;">税</th><th style="padding:8px;border:1px solid #d1fae5;">納付先</th>
-                        <th style="padding:8px;border:1px solid #d1fae5;">課税ベース</th><th style="padding:8px;border:1px solid #d1fae5;">赤字時</th>
-                        <th style="padding:8px;border:1px solid #d1fae5;">損金算入</th>
-                    </tr></thead>
+            <h2>英米式決算法 3ステップ概要</h2>
+            <div class="scroll-x">
+                <table class="step-table">
+                    <thead><tr><th>ステップ</th><th>操作</th><th>対象</th></tr></thead>
                     <tbody>
-                        <tr><td style="padding:8px;border:1px solid #e2e8f0;"><strong>法人税</strong></td><td>国</td><td>所得金額</td><td>免除</td><td>不可</td></tr>
-                        <tr><td style="padding:8px;border:1px solid #e2e8f0;"><strong>法人住民税</strong></td><td>地方</td><td>法人税割＋均等割</td><td>均等割のみ</td><td>不可</td></tr>
-                        <tr><td style="padding:8px;border:1px solid #e2e8f0;"><strong>法人事業税</strong></td><td>都道府県</td><td>所得金額</td><td>免除</td><td><strong>可</strong></td></tr>
+                        <tr><td><strong>Step 1</strong></td><td>収益・費用 → 損益勘定へ振替</td><td>損益計算書項目</td></tr>
+                        <tr><td><strong>Step 2</strong></td><td>損益勘定残高 → 繰越利益剰余金へ振替</td><td>損益勘定</td></tr>
+                        <tr><td><strong>Step 3</strong></td><td>各勘定を締め切り（線を引く）</td><td>全勘定</td></tr>
                     </tbody>
                 </table>
             </div>
-            <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:12px;padding:20px;margin-bottom:24px;">
-                <h4 style="margin:0 0 10px;color:#b45309;">均等割 = 赤字でも払う最低税額</h4>
-                <p style="margin:0;font-size:0.9rem;line-height:1.7;">資本金と従業員数で固定額が決まる。利益ゼロ・赤字でも必ず発生。創業間もない法人・赤字事業者も要注意。</p>
+            <h3>Step 1 — 収益の振替（売上2,000・受取利息100）</h3>
+            <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px;margin-bottom:14px;">
+                <pre style="margin:0;font-size:0.88rem;line-height:1.7;white-space:pre-wrap;font-family:inherit;color:#334155;">(借) 売上      2,000   /   (貸) 損益  2,100
+     受取利息    100</pre>
+                <p style="margin:10px 0 0;font-size:0.88rem;color:#64748b;">売上のホームは貸方 → ゼロにするには<strong>借方</strong>に仕訳</p>
             </div>
-            <div style="background:#fffbeb;border-left:6px solid var(--accent-gold);padding:20px;border-radius:12px;margin-bottom:24px;">
-                <h4 style="margin:0 0 10px;color:#b45309;"><i class="fa-solid fa-lightbulb"></i> AI Director's Eye：法人化のタイミング</h4>
-                <p style="margin:0;font-size:0.9rem;line-height:1.7;">個人は所得税（累進最高45%）。法人は実効税率25〜30%程度。利益600〜800万円超で法人化を検討するケースが多い理由がここにある。</p>
+            <h3>Step 1 — 費用の振替（仕入1,000・保険料600）</h3>
+            <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px;margin-bottom:14px;">
+                <pre style="margin:0;font-size:0.88rem;line-height:1.7;white-space:pre-wrap;font-family:inherit;color:#334155;">(借) 損益  1,600   /   (貸) 仕入    1,000
+                            保険料    600</pre>
+                <p style="margin:10px 0 0;font-size:0.88rem;color:#64748b;">費用のホームは借方 → ゼロにするには<strong>貸方</strong>に仕訳</p>
             </div>
+            <h3>Step 2 — 当期純利益500円（収益2,100−費用1,600）</h3>
+            <div style="background:#ecfdf5;border:1px solid #a7f3d0;border-radius:12px;padding:18px 20px;margin-bottom:14px;">
+                <pre style="margin:0;font-size:0.88rem;line-height:1.7;white-space:pre-wrap;font-family:inherit;color:#334155;">(借) 損益  500   /   (貸) 繰越利益剰余金  500</pre>
+                <p style="margin:10px 0 0;font-size:0.88rem;color:#64748b;">純損失の場合は (借)繰越利益剰余金 / (貸)損益</p>
+            </div>
+            <h3>Step 3 — T字勘定の締め切り</h3>
+            <ul class="step-list" style="margin-bottom:20px;">
+                <li><strong>収益・費用</strong>：合計線（1本）→ 縦合計 → 締め切り線（二重線）。余白は余白線（斜め）</li>
+                <li><strong>資産・負債・純資産</strong>：貸借差額を「次期繰越」→ 合計線 → 締め切り線</li>
+                <li>翌期の反対側に「前期繰越」を書く手続きを<strong>開始記入</strong>と呼ぶ</li>
+            </ul>
             <div style="text-align:center;margin-top:30px;">
-                <button class="tool-link-btn" onclick="openTab('second')" style="background:var(--accent-green);">消費税の発展へ <i class="fa-solid fa-arrow-right"></i></button>
+                <button class="tool-link-btn" onclick="openTab('second')" style="background:var(--accent-green);">3ステップ演習へ <i class="fa-solid fa-arrow-right"></i></button>
             </div>
         </div>
 
-                <div id="second" class="tab-content">
+        <div id="second" class="tab-content">
             <div class="bloom-story" style="margin-bottom:24px;">
-                <span class="bloom-story-label">📍 Bloom 9日目・後半②</span>
-                <p>「食品8%・外食10%ってレシートで毎回確認？」——試験では税率判断が頻出。ここでパターンを固める。</p>
+                <span class="bloom-story-label">📍 Bloom 10日目・午後</span>
+                <p>「売上の振替、借方に書くんですね！」演習問題に挑むHarukaさん。先輩が横でT字の書き方をチェックする。</p>
             </div>
             <div class="learning-card">
                 <div class="lc-video">
-                    <div class="vc-thumb" data-video-id="ssh4POSgru4" style="background-image:url('https://img.youtube.com/vi/ssh4POSgru4/maxresdefault.jpg'),url('https://img.youtube.com/vi/ssh4POSgru4/hqdefault.jpg');">
+                    <div class="vc-thumb" data-video-id="sOv9DnkQ0TU" style="background-image:url('https://img.youtube.com/vi/sOv9DnkQ0TU/maxresdefault.jpg'),url('https://img.youtube.com/vi/sOv9DnkQ0TU/hqdefault.jpg');">
                         <i class="fa-brands fa-youtube vc-thumb-play"></i>
                     </div>
                 </div>
                 <div class="lc-content">
-                    <div class="lc-header"><span class="vc-tag">消費税の発展</span><h3 class="lc-title">税率の種類と税抜・税込方式の違い</h3></div>
-                    <div class="lc-body"><ul class="lc-list"><li>軽減8%：飲食料品（外食・酒除く）＋週2回以上の定期購読新聞</li><li>標準10%：その他・外食・消耗品</li><li>非課税：土地・有価証券・商品券・収入印紙・郵便切手</li><li>仮払/仮受は<strong>取引発生時</strong>に計上（支払時ではない）</li></ul></div>
+                    <div class="lc-header"><span class="vc-tag">演習</span><h3 class="lc-title">決算振替仕訳とT字勘定の書き方</h3></div>
+                    <div class="lc-body"><ul class="lc-list"><li>仕訳で借方に書いたもの → T字の左、貸方 → T字の右</li><li>相手科目が複数なら「諸口」と記入</li><li>ホームポジションで残高の向きを確認する</li></ul></div>
                 </div>
             </div>
-            <div class="learning-card">
-                <div class="lc-video">
-                    <div class="vc-thumb" data-video-id="QEQnzYa3N54" style="background-image:url('https://img.youtube.com/vi/QEQnzYa3N54/maxresdefault.jpg'),url('https://img.youtube.com/vi/QEQnzYa3N54/hqdefault.jpg');">
-                        <i class="fa-brands fa-youtube vc-thumb-play"></i>
-                    </div>
-                </div>
-                <div class="lc-content">
-                    <div class="lc-header"><span class="vc-tag">試験対策</span><h3 class="lc-title">第3問頻出：決算整理仕訳の3ステップ解法</h3></div>
-                    <div class="lc-body"><ul class="lc-list"><li>前TBから仮払・仮受消費税を読み取る</li><li>相殺して未払消費税を計上</li><li>法人税等：確定額→仮払取り崩し→未払法人税等へ</li></ul></div>
-                </div>
+            <h2>例題1：売上勘定の振替</h2>
+            <p style="font-size:0.95rem;">問題：売上勘定の貸方残高1万円を損益勘定に振り替えた。正しい仕訳は？</p>
+            <div style="background:#ecfdf5;border:1px solid #a7f3d0;border-radius:12px;padding:18px 20px;margin:16px 0;">
+                <pre style="margin:0;font-size:0.88rem;line-height:1.7;white-space:pre-wrap;font-family:inherit;">(借) 売上  10,000   /   (貸) 損益  10,000</pre>
+                <p style="margin:10px 0 0;font-size:0.88rem;color:#64748b;">収益はホームが貸方。残高ゼロのため借方に仕訳し、損益勘定（集合勘定）の貸方に受け取る。</p>
             </div>
-            <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:24px;margin-bottom:20px;overflow-x:auto;">
-                <h4 style="margin:0 0 16px;color:var(--accent-green);"><i class="fa-solid fa-percent"></i> 消費税率・非課税 判定</h4>
-                <table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
-                    <tr style="background:#ecfdf5;"><th style="padding:8px;border:1px solid #d1fae5;">分類</th><th style="padding:8px;border:1px solid #d1fae5;">例</th><th style="padding:8px;border:1px solid #d1fae5;">税率</th></tr>
-                    <tr><td style="padding:8px;border:1px solid #e2e8f0;">標準</td><td>消耗品・外食・サービス</td><td><strong>10%</strong></td></tr>
-                    <tr><td style="padding:8px;border:1px solid #e2e8f0;">軽減</td><td>食品持ち帰り・定期購読新聞</td><td><strong>8%</strong></td></tr>
-                    <tr><td style="padding:8px;border:1px solid #e2e8f0;">非課税</td><td>土地・有価証券・商品券・印紙</td><td><strong>0%</strong></td></tr>
-                </table>
-                <p style="margin:14px 0 0;font-size:0.88rem;color:#065f46;"><strong>ポイント</strong>：外食10%、持ち帰り8%。試験で「食品の仕入れ」→まず8%でOK。</p>
-            </div>
-            <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:20px;margin-bottom:20px;">
-                <h4 style="margin:0 0 10px;color:#1d4ed8;">消費税の計上タイミング = 取引発生時</h4>
-                <pre style="margin:0 0 10px;font-size:0.88rem;white-space:pre-wrap;">(借) 備品 100,000 / 仮払消費税 10,000 / (貸) 未払金 110,000</pre>
-                <p style="margin:0;font-size:0.88rem;">翌月現金支払でも、仮払消費税は<strong>購入した時</strong>に計上する。</p>
-            </div>
-            <div style="background:#f0fdf4;border:1px solid #d1fae5;border-radius:12px;padding:20px;margin-bottom:20px;">
-                <h4 style="margin:0 0 12px;color:#047857;"><i class="fa-solid fa-pen-to-square"></i> 第3問：決算整理3ステップ</h4>
-                <ol style="margin:0;padding-left:1.3rem;font-size:0.9rem;line-height:1.8;">
-                    <li>前TBで仮払・仮受消費税を確認</li>
-                    <li>「仮」科目を0にし、差額を未払消費税へ</li>
-                    <li>法人税等：確定額借方→仮払消去→未払法人税等</li>
-                </ol>
-                <p style="margin:12px 0 0;font-size:0.88rem;">例：仮払470,000・仮受930,000 → 未払460,000</p>
+            <h2>例題2：純利益の繰越利益剰余金への振替</h2>
+            <p style="font-size:0.95rem;">損益勘定：貸方合計（収益）1,500円、借方合計（費用）800円 → 純利益700円</p>
+            <div style="background:#ecfdf5;border:1px solid #a7f3d0;border-radius:12px;padding:18px 20px;margin:16px 0;">
+                <pre style="margin:0;font-size:0.88rem;line-height:1.7;white-space:pre-wrap;font-family:inherit;">(借) 損益  700   /   (貸) 繰越利益剰余金  700</pre>
+                <p style="margin:10px 0 0;font-size:0.88rem;color:#64748b;">繰越利益剰余金（純資産）はホームが貸方。増加は貸方に計上。</p>
             </div>
             <div class="talk-scene" style="margin:24px 0;">
-                <div class="talk-bubble owner"><div class="talk-icon">🧑</div><div class="talk-text">商品券を買うとき消費税がかからないって知らなかったです。</div></div>
-                <div class="talk-bubble teacher"><div class="talk-icon">👩‍🏫</div><div class="talk-text">まだ消費していないから非課税。使うときに課税。収入印紙は購入時非課税、使用時に租税公課として費用計上。</div></div>
+                <div class="talk-bubble owner"><div class="talk-icon">🧑</div><div class="talk-text">T字に写すとき、左右逆にしちゃうんですけど…</div></div>
+                <div class="talk-bubble teacher"><div class="talk-icon">👩‍🏫</div><div class="talk-text">「仕訳でどちら側か」をそのまま写すだけ。借方仕訳＝左、貸方仕訳＝右。慣れれば一瞬です。</div></div>
             </div>
             <div style="text-align:center;margin-top:30px;">
                 <button class="tool-link-btn" onclick="openTab('summary')" style="background:var(--accent-green);">まとめへ <i class="fa-solid fa-arrow-right"></i></button>
             </div>
         </div>
 
-                <div id="summary" class="tab-content">
+        <div id="summary" class="tab-content">
             <div class="bloom-story" style="margin-bottom:24px;">
-                <span class="bloom-story-label">📍 Bloom 9日目・夜</span>
-                <p>法人税3種と消費税のパターンを習得。「Day9が終わった…試験まであと少し」——<strong>Day 9修了</strong>を称える。</p>
+                <span class="bloom-story-label">📍 Bloom 10日目・夕方</span>
+                <p>帳簿の締め切り3ステップを習得したHarukaさん。「明日の後半で、貸借対照表を"読める"ようになるんだ…」</p>
             </div>
-            <h2>DAY 9後半 まとめ</h2>
+            <h2>DAY 10前半 まとめ</h2>
             <div class="summary-grid">
-                <div class="summary-card"><div class="summary-icon"><i class="fa-solid fa-money-bill-wave"></i></div><h3>給料・所得税・社保</h3><p>天引き→納付で消去。立替金は天引きで回収。</p></div>
-                <div class="summary-card"><div class="summary-icon"><i class="fa-solid fa-receipt"></i></div><h3>消費税の完全整理</h3><p>8%・10%・非課税。仮科目は決算でゼロ。</p></div>
-                <div class="summary-card"><div class="summary-icon"><i class="fa-solid fa-building-columns"></i></div><h3>法人税等3種</h3><p>均等割は赤字でも発生。事業税は損金算入可。</p></div>
-                <div class="summary-card"><div class="summary-icon"><i class="fa-solid fa-pen-to-square"></i></div><h3>試験第3問</h3><p>前TB確認→相殺→未払へ。「仮は決算でゼロ」。</p></div>
+                <div class="summary-card"><div class="summary-icon"><i class="fa-solid fa-arrows-rotate"></i></div><h3>収益・費用 vs 繰越</h3><p>収益・費用は当期だけ→残高ゼロ。資産・負債・純資産は翌期へ繰越。</p></div>
+                <div class="summary-card"><div class="summary-icon"><i class="fa-solid fa-1"></i></div><h3>Step1 決算振替</h3><p>収益・費用 → 損益勘定へ振替（決算振替仕訳）。</p></div>
+                <div class="summary-card"><div class="summary-icon"><i class="fa-solid fa-2"></i></div><h3>Step2 純損益</h3><p>損益勘定残高 → 繰越利益剰余金へ振替。</p></div>
+                <div class="summary-card"><div class="summary-icon"><i class="fa-solid fa-grip-lines"></i></div><h3>Step3 締め切り線</h3><p>合計線→縦合計→締め切り線（二重線）。開始記入で翌期スタート。</p></div>
             </div>
             <h2>重要用語チェック</h2>
             <div class="term-grid">
-                <div class="term-card"><strong>軽減税率</strong><span>8%。食品（外食・酒除く）と定期購読新聞。</span></div>
-                <div class="term-card"><strong>非課税取引</strong><span>土地・有価証券・商品券・印紙など。</span></div>
-                <div class="term-card"><strong>法人税割</strong><span>法人住民税の一部。法人税額×税率。</span></div>
-                <div class="term-card"><strong>均等割</strong><span>固定額。赤字でも支払義務。</span></div>
-                <div class="term-card"><strong>損金算入</strong><span>法人事業税のみ損金算入可。</span></div>
-                <div class="term-card"><strong>税抜方式</strong><span>本体と消費税を分けて計上。</span></div>
-                <div class="term-card"><strong>税込方式</strong><span>込みで計上（減少傾向）。</span></div>
-                <div class="term-card"><strong>前TB</strong><span>決算整理前残高試算表。第3問で必須。</span></div>
+                <div class="term-card"><strong>損益勘定</strong><span>収益・費用を集める集合勘定。決算時のみ使用。</span></div>
+                <div class="term-card"><strong>決算振替仕訳</strong><span>Step1の収益・費用→損益勘定への振替。</span></div>
+                <div class="term-card"><strong>繰越利益剰余金</strong><span>純利益を受け取る純資産勘定。</span></div>
+                <div class="term-card"><strong>合計線</strong><span>借方・貸方合計の下に引く1本線。</span></div>
+                <div class="term-card"><strong>締め切り線</strong><span>縦合計の下に引く二重線。</span></div>
+                <div class="term-card"><strong>開始記入</strong><span>次期繰越の反対側に前期繰越を記入。</span></div>
             </div>
             <div class="check-panel">
                 <h3><i class="fa-solid fa-clipboard-check"></i> セルフチェック</h3>
                 <ol class="check-list">
-                    <li>均等割と法人税割の違い、赤字時どちらが発生するか説明できますか？</li>
-                    <li>食品持ち帰りと文具の税率は？（答え：8%と10%）</li>
-                    <li>未払購入時、仮払消費税は購入時と支払時どちら？（答え：購入時）</li>
+                    <li>収益勘定の残高をゼロにする仕訳の向きを説明できますか？</li>
+                    <li>損益勘定：収益6,300・費用4,800のとき当期純利益は？（答え：1,500円）</li>
+                    <li>資産勘定締め切り後、翌期に行う手続きの名称は？（答え：開始記入）</li>
                 </ol>
             </div>
             <div class="quiz-panel" id="quizPanel">
@@ -607,32 +593,19 @@
                     <button onclick="resetQuiz()" class="tool-link-btn" style="margin-top:16px;background:var(--accent-green);"><i class="fa-solid fa-rotate-right"></i> もう一度</button>
                 </div>
             </div>
-            <div style="text-align:center;margin:40px 0 20px;">
-                <button class="tool-link-btn" onclick="showStamp()" style="background:linear-gradient(135deg,#dc2626,#b91c1c);padding:1.2rem 3rem;font-size:1.15rem;border:none;cursor:pointer;">
-                    <i class="fa-solid fa-stamp"></i> Day 9 コンプリートチェック！
-                </button>
-            </div>
-            <div class="stamp-overlay" id="stampOverlay" onclick="hideStamp()">
-                <div class="stamp-modal" onclick="event.stopPropagation()">
-                    <div class="sakura-confetti" id="sakuraConfetti"></div>
-                    <div class="stamp-mark">
-                        <div class="stamp-kanji">合格</div>
-                        <div class="stamp-sub">DAY 9 COMPLETE</div>
-                    </div>
-                    <h3 style="color:#1e293b;margin:16px 0 8px;font-size:1.4rem;">Day 9 修了おめでとう！</h3>
-                    <p style="color:#64748b;font-size:0.95rem;line-height:1.7;margin-bottom:20px;">税金の全論点を完全習得したあなたは<br>もう<strong>簿記3級の試験範囲</strong>をほぼ制覇しました。</p>
-                    <button class="tool-link-btn" onclick="hideStamp()" style="background:var(--accent-green);"><i class="fa-solid fa-xmark"></i> 閉じる</button>
-                </div>
+            <div style="background:#f0fdf4;padding:25px 30px;border-radius:12px;margin:35px 0 20px;border-left:6px solid #059669;">
+                <h4 style="color:#047857;margin:0 0 10px;"><i class="fa-solid fa-forward"></i> 次のステップ：Day 10後半へ</h4>
+                <p style="margin:0;font-size:0.95rem;line-height:1.6;">貸借対照表の本質と財務分析5大アプローチを後半で学び、コース最終日を完走します。</p>
             </div>
         </div>
 
         <div style="text-align:center; padding: 3rem 0 2rem; display: flex; flex-direction: column; gap: 1rem; align-items: center;">
-    <button type="button" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:linear-gradient(135deg, #34d399, #059669); border:none; box-shadow: 0 10px 30px rgba(5,150,105, 0.25); cursor:pointer;" onclick="(async function(){try{const r=await fetch('./vol10-1.html',{method:'HEAD',cache:'no-store'});if(r.ok){window.location.href='./vol10-1.html';return;}}catch(e){}alert('Day 10前半は準備中です。もうしばらくお待ちください。');})()">
-        Day 10前半へ進む <i class="fa-solid fa-arrow-right"></i>
+    <button type="button" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:linear-gradient(135deg, #34d399, #059669); border:none; box-shadow: 0 10px 30px rgba(5,150,105, 0.25); cursor:pointer;" onclick="(async function(){try{const r=await fetch('./vol10-2.html',{method:'HEAD',cache:'no-store'});if(r.ok){window.location.href='./vol10-2.html';return;}}catch(e){}alert('Day 10後半は準備中です。もうしばらくお待ちください。');})()">
+        Day 10後半へ進む <i class="fa-solid fa-arrow-right"></i>
     </button>
-    <button type="button" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:#fff; color:#059669; border:2px solid var(--accent-green); box-shadow:none; cursor:pointer;" onclick="window.location.href='./vol09-1.html'">
-        <i class="fa-solid fa-arrow-left"></i> Day 9前半へ戻る
-    </button>
+    <a href="./vol09-2.html" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:#fff; color:#059669; border:2px solid var(--accent-green); box-shadow:none; text-decoration:none;">
+        <i class="fa-solid fa-arrow-left"></i> Day 9後半へ戻る
+    </a>
     <button type="button" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:#fff; color:#4a4a4a; border:2px solid #e2e8f0; box-shadow:none; cursor:pointer;" onclick="window.location.href='./index.html'">
         <i class="fa-solid fa-house"></i> 学習記録をつけて Home へ戻る
     </button>
@@ -649,20 +622,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        document.querySelectorAll('.copy-btn').forEach(button => {
-            button.addEventListener('click', () => {
-                const text = button.parentElement.querySelector('.prompt-text').innerText;
-                navigator.clipboard.writeText(text).then(() => {
-                    button.classList.add('copied');
-                    button.innerHTML = '<i class="fa-solid fa-check"></i> コピーしました';
-                    setTimeout(() => {
-                        button.classList.remove('copied');
-                        button.innerHTML = '<i class="fa-regular fa-copy"></i> コピー';
-                    }, 2000);
-                });
-            });
-        });
-
         document.querySelectorAll('.vc-thumb[data-video-id]').forEach(thumb => {
             thumb.addEventListener('click', function() {
                 const videoId = this.dataset.videoId;
@@ -673,47 +632,13 @@
             }, { once: true });
         });
 
-        document.querySelectorAll('a[data-check-page="true"]').forEach(link => {
-            link.addEventListener('click', async event => {
-                event.preventDefault();
-                const target = link.getAttribute('href');
-                try {
-                    const response = await fetch(target, { method: 'HEAD', cache: 'no-store' });
-                    if (response.ok) {
-                        window.location.href = target;
-                        return;
-                    }
-                } catch (error) {
-                    // Local file previews may reject HEAD requests; keep users away from a broken link.
-                }
-                alert('Day 8後半ページはまだ準備中です。公開後にこのリンクから進めます。');
-            });
-        });
-
         const quizData = [
-    { q: "消費税の軽減税率8%が適用されるのは？", opts: ["コンビニ店内飲食コーヒー", "スーパー食料品（持ち帰り）", "レストランランチ", "お酒の購入"], ans: 1, fb: "8%は飲食料品（外食・酒除く）と定期購読新聞のみ。" },
-    { q: "消費税が非課税となる取引は？", opts: ["文具購入", "土地の売却", "商品仕入れ", "広告費"], ans: 1, fb: "土地の売買は原則非課税。" },
-    { q: "法人住民税の「均等割」について正しいのは？", opts: ["利益に税率をかける", "赤字でも支払い義務がある", "法人税額に税率をかける", "大企業のみ"], ans: 1, fb: "均等割は固定額。赤字でも発生。" },
-    { q: "損金算入できる法人税等は？", opts: ["法人税のみ", "法人事業税のみ", "法人住民税のみ", "3つすべて"], ans: 1, fb: "法人事業税のみ損金算入可。" },
-    { q: "未払購入110,000円（税抜100,000+消費税10,000）。仮払消費税を計上するのは？", opts: ["翌月支払時", "購入（取引発生）時", "決算時", "未払消去時"], ans: 1, fb: "取引発生時に仮払消費税を計上。" }
+    { q: "決算整理後、売上勘定の残高6,000円を損益勘定に振り替える仕訳として正しいのはどれか？", opts: ["(借)損益6,000/(貸)売上6,000", "(借)売上6,000/(貸)損益6,000", "(借)売上6,000/(貸)繰越利益剰余金6,000", "(借)損益6,000/(貸)繰越利益剰余金6,000"], ans: 1, fb: "収益（売上）のホームは貸方。残高ゼロのため借方に仕訳し、損益勘定の貸方に受け取ります。" },
+    { q: "損益勘定に収益6,300円・費用4,800円が集まった。この期の当期純利益はいくらか？", opts: ["6,300円", "4,800円", "1,500円", "11,100円"], ans: 2, fb: "6,300−4,800=1,500円が当期純利益。その後繰越利益剰余金へ振替します。" },
+    { q: "資産の勘定を締め切った後、翌期の先頭に行う手続きの名称として正しいのはどれか？", opts: ["締め切り記入", "開始記入", "前期繰越記入", "次期記入"], ans: 1, fb: "次期繰越の反対側に前期繰越を記入する作業を開始記入（かいしきにゅう）と呼びます。" },
+    { q: "T字勘定を締め切る際、最後に引く線はどれか？", opts: ["合計線（1本線）", "締め切り線（二重線）", "余白線（斜め線）", "繰越線"], ans: 1, fb: "合計線→縦合計→締め切り線（二重線）の順。最後は締め切り線です。" },
+    { q: "仕入3,000・保険料1,200・支払利息600を損益勘定に振り替えた。借方科目と金額として正しいのは？", opts: ["仕入3,000/保険料1,200/支払利息600", "損益4,800", "繰越利益剰余金4,800", "損益3,000"], ans: 1, fb: "費用振替は借方損益4,800、貸方に各費用科目。費用のホームは借方なので振替は貸方に仕訳します。" }
 ];
-
-
-        function showStamp() {
-            const overlay = document.getElementById('stampOverlay');
-            overlay.classList.add('show');
-            const container = document.getElementById('sakuraConfetti');
-            container.innerHTML = '';
-            for (let i = 0; i < 24; i++) {
-                const p = document.createElement('span');
-                p.textContent = '🌸';
-                p.style.cssText = `position:absolute;left:${Math.random()*100}%;top:-30px;font-size:${0.8+Math.random()*1.2}rem;animation:sakuraFall ${2+Math.random()*3}s ${Math.random()*1.5}s ease-in forwards;`;
-                container.appendChild(p);
-            }
-        }
-        function hideStamp() {
-            document.getElementById('stampOverlay').classList.remove('show');
-        }
 
         let selectedAnswers = [];
 
@@ -766,8 +691,8 @@
             result.className = isPassed ? 'pass' : 'fail';
             document.getElementById('quiz-score').textContent = `${score} / ${quizData.length} 正解`;
             document.getElementById('quiz-msg').textContent = isPassed
-                ? '素晴らしい！法人税3種の深掘りと消費税発展演習、しっかり理解できています。Day9後半へ進みましょう。'
-                : 'もう一度ページを読み直してから再挑戦しましょう。NotebookLMに解説を頼むのもOKです。';
+                ? '素晴らしい！帳簿の締め切り3ステップ、しっかり理解できています。Day10後半へ進みましょう。'
+                : 'もう一度ページを読み直してから再挑戦しましょう。';
             result.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
@@ -780,4 +705,4 @@
     </script>
 </body>
 </html>
-<!-- cache-bust: 2026-05-22T15:00:00 -->
+<!-- cache-bust: 2026-05-23T09:00:00 -->
