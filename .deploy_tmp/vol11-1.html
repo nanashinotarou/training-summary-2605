@@ -164,6 +164,24 @@
             .header h1 { font-size: 1.55rem; }
             .q-point { margin-left: 0; width: 100%; }
         }
+        .entry-select {
+            font-size: 0.82rem; border: 1px solid #d1d5db; border-radius: 4px;
+            padding: 3px 6px; max-width: 160px; background: #fff; cursor: pointer;
+        }
+        .entry-select.correct { background: #d1fae5; border-color: #059669; }
+        .entry-select.wrong { background: #fee2e2; border-color: #dc2626; }
+        .entry-amount {
+            width: 88px; text-align: right; border: 1px solid #d1d5db;
+            border-radius: 4px; padding: 3px 6px; font-size: 0.82rem;
+        }
+        .entry-amount.correct { background: #d1fae5; border-color: #059669; }
+        .entry-amount.wrong { background: #fee2e2; border-color: #dc2626; }
+        .entry-dash { color: #94a3b8; text-align: center; }
+        .score-btn-row { margin: 12px 0; display: flex; gap: 8px; flex-wrap: wrap; }
+        .section-banner {
+            padding: 12px 16px; border-radius: 8px; font-weight: 700;
+            font-size: 0.95rem; margin: 8px 0; display: none;
+        }
     </style>
 </head>
 <body>
@@ -990,6 +1008,163 @@
             if (btn) btn.style.display = 'none';
         }
 
+        function entryCorrect(el) {
+            el.classList.remove('wrong');
+            el.classList.add('correct');
+        }
+        function entryWrong(el) {
+            el.classList.remove('correct');
+            el.classList.add('wrong');
+        }
+        function entryReset(el) {
+            if (!el) return;
+            if (el.tagName === 'SELECT') el.value = '';
+            else el.value = '';
+            el.classList.remove('correct', 'wrong');
+            el.title = '';
+        }
+        function showBanner(bannerId, correct, total) {
+            const el = document.getElementById(bannerId);
+            if (!el) return false;
+            el.style.display = 'block';
+            const pct = total ? Math.round(correct / total * 100) : 0;
+            if (pct === 100) {
+                el.style.background = '#d1fae5';
+                el.style.color = '#065f46';
+                el.textContent = '🎉 全問正解！';
+                return true;
+            }
+            el.style.background = '#fee2e2';
+            el.style.color = '#991b1b';
+            el.textContent = correct + '/' + total + '正解（' + pct + '%）— 赤いセルを見直してみよう';
+            return false;
+        }
+        function hideBanner(bannerId) {
+            const el = document.getElementById(bannerId);
+            if (el) el.style.display = 'none';
+        }
+
+        function extractLetter(text) {
+            if (!text || text.trim() === '—') return null;
+            const m = text.match(/（(.+?)）/);
+            return m ? m[1] : null;
+        }
+        function extractAmount(text) {
+            if (!text || text.trim() === '—') return null;
+            return parseInt(text.replace(/[,，]/g, ''), 10);
+        }
+
+        function ensureEntryControls(n) {
+            const card = document.getElementById('q' + n);
+            if (!card) return;
+            if (card.querySelector('#entry-banner-' + n)) return;
+            const blankTable = card.querySelector('.answer-blank');
+            if (!blankTable) return;
+            const scrollWrap = blankTable.closest('.scroll-x') || blankTable.parentElement;
+            const controls = document.createElement('div');
+            controls.innerHTML = `
+                <div class="score-btn-row">
+                    <button type="button" class="reveal-btn" onclick="scoreEntry(${n})">
+                        <i class="fa-solid fa-check-to-slot"></i> 採点する
+                    </button>
+                    <button type="button" class="self-ng" onclick="resetEntry(${n})">
+                        <i class="fa-solid fa-rotate-right"></i> リセット
+                    </button>
+                </div>
+                <div id="entry-banner-${n}" class="section-banner"></div>
+            `;
+            scrollWrap.insertAdjacentElement('afterend', controls);
+        }
+
+        function buildEntryTable(n) {
+            const card = document.getElementById('q' + n);
+            const ansPanel = document.getElementById('ans' + n);
+            if (!card || !ansPanel) return;
+            const ansRows = Array.from(ansPanel.querySelectorAll('.answer-correct tbody tr'));
+            const choices = Array.from(card.querySelectorAll('.choice-item')).map(el => el.textContent.trim());
+
+            const blankTbody = card.querySelector('.answer-blank tbody');
+            if (!blankTbody) return;
+            const blankRows = Array.from(blankTbody.querySelectorAll('tr'));
+
+            const makeSelect = (id) => {
+                const opts = choices.map(c => `<option value="${c[0]}">${c}</option>`).join('');
+                return `<select class="entry-select" id="${id}"><option value="">（選択）</option>${opts}</select>`;
+            };
+            const makeAmt = (id) => `<input type="number" class="entry-amount" id="${id}" min="0">`;
+
+            blankRows.forEach((row, ri) => {
+                const ansRow = ansRows[ri];
+                if (!ansRow) return;
+                const ansCells = ansRow.querySelectorAll('td');
+                const cells = row.querySelectorAll('td');
+
+                const dText = ansCells[0]?.textContent.trim() || '';
+                if (dText && dText !== '—') {
+                    cells[0].innerHTML = makeSelect(`d-acc-${n}-${ri}`);
+                    cells[1].innerHTML = makeAmt(`d-amt-${n}-${ri}`);
+                } else {
+                    cells[0].className = 'entry-dash'; cells[0].textContent = '—';
+                    cells[1].className = 'entry-dash'; cells[1].textContent = '—';
+                }
+
+                const cText = ansCells[2]?.textContent.trim() || '';
+                if (cText && cText !== '—') {
+                    cells[2].innerHTML = makeSelect(`c-acc-${n}-${ri}`);
+                    cells[3].innerHTML = makeAmt(`c-amt-${n}-${ri}`);
+                } else {
+                    cells[2].className = 'entry-dash'; cells[2].textContent = '—';
+                    cells[3].className = 'entry-dash'; cells[3].textContent = '—';
+                }
+            });
+        }
+
+        function scoreEntry(n) {
+            const ansPanel = document.getElementById('ans' + n);
+            if (!ansPanel) return;
+            const ansRows = Array.from(ansPanel.querySelectorAll('.answer-correct tbody tr'));
+            let correct = 0, total = 0;
+
+            ansRows.forEach((ansRow, ri) => {
+                const ansCells = ansRow.querySelectorAll('td');
+
+                const dLetter = extractLetter(ansCells[0]?.textContent);
+                if (dLetter) {
+                    const dAcc = document.getElementById(`d-acc-${n}-${ri}`);
+                    const dAmt = document.getElementById(`d-amt-${n}-${ri}`);
+                    const dAmtCorrect = extractAmount(ansCells[1]?.textContent);
+                    total += 2;
+                    if (dAcc && dAcc.value === dLetter) { entryCorrect(dAcc); correct++; } else if (dAcc) entryWrong(dAcc);
+                    if (dAmt && parseInt(dAmt.value, 10) === dAmtCorrect) { entryCorrect(dAmt); correct++; } else if (dAmt) entryWrong(dAmt);
+                }
+
+                const cLetter = extractLetter(ansCells[2]?.textContent);
+                if (cLetter) {
+                    const cAcc = document.getElementById(`c-acc-${n}-${ri}`);
+                    const cAmt = document.getElementById(`c-amt-${n}-${ri}`);
+                    const cAmtCorrect = extractAmount(ansCells[3]?.textContent);
+                    total += 2;
+                    if (cAcc && cAcc.value === cLetter) { entryCorrect(cAcc); correct++; } else if (cAcc) entryWrong(cAcc);
+                    if (cAmt && parseInt(cAmt.value, 10) === cAmtCorrect) { entryCorrect(cAmt); correct++; } else if (cAmt) entryWrong(cAmt);
+                }
+            });
+
+            if (showBanner('entry-banner-' + n, correct, total)) markOk(n);
+        }
+
+        function resetEntry(n) {
+            const card = document.getElementById('q' + n);
+            if (!card) return;
+            card.querySelectorAll('.entry-select, .entry-amount').forEach(entryReset);
+            hideBanner('entry-banner-' + n);
+            markNg(n);
+        }
+
+        for (let i = 1; i <= 15; i++) {
+            buildEntryTable(i);
+            ensureEntryControls(i);
+        }
+
         function markOk(n) {
             drillOk.add(n);
             const wrap = document.querySelector(`#q${n} .self-check-btns`);
@@ -1040,4 +1215,4 @@
     </script>
 </body>
 </html>
-<!-- cache-bust: 2026-05-26T20:00:00 -->
+<!-- cache-bust: 2026-05-27T12:00:00 -->
