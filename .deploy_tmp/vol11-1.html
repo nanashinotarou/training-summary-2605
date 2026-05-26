@@ -1004,8 +1004,9 @@
             if (!panel) return;
             panel.style.display = 'block';
             panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            const btn = document.querySelector(`#q${n} .reveal-btn`);
-            if (btn) btn.style.display = 'none';
+            document.querySelectorAll(`#q${n} .reveal-btn`).forEach(b => {
+                if (!b.closest('.score-btn-row')) b.style.display = 'none';
+            });
         }
 
         function entryCorrect(el) {
@@ -1175,8 +1176,9 @@
         function markNg(n) {
             const panel = document.getElementById('ans' + n);
             if (panel) panel.style.display = 'none';
-            const btn = document.querySelector(`#q${n} .reveal-btn`);
-            if (btn) btn.style.display = 'inline-flex';
+            document.querySelectorAll(`#q${n} .reveal-btn`).forEach(b => {
+                if (!b.closest('.score-btn-row')) b.style.display = 'inline-flex';
+            });
             const wrap = document.querySelector(`#q${n} .self-check-btns`);
             if (wrap) wrap.innerHTML = `
                 <button type="button" class="self-ok" onclick="markOk(${n})"><i class="fa-solid fa-circle-check"></i> 理解した</button>
@@ -1215,4 +1217,4 @@
     </script>
 </body>
 </html>
-<!-- cache-bust: 2026-05-27T12:00:00 -->
+<!-- cache-bust: 2026-05-27T15:00:00 -->
