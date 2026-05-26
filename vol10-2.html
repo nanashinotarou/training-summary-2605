@@ -595,7 +595,7 @@
         <div id="summary" class="tab-content">
             <div class="bloom-story" style="margin-bottom:24px;">
                 <span class="bloom-story-label">📍 Bloom 10日目・夜</span>
-                <p>貸借対照表と財務分析5軸を習得。「<strong>Day 10が最終日</strong>…これで全10日、完走だ」</p>
+                <p>貸借対照表と財務分析5軸を習得。「<strong>基礎編が一区切り</strong>…次はDay 11の過去問演習だ！」</p>
             </div>
             <h2>DAY 10後半 まとめ</h2>
             <div class="summary-grid">
@@ -632,7 +632,7 @@
             </div>
             <div style="text-align:center;margin:40px 0 20px;">
                 <button class="tool-link-btn" onclick="showStamp()" style="background:linear-gradient(135deg,#dc2626,#b91c1c);padding:1.2rem 3rem;font-size:1.15rem;border:none;cursor:pointer;">
-                    <i class="fa-solid fa-stamp"></i> 簿記3級コース 全課程コンプリート！
+                    <i class="fa-solid fa-stamp"></i> DAY 10 コンプリート！🎉
                 </button>
             </div>
             <div class="stamp-overlay" id="stampOverlay" onclick="hideStamp()">
@@ -642,14 +642,17 @@
                         <div class="stamp-kanji">合格</div>
                         <div class="stamp-sub">DAY 10 COMPLETE</div>
                     </div>
-                    <h3 id="stampModalTitle" style="color:#1e293b;margin:16px 0 8px;font-size:1.4rem;">簿記3級コース 全課程修了！</h3>
-                    <p id="stampModalBody" style="color:#64748b;font-size:0.95rem;line-height:1.7;margin-bottom:20px;">Day 1 から Day 10 まで、お疲れ様でした！帳簿の締め切りから財務分析まで、簿記3級の全論点を完走しました。自信を持って本番に臨んでください。</p>
+                    <h3 id="stampModalTitle" style="color:#1e293b;margin:16px 0 8px;font-size:1.4rem;">DAY 10 コンプリート！</h3>
+                    <p id="stampModalBody" style="color:#64748b;font-size:0.95rem;line-height:1.7;margin-bottom:20px;">帳簿の締め切りから財務分析まで完走！次はいよいよ実践フェーズ。Day 11 の過去問演習で本番力を鍛えよう！</p>
                     <button class="tool-link-btn" onclick="hideStamp()" style="background:var(--accent-green);"><i class="fa-solid fa-xmark"></i> 閉じる</button>
                 </div>
             </div>
         </div>
 
         <div style="text-align:center; padding: 3rem 0 2rem; display: flex; flex-direction: column; gap: 1rem; align-items: center;">
+    <button type="button" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:linear-gradient(135deg, #34d399, #059669); border:none; box-shadow: 0 10px 30px rgba(5,150,105, 0.25); cursor:pointer;" onclick="(async function(){try{const r=await fetch('./vol11-1.html',{method:'HEAD',cache:'no-store'});if(r.ok){window.location.href='./vol11-1.html';return;}}catch(e){}alert('Day 11は準備中です。もうしばらくお待ちください。');})()">
+        Day 11 過去問演習へ <i class="fa-solid fa-arrow-right"></i>
+    </button>
     <button type="button" class="tool-link-btn" style="padding: 1.2rem 4rem; font-size:1.25rem; background:#fff; color:#059669; border:2px solid var(--accent-green); box-shadow:none; cursor:pointer;" onclick="window.location.href='./vol10-1.html'">
         <i class="fa-solid fa-arrow-left"></i> Day 10前半へ戻る
     </button>
@@ -754,7 +757,7 @@
             result.className = isPassed ? 'pass' : 'fail';
             document.getElementById('quiz-score').textContent = `${score} / ${quizData.length} 正解`;
             document.getElementById('quiz-msg').textContent = isPassed
-                ? 'おめでとうございます！簿記3級コース全10日を完走しました。全課程コンプリートスタンプを押しましょう！'
+                ? 'おめでとうございます！Day 10 をコンプリートしました。スタンプを押して Day 11 へ進みましょう！'
                 : 'もう一度ページを読み直してから再挑戦しましょう。';
             result.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
@@ -768,4 +771,4 @@
     </script>
 </body>
 </html>
-<!-- cache-bust: 2026-05-23T15:00:00 -->
+<!-- cache-bust: 2026-05-26T09:00:00 -->
