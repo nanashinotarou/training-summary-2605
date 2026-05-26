@@ -79,6 +79,83 @@
 - 「AIに何を頼むか」を設計できる人が、コストと品質を制御できる
 - **「省エネ×高単価」の追求が、AI時代のディレクターに求められる設計力**
 
+---
+
+## 4. 【設計前例】試験系教材のインタラクティブ採点型デザイン（Day 11で確立、2026-05-27）
+
+> **次回以降の試験系教材・演習ページを作る際は、必ずこのセクションを参照すること。**
+> Day 11（vol11-1.html / vol11-2.html）で全面的に採用・完成した設計パターン。
+
+### 採用の経緯
+当初の教材は「？」を静的表示し、折り畳みで解答を「見る」だけのハリボテ設計だった。
+H.Kの指摘：「手が動かせない。全部入力可能で採点機能付きにしてほしい」→ インタラクティブ採点型に全面設計変更。
+
+### 設計の柱（3つ）
+1. **ブラウザ上で解ける**：`<select>`（記号選択）＋ `<input type="number">`（金額入力）で問題を解く
+2. **即時フィードバック**：採点ボタン押下で正解＝緑・不正解＝赤にセルが変色
+3. **解答後の根拠解説**：100%正解または「解答を見る」で詳細な計算根拠つき解説を表示
+
+### 共通CSS（各ファイルのstyleに追加するセット）
+
+```css
+.entry-select { font-size:0.82rem; border:1px solid #d1d5db; border-radius:4px; padding:3px 6px; max-width:160px; background:#fff; cursor:pointer; }
+.entry-select.correct { background:#d1fae5; border-color:#059669; }
+.entry-select.wrong   { background:#fee2e2; border-color:#dc2626; }
+.entry-amount { width:88px; text-align:right; border:1px solid #d1d5db; border-radius:4px; padding:3px 6px; font-size:0.82rem; }
+.entry-amount.correct { background:#d1fae5; border-color:#059669; }
+.entry-amount.wrong   { background:#fee2e2; border-color:#dc2626; }
+.entry-dash { color:#94a3b8; text-align:center; }
+.score-btn-row { margin:12px 0; display:flex; gap:8px; flex-wrap:wrap; }
+.section-banner { padding:12px 16px; border-radius:8px; font-weight:700; font-size:0.95rem; margin:8px 0; display:none; }
+```
+
+### 共通JS ユーティリティ
+
+```javascript
+function entryCorrect(el) { el.classList.remove('wrong'); el.classList.add('correct'); }
+function entryWrong(el)   { el.classList.remove('correct'); el.classList.add('wrong'); }
+function entryReset(el)   { if (!el) return; el.value = ''; el.classList.remove('correct','wrong'); el.title = ''; }
+function showBanner(bannerId, correct, total) {
+    const el = document.getElementById(bannerId);
+    el.style.display = 'block';
+    const pct = total ? Math.round(correct / total * 100) : 0;
+    if (pct === 100) { el.style.background='#d1fae5'; el.style.color='#065f46'; el.textContent='🎉 全問正解！'; return true; }
+    else { el.style.background='#fee2e2'; el.style.color='#991b1b'; el.textContent=correct+'/'+total+'正解（'+pct+'%）— 赤いセルを見直してみよう'; return false; }
+}
+function hideBanner(bannerId) { const el=document.getElementById(bannerId); if(el) el.style.display='none'; }
+```
+
+### 実装パターン別の設計
+
+| 問題タイプ | 入力UI | 正答データ形式 | 参照ファイル |
+|---|---|---|---|
+| 仕訳（記号＋金額） | select（ア〜カ）＋ number input | `answer-correct tbody` から動的抽出 | vol11-1.html: buildEntryTable |
+| 商品有高帳 | number input（null=ダッシュ、負数=△） | `fifoCorrect[row][col]` 2D配列 | vol11-2.html Tab1 |
+| T字勘定（記号＋金額） | select（ア〜ク）＋ number input | `kaikakeDebit` 等の配列 | vol11-2.html Tab2 |
+| 仕訳日計表（借方・貸方） | number input（null=ダッシュ） | `nikkeiCorrect[row]` 配列 | vol11-2.html Tab3 |
+| 記号穴埋め | number input | `kigoCorrect = {ア:値, イ:値,...}` | vol11-2.html Tab3 |
+| 精算表（9列） | number input（min="0"） | `correctData[row]` 配列 | vol11-2.html Tab4 |
+
+### 採点完了管理（複数セクションがあるタブ）
+```javascript
+const q21Done = new Set();
+function checkQ21Done() {
+    if (q21Done.size >= 3) document.getElementById('confirm-btn-q21')?.removeAttribute('disabled');
+    else document.getElementById('confirm-btn-q21')?.setAttribute('disabled', 'disabled');
+}
+// 各セクション採点100%時: q21Done.add('fifo'); checkQ21Done();
+// 解答表示時も同様に活性化（revealSection の tabMap で対応）
+```
+
+### ハマりポイント（既知バグと対処）
+- **revealAnswer / markNg が `.score-btn-row` 内のボタンを誤操作する**
+  → `document.querySelector('#qN .reveal-btn')` は「採点する」ボタン（score-btn-row内）を先に拾う
+  → 修正: `document.querySelectorAll('#qN .reveal-btn').forEach(b => { if (!b.closest('.score-btn-row')) ... })`
+- **負数入力**（仕入返品の△値）：`<input type="number">` に `min` 属性を付けないこと
+- **Cloudflare Pages のデプロイ**：このプロジェクトは GitHub 自動デプロイではなく `.deploy_tmp/` フォルダを手動アップロード
+
+---
+
 ### 教材制作の目的と対象（過去）
 - **対象:** Canva / Figmaを触れるグラフィック経験者、コードは書かないがWeb制作に関わる立場の方。
 - **目標とする人材像:** クライアントと対等に要件定義ができ、AI等に的確な指示が出せる人材。補助金終了後も安定して稼働できること。
