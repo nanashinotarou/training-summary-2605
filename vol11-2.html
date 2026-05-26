@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 11 後半 | 第2問・第3問 演習</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body:#f0fdf4; --bg-card:rgba(255,255,255,0.85); --bg-card-solid:#fff;
+            --text-main:#1e293b; --text-sub:#64748b;
+            --accent-green:#059669; --accent-gold:#d97706; --accent-blue:#2563eb;
+            --accent-light:#d1fae5; --shadow-soft:0 10px 30px rgba(0,0,0,0.05);
+            --radius-large:24px; --radius-medium:16px;
+        }
+        * { box-sizing:border-box; margin:0; padding:0; }
+        body {
+            font-family:'Noto Sans JP',sans-serif; background:var(--bg-body);
+            background-image:radial-gradient(at 0% 0%,rgba(255,255,255,0.8) 0,transparent 50%),
+                radial-gradient(at 100% 100%,rgba(209,250,229,0.8) 0,transparent 50%);
+            min-height:100vh; display:flex; justify-content:center; padding:40px 20px;
+        }
+        .home-btn {
+            position:fixed; bottom:30px; right:30px; width:60px; height:60px;
+            background:var(--accent-green); color:#fff; border-radius:50%;
+            display:flex; align-items:center; justify-content:center; font-size:1.5rem;
+            text-decoration:none; z-index:1000;
+        }
+        .container {
+            width:100%; max-width:960px; background:var(--bg-card);
+            border-radius:var(--radius-large); box-shadow:var(--shadow-soft); overflow:hidden;
+        }
+        .header { padding:40px 40px 20px; border-bottom:2px solid var(--accent-light); text-align:center; }
+        .header-tag { display:inline-block; background:var(--accent-green); color:#fff;
+            font-weight:700; padding:4px 12px; border-radius:20px; font-size:0.85rem; margin-bottom:15px; }
+        .header h1 { font-size:2rem; font-weight:900; color:var(--accent-green); margin-bottom:8px; }
+        .header-sub { color:var(--text-sub); margin-bottom:12px; }
+        .progress-wrap { max-width:520px; height:8px; background:#e2e8f0; border-radius:999px; margin:0 auto; overflow:hidden; }
+        .progress-bar { width:83%; height:100%; background:linear-gradient(90deg,var(--accent-green),#34d399); border-radius:inherit; }
+        .tabs { display:flex; padding:0 12px; background:rgba(255,255,255,0.5); border-bottom:1px solid #eee; overflow-x:auto; }
+        .tab-btn { border:none; background:none; padding:18px 14px; font-size:0.88rem; font-weight:700;
+            color:var(--text-sub); cursor:pointer; position:relative; white-space:nowrap; }
+        .tab-btn:hover,.tab-btn.active { color:var(--accent-green); }
+        .tab-btn.active::after { content:''; position:absolute; bottom:0; left:0; width:100%; height:3px; background:var(--accent-green); }
+        .tab-content { display:none; padding:32px 28px; background:var(--bg-card-solid); }
+        .tab-content.active { display:block; }
+        .problem-card { border:1px solid #e2e8f0; border-radius:16px; padding:24px; margin-bottom:24px; background:#fff; }
+        .problem-header { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:14px; }
+        .prob-badge { background:var(--accent-blue); color:#fff; padding:4px 12px; border-radius:20px; font-size:0.85rem; font-weight:700; }
+        .prob-title { font-weight:700; font-size:1rem; }
+        .prob-point { margin-left:auto; color:var(--accent-gold); font-weight:700; font-size:0.9rem; }
+        .prob-desc { font-size:0.95rem; line-height:1.75; margin-bottom:16px; color:#334155; }
+        .scroll-x { overflow-x:auto; -webkit-overflow-scrolling:touch; margin-bottom:12px; }
+        .prob-table { width:100%; border-collapse:collapse; font-size:0.8rem; min-width:480px; }
+        .prob-table th,.prob-table td { border:1px solid #e2e8f0; padding:8px; text-align:left; }
+        .prob-table thead th { background:#f8fafc; font-weight:700; }
+        .blank-state td { color:#94a3b8; }
+        .answer-state { border-left:4px solid var(--accent-green); }
+        .reveal-btn {
+            display:inline-flex; align-items:center; gap:8px; background:var(--accent-green); color:#fff;
+            border:none; border-radius:30px; padding:12px 22px; font-weight:700; cursor:pointer; font-size:0.95rem;
+        }
+        .q-explanation {
+            background:#fffbeb; border-left:4px solid var(--accent-gold); padding:14px 16px;
+            margin:16px 0; font-size:0.92rem; line-height:1.7;
+        }
+        .confirm-btn {
+            background:#059669; color:#fff; border:none; border-radius:30px;
+            padding:12px 24px; font-weight:700; cursor:pointer; font-size:0.95rem;
+        }
+        .stamp-section { text-align:center; margin:32px 0 16px; }
+        #stamp-btn:disabled { opacity:0.45; cursor:not-allowed; }
+        #stamp-btn {
+            background:linear-gradient(135deg,#dc2626,#b91c1c); color:#fff; border:none;
+            padding:1.2rem 3rem; font-size:1.15rem; border-radius:30px; cursor:pointer;
+        }
+        #stamp-hint { font-size:0.88rem; color:var(--text-sub); margin-top:10px; }
+        .stamp-overlay {
+            position:fixed; inset:0; background:rgba(0,0,0,0.6); display:none;
+            align-items:center; justify-content:center; z-index:9999;
+        }
+        .stamp-overlay.show { display:flex; }
+        .stamp-modal { background:#fff; border-radius:24px; padding:48px 40px; text-align:center;
+            max-width:420px; width:90%; position:relative; overflow:hidden; }
+        .stamp-mark {
+            width:160px; height:160px; border:10px solid #dc2626; border-radius:50%;
+            display:flex; flex-direction:column; align-items:center; justify-content:center;
+            margin:0 auto 20px; transform:rotate(-12deg);
+        }
+        .stamp-kanji { font-size:3rem; font-weight:900; color:#dc2626; }
+        .stamp-sub { font-size:0.65rem; color:#dc2626; font-weight:700; margin-top:4px; }
+        .sakura-confetti { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+        @keyframes sakuraFall { to { transform:translateY(110vh) rotate(360deg); opacity:0; } }
+        .tool-link-btn { display:inline-flex; align-items:center; gap:10px; justify-content:center; font-weight:bold; border-radius:30px; }
+        @media (max-width:768px) {
+            .tab-content { padding:20px 14px; }
+            .header h1 { font-size:1.5rem; }
+            .prob-point { margin-left:0; width:100%; }
+        }
+    </style>
+</head>
+<body>
+    <a href="./index.html" class="home-btn"><i class="fa-solid fa-house"></i></a>
+    <div class="container">
+        <header class="header">
+            <span class="header-tag">DAY 11（後半）</span>
+            <h1>第2問・第3問 演習</h1>
+            <p class="header-sub">帳簿記入から精算表まで、実戦データで完全攻略</p>
+            <div class="progress-wrap"><div class="progress-bar"></div></div>
+        </header>
+        <nav class="tabs">
+            <button class="tab-btn active" onclick="openTab('tab-q21')">📦 第2問① 商品有高帳</button>
+            <button class="tab-btn" onclick="openTab('tab-q22')">🏦 第2問② 勘定記入</button>
+            <button class="tab-btn" onclick="openTab('tab-q23')">📋 第2問③ 伝票会計</button>
+            <button class="tab-btn" onclick="openTab('tab-q3')">📊 第3問 精算表</button>
+        </nav>
+
+        <div id="tab-q21" class="tab-content active">
+    <div class="problem-card">
+        <div class="problem-header">
+            <span class="prob-badge">第2問①</span>
+            <span class="prob-title">先入先出法（8月）</span>
+            <span class="prob-point">約10点</span>
+        </div>
+        <p class="prob-desc">次の資料にもとづいて、先入先出法による商品有高帳（8月分）を完成させなさい。<br>8/1 前月繰越：20個 @¥2,000／8/5 仕入：40個 @¥2,150／8/6 仕入返品：10個（8/5仕入分）／8/10 売上：40個</p>
+        <div class="scroll-x"><table class="prob-table blank-state"><thead><tr><th>日付</th><th>摘要</th><th>受入数</th><th>受入単価</th><th>受入金額</th><th>払出数</th><th>払出単価</th><th>払出金額</th><th>残高数</th><th>残高単価</th><th>残高金額</th></tr></thead><tbody><tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+</tbody></table></div>
+        <button type="button" class="reveal-btn" onclick="revealSection('sec-1-1')">
+            <i class="fa-solid fa-eye"></i> 解答・解説を見る
+        </button>
+        <div class="answer-panel" id="sec-1-1" style="display:none;">
+            <div class="scroll-x"><table class="prob-table answer-state"><thead><tr><th>日付</th><th>摘要</th><th>受入数</th><th>受入単価</th><th>受入金額</th><th>払出数</th><th>払出単価</th><th>払出金額</th><th>残高数</th><th>残高単価</th><th>残高金額</th></tr></thead><tbody><tr><td>8/1</td><td>前月繰越</td><td>20</td><td>2,000</td><td>40,000</td><td>—</td><td>—</td><td>—</td><td>20</td><td>2,000</td><td>40,000</td></tr>
+<tr><td>8/5</td><td>仕入</td><td>40</td><td>2,150</td><td>86,000</td><td>—</td><td>—</td><td>—</td><td>20</td><td>2,000</td><td>40,000</td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>40</td><td>2,150</td><td>86,000</td></tr>
+<tr><td>8/6</td><td>仕入返品</td><td>△10</td><td>2,150</td><td>△21,500</td><td>—</td><td>—</td><td>—</td><td>20</td><td>2,000</td><td>40,000</td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>30</td><td>2,150</td><td>64,500</td></tr>
+<tr><td>8/10</td><td>売上</td><td>—</td><td>—</td><td>—</td><td>20</td><td>2,000</td><td>40,000</td><td>10</td><td>2,150</td><td>21,500</td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td>20</td><td>2,150</td><td>43,000</td><td></td><td></td><td></td></tr>
+<tr><td>8/31</td><td>次月繰越</td><td>—</td><td>—</td><td>—</td><td>10</td><td>2,150</td><td>21,500</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>合計</td><td></td><td>50</td><td></td><td>104,500</td><td>50</td><td></td><td>104,500</td><td></td><td></td><td></td></tr>
+</tbody></table></div>
+            <div class="q-explanation">先入先出法：古い仕入から順に払い出す。8/10売上40個は、8/1繰越分20個（@2,000）と8/5仕入残分20個（@2,150）から払い出す。8/6の返品は受入欄にマイナス（△）で記入。</div>
+        </div>
+    </div>
+    <div class="problem-card">
+        <div class="problem-header">
+            <span class="prob-badge">第2問①</span>
+            <span class="prob-title">移動平均法（次月繰越）</span>
+            <span class="prob-point"></span>
+        </div>
+        <p class="prob-desc">同じ取引を移動平均法で処理した場合の次月繰越高を答えなさい。</p>
+        <div class="scroll-x"><table class="prob-table blank-state"><thead><tr><th>計算ステップ</th><th>算式</th><th>結果</th></tr></thead><tbody><tr><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td></tr>
+</tbody></table></div>
+        <button type="button" class="reveal-btn" onclick="revealSection('sec-1-2')">
+            <i class="fa-solid fa-eye"></i> 解答・解説を見る
+        </button>
+        <div class="answer-panel" id="sec-1-2" style="display:none;">
+            <div class="scroll-x"><table class="prob-table answer-state"><thead><tr><th>計算ステップ</th><th>算式</th><th>結果</th></tr></thead><tbody><tr><td>8/5仕入後 平均単価</td><td>（40,000＋86,000）÷（20＋40）</td><td>@2,100</td></tr>
+<tr><td>8/6返品後 平均単価</td><td>（126,000－21,500）÷（60－10）</td><td>@2,090</td></tr>
+<tr><td>8/10払出後 残高数量</td><td>50個 ー 40個</td><td>10個</td></tr>
+<tr><td>次月繰越高</td><td>10個 × @2,090</td><td>¥20,900</td></tr>
+</tbody></table></div>
+            <div class="q-explanation">移動平均法では都度平均単価を再計算。返品・売上後の残高10個×@2,090＝次月繰越高20,900円。</div>
+        </div>
+    </div>
+    <div class="problem-card">
+        <div class="problem-header">
+            <span class="prob-badge">第2問①</span>
+            <span class="prob-title">α商品（移動平均法・11月）</span>
+            <span class="prob-point"></span>
+        </div>
+        <p class="prob-desc">11/1 前月繰越200個@466／11/5 仕入150@480／11/10 売上200@売価650／11/18 仕入180@483／11/25 売上110@売価660。売上高・原価・総利益を計算。</p>
+        <div class="scroll-x"><table class="prob-table blank-state"><thead><tr><th>日付</th><th>摘要</th><th>受入数</th><th>単価</th><th>金額</th><th>払出数</th><th>単価</th><th>金額</th><th>残高数</th><th>単価</th><th>残高金額</th></tr></thead><tbody><tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+</tbody></table></div>
+        <button type="button" class="reveal-btn" onclick="revealSection('sec-1-3')">
+            <i class="fa-solid fa-eye"></i> 解答・解説を見る
+        </button>
+        <div class="answer-panel" id="sec-1-3" style="display:none;">
+            <div class="scroll-x"><table class="prob-table answer-state"><thead><tr><th>日付</th><th>摘要</th><th>受入数</th><th>単価</th><th>金額</th><th>払出数</th><th>単価</th><th>金額</th><th>残高数</th><th>単価</th><th>残高金額</th></tr></thead><tbody><tr><td>11/1</td><td>前月繰越</td><td>200</td><td>466</td><td>93,200</td><td></td><td></td><td></td><td>200</td><td>466</td><td>93,200</td></tr>
+<tr><td>11/5</td><td>仕入</td><td>150</td><td>480</td><td>72,000</td><td></td><td></td><td></td><td>350</td><td>472</td><td>165,200</td></tr>
+<tr><td>11/10</td><td>売上</td><td></td><td></td><td></td><td>200</td><td>472</td><td>94,400</td><td>150</td><td>472</td><td>70,800</td></tr>
+<tr><td>11/18</td><td>仕入</td><td>180</td><td>483</td><td>86,940</td><td></td><td></td><td></td><td>330</td><td>478</td><td>157,740</td></tr>
+<tr><td>11/25</td><td>売上</td><td></td><td></td><td></td><td>110</td><td>478</td><td>52,580</td><td>220</td><td>478</td><td>105,160</td></tr>
+<tr><td>11/30</td><td>次月繰越</td><td></td><td></td><td></td><td>220</td><td>478</td><td>105,160</td><td></td><td></td><td></td></tr>
+</tbody></table><div class="scroll-x" style="margin-top:12px;"><table class="prob-table answer-state"><thead><tr><th>項目</th><th>金額</th></tr></thead><tbody><tr><td>売上高</td><td>130,000＋72,600＝202,600円</td></tr>
+<tr><td>売上原価</td><td>94,400＋52,580＝146,980円</td></tr>
+<tr><td>売上総利益</td><td>202,600－146,980＝55,620円</td></tr>
+</tbody></table></div></div>
+            <div class="q-explanation">移動平均単価は都度再計算（11/5後472円、11/18後478円）。売上総利益＝売上高－売上原価。</div>
+        </div>
+    </div><div style="text-align:center;margin:24px 0;"><button type="button" class="confirm-btn" onclick="confirmSection('sec-tab1',1)"><i class="fa-solid fa-circle-check"></i> 第2問①を確認しました</button></div></div>
+        <div id="tab-q22" class="tab-content">
+    <div class="problem-card">
+        <div class="problem-header">
+            <span class="prob-badge">第2問②</span>
+            <span class="prob-title">買掛金補助元帳</span>
+            <span class="prob-point">約10点</span>
+        </div>
+        <p class="prob-desc">8月中の取引にもとづき、買掛金の総勘定元帳と補助元帳（甲商店・乙商店）を完成させなさい。</p>
+        <div class="scroll-x"><table class="prob-table blank-state"><thead><tr><th>借方</th><th>日付</th><th>貸方</th></tr></thead><tbody><tr><td>？</td><td>8/1 前月繰越 585,000</td><td>？</td></tr>
+<tr><td>？</td><td>8/6 仕入（乙）542,000</td><td>？</td></tr>
+<tr><td>？</td><td>8/12 仕入（甲）385,000</td><td>？</td></tr>
+<tr><td>？</td><td></td><td>？</td></tr>
+<tr><td>？</td><td></td><td>？</td></tr>
+<tr><td>？</td><td>合計 1,512,000</td><td>？</td></tr>
+</tbody></table><p style='margin:8px 0;font-size:0.9rem;color:#64748b;'>（甲・乙の補助元帳も同様に完成）</p></div>
+        <button type="button" class="reveal-btn" onclick="revealSection('sec-2-1')">
+            <i class="fa-solid fa-eye"></i> 解答・解説を見る
+        </button>
+        <div class="answer-panel" id="sec-2-1" style="display:none;">
+            <div class="scroll-x"><h4 style='margin:16px 0 8px;font-size:0.95rem;'>総勘定元帳「買掛金」</h4><table class="prob-table answer-state"><thead><tr><th>借方</th><th>日付</th><th>貸方</th></tr></thead><tbody><tr><td>返品 100,000（8/7）</td><td>8/1 前月繰越 585,000</td><td></td></tr>
+<tr><td>当座預金 350,000（8/23）</td><td>8/6 仕入（乙）542,000</td><td></td></tr>
+<tr><td>電子記録債務 160,000（8/25）</td><td>8/12 仕入（甲）385,000</td><td></td></tr>
+<tr><td>普通預金 250,000（8/27）</td><td></td><td></td></tr>
+<tr><td>次月繰越 652,000（8/31）</td><td></td><td></td></tr>
+<tr><td>合計 1,512,000</td><td>合計 1,512,000</td><td></td></tr>
+</tbody></table><h4 style='margin:16px 0 8px;font-size:0.95rem;'>買掛金元帳「甲商店」</h4><table class="prob-table answer-state"><thead><tr><th>借方</th><th>日付</th><th>貸方</th></tr></thead><tbody><tr><td>当座預金 350,000（8/23）</td><td>8/1 前月繰越 265,000</td><td></td></tr>
+<tr><td>電子記録債務 160,000（8/25）</td><td>8/12 仕入 385,000</td><td></td></tr>
+<tr><td>次月繰越 140,000（8/31）</td><td></td><td></td></tr>
+<tr><td>合計 650,000</td><td>合計 650,000</td><td></td></tr>
+</tbody></table><h4 style='margin:16px 0 8px;font-size:0.95rem;'>買掛金元帳「乙商店」</h4><table class="prob-table answer-state"><thead><tr><th>借方</th><th>日付</th><th>貸方</th></tr></thead><tbody><tr><td>返品 100,000（8/7）</td><td>8/1 前月繰越 320,000</td><td></td></tr>
+<tr><td>普通預金 250,000（8/27）</td><td>8/6 仕入 542,000</td><td></td></tr>
+<tr><td>次月繰越 512,000（8/31）</td><td></td><td></td></tr>
+<tr><td>合計 862,000</td><td>合計 862,000</td><td></td></tr>
+</tbody></table></div>
+            <div class="q-explanation">補助元帳の合計（甲140,000＋乙512,000＝652,000）が総勘定元帳の次月繰越652,000と一致することを必ず確認する。</div>
+        </div>
+    </div>
+    <div class="problem-card">
+        <div class="problem-header">
+            <span class="prob-badge">第2問②</span>
+            <span class="prob-title">損益振替・繰越商品（三分法）</span>
+            <span class="prob-point"></span>
+        </div>
+        <p class="prob-desc">決算整理後の勘定記入（売上・仕入・繰越商品・損益）を完成。期首商品280,000／期末350,000／年間売上5,850,000／仕入2,700,000。</p>
+        <div class="scroll-x"><table class="prob-table blank-state"><thead><tr><th>借方</th><th>日付</th><th>貸方</th></tr></thead><tbody><tr><td>？</td><td>3/31 残高（期中売上計）</td><td>？</td></tr>
+<tr><td>？</td><td>合計 6,000,000</td><td>？</td></tr>
+</tbody></table></div>
+        <button type="button" class="reveal-btn" onclick="revealSection('sec-2-2')">
+            <i class="fa-solid fa-eye"></i> 解答・解説を見る
+        </button>
+        <div class="answer-panel" id="sec-2-2" style="display:none;">
+            <div class="scroll-x"><h4 style='margin:12px 0 6px;'>売上勘定</h4><table class="prob-table answer-state"><thead><tr><th>借方</th><th>日付</th><th>貸方</th></tr></thead><tbody><tr><td>損益 5,850,000（3/31）</td><td>3/31 残高（期中売上計）</td><td>5,850,000</td></tr>
+<tr><td>合計 6,000,000</td><td>合計 6,000,000</td><td></td></tr>
+</tbody></table><h4 style='margin:12px 0 6px;'>仕入勘定</h4><table class="prob-table answer-state"><thead><tr><th>借方</th><th>日付</th><th>貸方</th></tr></thead><tbody><tr><td>期中仕入計</td><td>繰越商品 350,000（3/31期末）</td><td></td></tr>
+<tr><td>繰越商品 280,000（3/31期首）</td><td>損益 2,495,000（3/31）</td><td></td></tr>
+<tr><td>合計 2,980,000</td><td>合計 2,980,000</td><td></td></tr>
+</tbody></table><h4 style='margin:12px 0 6px;'>繰越商品勘定</h4><table class="prob-table answer-state"><thead><tr><th>借方</th><th>日付</th><th>貸方</th></tr></thead><tbody><tr><td>前期繰越 280,000（4/1）</td><td>仕入 280,000（3/31期首振替）</td><td></td></tr>
+<tr><td>仕入 350,000（3/31期末）</td><td>次期繰越 350,000（3/31）</td><td></td></tr>
+<tr><td>合計 630,000</td><td>合計 630,000</td><td></td></tr>
+</tbody></table></div>
+            <div class="q-explanation">三分法決算：①繰越商品(期首)→仕入 ②仕入→繰越商品(期末) ③売上・仕入→損益。売上原価＝280,000＋2,700,000－350,000＝2,630,000円。</div>
+        </div>
+    </div><div style="text-align:center;margin:24px 0;"><button type="button" class="confirm-btn" onclick="confirmSection('sec-tab2',2)"><i class="fa-solid fa-circle-check"></i> 第2問②を確認しました</button></div></div>
+        <div id="tab-q23" class="tab-content">
+    <div class="problem-card">
+        <div class="problem-header">
+            <span class="prob-badge">第2問③</span>
+            <span class="prob-title">仕訳日計表（X9年12月1日）</span>
+            <span class="prob-point">約10点</span>
+        </div>
+        <p class="prob-desc">各伝票（入金No.101〜103、出金No.201〜204、振替No.301〜303）をもとに、仕訳日計表を完成させなさい。</p>
+        <div class="scroll-x"><table class="prob-table blank-state"><thead><tr><th>勘定科目</th><th>借方</th><th>貸方</th></tr></thead><tbody><tr><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td></tr>
+</tbody></table></div>
+        <button type="button" class="reveal-btn" onclick="revealSection('sec-3-1')">
+            <i class="fa-solid fa-eye"></i> 解答・解説を見る
+        </button>
+        <div class="answer-panel" id="sec-3-1" style="display:none;">
+            <div class="scroll-x"><table class="prob-table answer-state"><thead><tr><th>勘定科目</th><th>借方</th><th>貸方</th></tr></thead><tbody><tr><td>現金</td><td>540,000</td><td>269,000</td></tr>
+<tr><td>当座預金</td><td>—</td><td>230,000</td></tr>
+<tr><td>売掛金</td><td>145,000</td><td>130,000</td></tr>
+<tr><td>支払手形</td><td>26,000</td><td>35,000</td></tr>
+<tr><td>買掛金</td><td>188,000</td><td>95,000</td></tr>
+<tr><td>売上</td><td>—</td><td>325,000</td></tr>
+<tr><td>仕入</td><td>185,000</td><td>—</td></tr>
+<tr><td>合計</td><td>1,084,000</td><td>1,084,000</td></tr>
+</tbody></table></div>
+            <div class="q-explanation">入金伝票→現金借方540,000。出金伝票→現金貸方269,000。振替伝票を科目別集計。借方・貸方合計1,084,000で一致。</div>
+        </div>
+    </div>
+    <div class="problem-card">
+        <div class="problem-header">
+            <span class="prob-badge">第2問③</span>
+            <span class="prob-title">記号（ア〜エ）の答え</span>
+            <span class="prob-point"></span>
+        </div>
+        <p class="prob-desc">仕訳日計表に関連する記号問題の正答を確認。</p>
+        <div class="scroll-x"><table class="prob-table blank-state"><thead><tr><th>記号</th><th>答え</th></tr></thead><tbody><tr><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td></tr>
+</tbody></table></div>
+        <button type="button" class="reveal-btn" onclick="revealSection('sec-3-2')">
+            <i class="fa-solid fa-eye"></i> 解答・解説を見る
+        </button>
+        <div class="answer-panel" id="sec-3-2" style="display:none;">
+            <div class="scroll-x"><table class="prob-table answer-state"><thead><tr><th>記号</th><th>答え</th></tr></thead><tbody><tr><td>ア</td><td>40,000</td></tr>
+<tr><td>イ</td><td>65,000</td></tr>
+<tr><td>ウ</td><td>135,000</td></tr>
+<tr><td>エ</td><td>12,000</td></tr>
+</tbody></table></div>
+            <div class="q-explanation">各伝票の集計過程から導かれる補助数値。日計表の貸借一致を確認したうえで記号に代入。</div>
+        </div>
+    </div><div style="text-align:center;margin:24px 0;"><button type="button" class="confirm-btn" onclick="confirmSection('sec-tab3',3)"><i class="fa-solid fa-circle-check"></i> 第2問③を確認しました</button></div></div>
+        <div id="tab-q3" class="tab-content">
+    <div class="problem-card">
+        <div class="problem-header">
+            <span class="prob-badge">第3問</span>
+            <span class="prob-title">決算整理仕訳（9項目）</span>
+            <span class="prob-point">60点</span>
+        </div>
+        <p class="prob-desc">以下の決算整理事項を仕訳し、精算表を完成させなさい。</p>
+        <div class="scroll-x"><table class="prob-table blank-state"><thead><tr><th>#</th><th>仕訳（借方）</th><th>金額</th><th>仕訳（貸方）</th><th>金額</th><th>計算根拠</th></tr></thead><tbody><tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+</tbody></table></div>
+        <button type="button" class="reveal-btn" onclick="revealSection('sec-4-1')">
+            <i class="fa-solid fa-eye"></i> 解答・解説を見る
+        </button>
+        <div class="answer-panel" id="sec-4-1" style="display:none;">
+            <div class="scroll-x"><table class="prob-table answer-state"><thead><tr><th>#</th><th>仕訳（借方）</th><th>金額</th><th>仕訳（貸方）</th><th>金額</th><th>計算根拠</th></tr></thead><tbody><tr><td>1</td><td>旅費交通費2,500／消耗品費2,000</td><td>4,500</td><td>小口現金</td><td>4,500</td><td>未処理費用</td></tr>
+<tr><td>2</td><td>買掛金</td><td>50,000</td><td>仕入</td><td>50,000</td><td>返品未処理</td></tr>
+<tr><td>3</td><td>貸倒引当金繰入</td><td>4,000</td><td>貸倒引当金</td><td>4,000</td><td>14,000－10,000</td></tr>
+<tr><td>4</td><td>仮受金</td><td>1,200,000</td><td>土地1,100,000／固定資産売却益100,000</td><td>1,200,000</td><td>土地売却</td></tr>
+<tr><td>5</td><td>未収入金</td><td>50,000</td><td>保険料</td><td>50,000</td><td>翌期分5/12</td></tr>
+<tr><td>6</td><td>仕入460,000／繰越商品350,000</td><td>810,000</td><td>繰越商品460,000／仕入350,000</td><td>810,000</td><td>売上原価</td></tr>
+<tr><td>7</td><td>賞与</td><td>65,000</td><td>未払賞与</td><td>65,000</td><td>未払計上</td></tr>
+<tr><td>8</td><td>減価償却費</td><td>175,000</td><td>建物累計45,000／備品累計130,000</td><td>175,000</td><td>定額法</td></tr>
+<tr><td>9</td><td>前払利息</td><td>11,250</td><td>支払利息</td><td>11,250</td><td>翌期分繰延</td></tr>
+</tbody></table></div>
+            <div class="q-explanation">決算整理は①未処理の発見 ②修正記入 ③精算表への反映の順。各仕訳の根拠をメモしながら進める。</div>
+        </div>
+    </div>
+    <div class="problem-card">
+        <div class="problem-header">
+            <span class="prob-badge">第3問</span>
+            <span class="prob-title">精算表 完成数値</span>
+            <span class="prob-point"></span>
+        </div>
+        <p class="prob-desc">9列精算表の完成形。横幅が大きいため横スクロールで確認。</p>
+        <div class="scroll-x"><table class="prob-table blank-state"><thead><tr><th>勘定科目</th><th>残高TB(借)</th><th>残高TB(貸)</th><th>修正(借)</th><th>修正(貸)</th><th>P/L(借)</th><th>P/L(貸)</th><th>B/S(借)</th><th>B/S(貸)</th></tr></thead><tbody><tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+</tbody></table></div>
+        <button type="button" class="reveal-btn" onclick="revealSection('sec-4-2')">
+            <i class="fa-solid fa-eye"></i> 解答・解説を見る
+        </button>
+        <div class="answer-panel" id="sec-4-2" style="display:none;">
+            <div class="scroll-x"><table class="prob-table answer-state"><thead><tr><th>勘定科目</th><th>残高TB(借)</th><th>残高TB(貸)</th><th>修正(借)</th><th>修正(貸)</th><th>P/L(借)</th><th>P/L(貸)</th><th>B/S(借)</th><th>B/S(貸)</th></tr></thead><tbody><tr><td>現金</td><td>320,000</td><td></td><td></td><td></td><td></td><td></td><td>320,000</td><td></td></tr>
+<tr><td>小口現金</td><td>30,000</td><td></td><td></td><td>4,500</td><td></td><td></td><td>25,500</td><td></td></tr>
+<tr><td>普通預金</td><td>280,000</td><td></td><td></td><td></td><td></td><td></td><td>280,000</td><td></td></tr>
+<tr><td>受取手形</td><td>310,000</td><td></td><td></td><td></td><td></td><td></td><td>310,000</td><td></td></tr>
+<tr><td>売掛金</td><td>390,000</td><td></td><td></td><td></td><td></td><td></td><td>390,000</td><td></td></tr>
+<tr><td>繰越商品</td><td>460,000</td><td></td><td>350,000</td><td>460,000</td><td></td><td></td><td>350,000</td><td></td></tr>
+<tr><td>建物</td><td>900,000</td><td></td><td></td><td></td><td></td><td></td><td>900,000</td><td></td></tr>
+<tr><td>備品</td><td>650,000</td><td></td><td></td><td></td><td></td><td></td><td>650,000</td><td></td></tr>
+<tr><td>土地</td><td>2,200,000</td><td></td><td></td><td>1,100,000</td><td></td><td></td><td>1,100,000</td><td></td></tr>
+<tr><td>買掛金</td><td></td><td>500,000</td><td>50,000</td><td></td><td></td><td></td><td></td><td>450,000</td></tr>
+<tr><td>手形借入金</td><td></td><td>300,000</td><td></td><td></td><td></td><td></td><td></td><td>300,000</td></tr>
+<tr><td>仮受金</td><td></td><td>1,200,000</td><td>1,200,000</td><td></td><td></td><td></td><td></td><td>—</td></tr>
+<tr><td>貸倒引当金</td><td></td><td>10,000</td><td></td><td>4,000</td><td></td><td></td><td></td><td>14,000</td></tr>
+<tr><td>建物減価償却累計額</td><td></td><td>180,000</td><td></td><td>45,000</td><td></td><td></td><td></td><td>225,000</td></tr>
+<tr><td>備品減価償却累計額</td><td></td><td>390,000</td><td></td><td>130,000</td><td></td><td></td><td></td><td>520,000</td></tr>
+<tr><td>資本金</td><td></td><td>1,000,000</td><td></td><td></td><td></td><td></td><td></td><td>1,000,000</td></tr>
+<tr><td>繰越利益剰余金</td><td></td><td>390,000</td><td></td><td></td><td></td><td></td><td></td><td>390,000</td></tr>
+<tr><td>売上</td><td></td><td>5,705,000</td><td></td><td></td><td></td><td>5,705,000</td><td></td><td></td></tr>
+<tr><td>仕入</td><td>2,800,000</td><td></td><td>460,000</td><td>400,000</td><td>2,860,000</td><td></td><td></td><td></td></tr>
+<tr><td>賞与</td><td>800,000</td><td></td><td>65,000</td><td></td><td>865,000</td><td></td><td></td><td></td></tr>
+<tr><td>旅費交通費</td><td>70,000</td><td></td><td>2,500</td><td></td><td>72,500</td><td></td><td></td><td></td></tr>
+<tr><td>支払家賃</td><td>140,000</td><td></td><td></td><td></td><td>140,000</td><td></td><td></td><td></td></tr>
+<tr><td>保険料</td><td>240,000</td><td></td><td></td><td>50,000</td><td>190,000</td><td></td><td></td><td></td></tr>
+<tr><td>消耗品費</td><td>70,000</td><td></td><td>2,000</td><td></td><td>72,000</td><td></td><td></td><td></td></tr>
+<tr><td>支払利息</td><td>15,000</td><td></td><td></td><td>11,250</td><td>3,750</td><td></td><td></td><td></td></tr>
+<tr><td>固定資産売却益</td><td></td><td></td><td></td><td>100,000</td><td></td><td>100,000</td><td></td><td></td></tr>
+<tr><td>貸倒引当金繰入</td><td></td><td></td><td>4,000</td><td></td><td>4,000</td><td></td><td></td><td></td></tr>
+<tr><td>減価償却費</td><td></td><td></td><td>175,000</td><td></td><td>175,000</td><td></td><td></td><td></td></tr>
+<tr><td>未収入金</td><td></td><td></td><td>50,000</td><td></td><td></td><td></td><td>50,000</td><td></td></tr>
+<tr><td>未払賞与</td><td></td><td></td><td></td><td>65,000</td><td></td><td></td><td></td><td>65,000</td></tr>
+<tr><td>前払利息</td><td></td><td></td><td>11,250</td><td></td><td></td><td></td><td>11,250</td><td></td></tr>
+<tr><td>当期純利益</td><td></td><td></td><td></td><td></td><td>1,422,750</td><td></td><td></td><td>1,422,750</td></tr>
+<tr><td>合計</td><td>9,675,000</td><td>9,675,000</td><td>2,872,250</td><td>2,872,250</td><td>5,805,000</td><td>5,805,000</td><td>4,386,750</td><td>4,386,750</td></tr>
+</tbody></table></div>
+            <div class="q-explanation">修正記入後、損益計算書・貸借対照表欄に振り分け。借方・貸方の合計が各段階で一致することを確認。当期純利益1,422,750円。</div>
+        </div>
+    </div><div style="text-align:center;margin:24px 0;"><button type="button" class="confirm-btn" onclick="confirmSection('sec-tab4',4)"><i class="fa-solid fa-circle-check"></i> 第3問を確認しました</button></div></div>
+
+        <div class="stamp-section">
+            <button type="button" id="stamp-btn" disabled onclick="showStamp()">
+                <i class="fa-solid fa-stamp"></i> DAY 11 ALL コンプリート！🎉
+            </button>
+            <p id="stamp-hint">4つのセクションをすべて確認してから押せます</p>
+        </div>
+        <div class="stamp-overlay" id="stampOverlay" onclick="hideStamp()">
+            <div class="stamp-modal" onclick="event.stopPropagation()">
+                <div class="sakura-confetti" id="sakuraConfetti"></div>
+                <div class="stamp-mark">
+                    <div class="stamp-kanji">合格</div>
+                    <div class="stamp-sub">DAY 11 ALL COMPLETE</div>
+                </div>
+                <h3 style="margin:16px 0 8px;font-size:1.4rem;">DAY 11 完全制覇！</h3>
+                <p style="color:#64748b;font-size:0.95rem;line-height:1.7;margin-bottom:20px;">第1問〜第3問、全問攻略しました！仕訳・帳簿・精算表の流れが体に入ったはず。Day 12ではAIを使った最終仕上げに挑みましょう！</p>
+                <button type="button" class="confirm-btn" onclick="hideStamp()"><i class="fa-solid fa-xmark"></i> 閉じる</button>
+            </div>
+        </div>
+
+        <div style="text-align:center;padding:3rem 0 2rem;display:flex;flex-direction:column;gap:1rem;align-items:center;">
+            <button type="button" class="tool-link-btn"
+                style="padding:1.2rem 4rem;font-size:1.25rem;background:linear-gradient(135deg,#34d399,#059669);color:#fff;border:none;box-shadow:0 10px 30px rgba(5,150,105,0.25);"
+                onclick="(async function(){try{const r=await fetch('./vol12-1.html',{method:'HEAD',cache:'no-store'});if(r.ok){window.location.href='./vol12-1.html';return;}}catch(e){}alert('Day 12は準備中です。もうしばらくお待ちください。');})()">
+                Day 12 AIで最終チェックへ <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <a href="./vol11-1.html" class="tool-link-btn"
+                style="padding:1.2rem 4rem;font-size:1.25rem;background:#fff;color:#059669;border:2px solid var(--accent-green);text-decoration:none;">
+                <i class="fa-solid fa-arrow-left"></i> Day 11前半（仕訳演習）へ戻る
+            </a>
+            <button type="button" class="tool-link-btn"
+                style="padding:1.2rem 4rem;font-size:1.25rem;background:#fff;color:#4a4a4a;border:2px solid #e2e8f0;"
+                onclick="window.location.href='./index.html'">
+                <i class="fa-solid fa-house"></i> 学習記録をつけて Home へ戻る
+            </button>
+        </div>
+    </div>
+    <script>
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            const btn = document.querySelector(`.tab-btn[onclick*="openTab('${tabId}')"]`);
+            if (btn) btn.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        let confirmed = new Set();
+        const TOTAL_SECTIONS = 4;
+        function revealSection(sectionId) {
+            const panel = document.getElementById(sectionId);
+            if (!panel) return;
+            panel.style.display = 'block';
+            panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            const card = panel.closest('.problem-card');
+            if (card) {
+                const btn = card.querySelector('.reveal-btn');
+                if (btn) btn.style.display = 'none';
+            }
+        }
+        function confirmSection(sectionId, tabNum) {
+            confirmed.add(tabNum);
+            const el = document.querySelector(`[onclick*="confirmSection('${sectionId}'"]`);
+            if (el) el.outerHTML = '<span style="color:var(--accent-green);font-weight:700;font-size:1rem;">✅ 確認済み</span>';
+            updateStamp();
+        }
+        function updateStamp() {
+            if (confirmed.size >= TOTAL_SECTIONS) {
+                document.getElementById('stamp-btn').removeAttribute('disabled');
+                document.getElementById('stamp-hint').textContent = '全セクション確認済み！スタンプを押そう 🎉';
+            }
+        }
+        function showStamp() {
+            document.getElementById('stampOverlay').classList.add('show');
+            const c = document.getElementById('sakuraConfetti');
+            c.innerHTML = '';
+            for (let i = 0; i < 24; i++) {
+                const p = document.createElement('span');
+                p.textContent = '🌸';
+                p.style.cssText = `position:absolute;left:${Math.random()*100}%;top:-30px;font-size:${0.8+Math.random()}rem;animation:sakuraFall ${2+Math.random()*3}s ease-in forwards;`;
+                c.appendChild(p);
+            }
+        }
+        function hideStamp() { document.getElementById('stampOverlay').classList.remove('show'); }
+    </script>
+</body>
+</html>
+<!-- cache-bust: 2026-05-26T20:00:00 -->
