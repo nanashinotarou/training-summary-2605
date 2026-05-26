@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 11 前半 | 仕訳演習　第1問を完全攻略</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #f0fdf4; --bg-card: rgba(255,255,255,0.85); --bg-card-solid: #fff;
+            --text-main: #1e293b; --text-sub: #64748b;
+            --accent-green: #059669; --accent-gold: #d97706; --accent-blue: #2563eb;
+            --accent-light: #d1fae5; --shadow-soft: 0 10px 30px rgba(0,0,0,0.05);
+            --radius-large: 24px; --radius-medium: 16px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Noto Sans JP', sans-serif; background-color: var(--bg-body);
+            background-image: radial-gradient(at 0% 0%, rgba(255,255,255,0.8) 0, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(209,250,229,0.8) 0, transparent 50%);
+            background-attachment: fixed; color: var(--text-main);
+            min-height: 100vh; display: flex; justify-content: center; align-items: flex-start;
+            padding: 40px 20px;
+        }
+        .home-btn {
+            position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px;
+            background: var(--accent-green); color: white; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; font-size: 1.5rem;
+            text-decoration: none; box-shadow: 0 10px 25px rgba(5,150,105,0.4); z-index: 1000;
+        }
+        .container {
+            width: 100%; max-width: 900px; background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.6); border-radius: var(--radius-large);
+            box-shadow: var(--shadow-soft); overflow: hidden;
+        }
+        .header { padding: 40px 40px 20px; border-bottom: 2px solid var(--accent-light); text-align: center; }
+        .header-tag {
+            display: inline-block; background: var(--accent-green); color: white;
+            font-weight: 700; padding: 4px 12px; border-radius: 20px;
+            font-family: 'Roboto', sans-serif; font-size: 0.85rem; margin-bottom: 15px;
+        }
+        .header h1 { font-size: 2rem; font-weight: 900; color: var(--accent-green); margin-bottom: 8px; }
+        .header-sub { color: var(--text-sub); font-size: 1rem; margin-bottom: 12px; }
+        .progress-wrap { max-width: 520px; height: 8px; background: #e2e8f0; border-radius: 999px; margin: 0 auto; overflow: hidden; }
+        .progress-bar { width: 80%; height: 100%; background: linear-gradient(90deg, var(--accent-green), #34d399); border-radius: inherit; }
+        .tabs { display: flex; padding: 0 20px; background: rgba(255,255,255,0.5); border-bottom: 1px solid #eee; overflow-x: auto; }
+        .tab-btn {
+            border: none; background: none; padding: 20px 24px; font-size: 1rem; font-weight: 700;
+            color: var(--text-sub); cursor: pointer; position: relative; white-space: nowrap;
+        }
+        .tab-btn:hover, .tab-btn.active { color: var(--accent-green); }
+        .tab-btn.active::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px;
+            background: var(--accent-green); border-radius: 3px 3px 0 0;
+        }
+        .tab-content { display: none; padding: 40px; background: var(--bg-card-solid); min-height: 400px; }
+        .tab-content.active { display: block; }
+        h2 { font-size: 1.5rem; color: var(--text-main); border-left: 5px solid var(--accent-gold);
+            padding-left: 15px; margin: 28px 0 18px; }
+        h2:first-child { margin-top: 0; }
+        .guide-card {
+            background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-medium);
+            padding: 24px; margin-bottom: 24px;
+        }
+        .timeline-step {
+            display: flex; gap: 16px; align-items: flex-start; padding: 18px 20px;
+            border-radius: 12px; margin-bottom: 12px; color: #fff;
+        }
+        .timeline-step:last-child { margin-bottom: 0; }
+        .timeline-step.step1 { background: var(--accent-green); }
+        .timeline-step.step2 { background: var(--accent-gold); }
+        .timeline-step.step3 { background: var(--accent-blue); }
+        .timeline-step .step-num { font-weight: 900; font-size: 1.1rem; min-width: 72px; }
+        .timeline-step .step-body strong { display: block; font-size: 1.05rem; margin-bottom: 4px; }
+        .timeline-step .step-body span { font-size: 0.88rem; opacity: 0.95; }
+        .rule-list { list-style: none; padding: 0; }
+        .rule-list li {
+            position: relative; padding-left: 36px; margin-bottom: 14px; line-height: 1.7; font-size: 0.98rem;
+        }
+        .rule-list li::before {
+            content: counter(rule); counter-increment: rule;
+            position: absolute; left: 0; top: 2px; width: 26px; height: 26px;
+            background: var(--accent-green); color: #fff; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700;
+        }
+        .rule-list { counter-reset: rule; }
+        .drill-score-wrap {
+            background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 12px;
+            padding: 16px 20px; margin-bottom: 28px;
+        }
+        .drill-score-label { font-weight: 700; color: var(--accent-green); margin-right: 8px; }
+        #drill-score { font-size: 1.4rem; font-weight: 900; color: var(--accent-green); }
+        .drill-score-bar-bg { height: 10px; background: #d1fae5; border-radius: 999px; margin-top: 10px; overflow: hidden; }
+        .drill-score-bar { height: 100%; background: var(--accent-green); border-radius: 999px; transition: width 0.3s; }
+        .drill-card {
+            border: 1px solid #e2e8f0; border-radius: var(--radius-medium);
+            padding: 22px; margin-bottom: 20px; background: #fff; box-shadow: var(--shadow-soft);
+        }
+        .drill-card-header { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 14px; }
+        .q-badge { background: var(--accent-green); color: #fff; font-weight: 700; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; }
+        .q-tag { background: #f1f5f9; color: #475569; padding: 4px 10px; border-radius: 6px; font-size: 0.82rem; }
+        .q-point { margin-left: auto; color: var(--accent-gold); font-weight: 700; font-size: 0.9rem; }
+        .q-choices { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+        .choice-item { background: #f0fdf4; border: 1px solid #34d399; border-radius: 6px; padding: 4px 10px; font-size: 0.82rem; }
+        .q-text { font-size: 0.98rem; line-height: 1.75; margin-bottom: 16px; color: #334155; }
+        .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 12px; }
+        .answer-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 420px; }
+        .answer-table th, .answer-table td { border: 1px solid #e2e8f0; padding: 10px; text-align: left; }
+        .answer-table thead th { background: #f8fafc; font-weight: 700; }
+        .answer-blank td { color: #94a3b8; }
+        .answer-correct { border-left: 4px solid var(--accent-green); }
+        .reveal-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--accent-green); color: #fff; border: none; border-radius: 30px;
+            padding: 12px 22px; font-weight: 700; cursor: pointer; font-size: 0.95rem;
+        }
+        .q-explanation {
+            background: #fffbeb; border-left: 4px solid var(--accent-gold);
+            padding: 14px 16px; margin: 16px 0; font-size: 0.92rem; line-height: 1.7; color: #44403c;
+        }
+        .self-check-btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+        .self-ok {
+            background: #059669; color: white; border: none; border-radius: 30px;
+            padding: 10px 20px; font-weight: 700; cursor: pointer; font-size: 0.9rem;
+        }
+        .self-ng {
+            background: #fff; border: 2px solid #e2e8f0; color: #64748b;
+            border-radius: 30px; padding: 10px 20px; font-weight: 700; cursor: pointer; font-size: 0.9rem;
+        }
+        .tool-link-btn {
+            display: inline-flex; align-items: center; gap: 10px; justify-content: center;
+            font-weight: bold; border-radius: 30px; cursor: pointer; font-size: 0.95rem;
+        }
+        .stamp-section { text-align: center; margin: 36px 0 20px; }
+        #stamp-hint { font-size: 0.88rem; color: var(--text-sub); margin-top: 10px; }
+        #stamp-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+        #stamp-btn {
+            background: linear-gradient(135deg,#dc2626,#b91c1c); color: #fff; border: none;
+            padding: 1.2rem 3rem; font-size: 1.15rem; border-radius: 30px; cursor: pointer;
+        }
+        .stamp-overlay {
+            position: fixed; top:0; left:0; right:0; bottom:0;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+            display: none; align-items: center; justify-content: center; z-index: 9999;
+        }
+        .stamp-overlay.show { display: flex; }
+        .stamp-modal {
+            background: #fff; border-radius: 24px; padding: 48px 40px; text-align: center;
+            max-width: 400px; width: 90%; position: relative; overflow: hidden;
+        }
+        .stamp-mark {
+            width: 160px; height: 160px; border: 10px solid #dc2626; border-radius: 50%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            margin: 0 auto 20px; transform: rotate(-12deg);
+        }
+        .stamp-kanji { font-size: 3rem; font-weight: 900; color: #dc2626; }
+        .stamp-sub { font-size: 0.65rem; color: #dc2626; font-weight: 700; margin-top: 4px; }
+        .sakura-confetti { position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; overflow: hidden; }
+        @keyframes sakuraFall { to { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
+        @media (max-width: 768px) {
+            body { padding: 20px 10px; }
+            .tab-content { padding: 24px 16px; }
+            .header h1 { font-size: 1.55rem; }
+            .q-point { margin-left: 0; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <a href="./index.html" class="home-btn" title="ホーム"><i class="fa-solid fa-house"></i></a>
+    <div class="container">
+        <header class="header">
+            <span class="header-tag">DAY 11</span>
+            <h1>仕訳演習　第1問を完全攻略</h1>
+            <p class="header-sub">15問×実戦形式で勘定科目の反射神経を鍛える</p>
+            <div class="progress-wrap"><div class="progress-bar"></div></div>
+        </header>
+        <nav class="tabs">
+            <button class="tab-btn active" onclick="openTab('tab-guide')">⚔️ 試験攻略ガイド</button>
+            <button class="tab-btn" onclick="openTab('tab-drill')">📝 仕訳演習（第1問）</button>
+        </nav>
+
+        <div id="tab-guide" class="tab-content active">
+            <h2>本番の解答順序</h2>
+            <div class="guide-card">
+                <div class="timeline-step step1">
+                    <span class="step-num">STEP 1</span>
+                    <div class="step-body">
+                        <strong>第1問（仕訳×5）　20点　15〜20分</strong>
+                        <span>勘定科目は記号で迷わず選ぶ</span>
+                    </div>
+                </div>
+                <div class="timeline-step step2">
+                    <span class="step-num">STEP 2</span>
+                    <div class="step-body">
+                        <strong>第3問（精算表 or 試算表）　60点　25〜30分</strong>
+                        <span>合格の天王山。ここを制す</span>
+                    </div>
+                </div>
+                <div class="timeline-step step3">
+                    <span class="step-num">STEP 3</span>
+                    <div class="step-body">
+                        <strong>第2問（帳簿記入）　20点　残り時間</strong>
+                        <span>第1・3問を素早く終わらせてから</span>
+                    </div>
+                </div>
+            </div>
+            <h2>第1問 攻略の鉄則</h2>
+            <div class="guide-card">
+                <ol class="rule-list">
+                    <li><strong>勘定科目は提示された6択（ア～カ）から選ぶ</strong>　自由記述ではない</li>
+                    <li><strong>借方と貸方の合計金額が必ず一致する</strong>　ズレたら必ず見直す</li>
+                    <li><strong>三分法の基本</strong>: 商品仕入＝「仕入」、販売＝「売上」、棚卸調整は決算整理</li>
+                </ol>
+            </div>
+            <div style="text-align:center;margin-top:28px;">
+                <button type="button" class="tool-link-btn" style="background:var(--accent-green);color:#fff;border:none;padding:14px 32px;" onclick="openTab('tab-drill')">
+                    仕訳演習（15問）へ <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="tab-drill" class="tab-content">
+            <div class="drill-score-wrap">
+                <span class="drill-score-label">理解できた問題</span>
+                <span id="drill-score">0</span> / 15
+                <div class="drill-score-bar-bg">
+                    <div class="drill-score-bar" id="drill-score-bar" style="width:0%"></div>
+                </div>
+            </div>
+
+        <div class="drill-card" id="q1">
+            <div class="drill-card-header">
+                <span class="q-badge">問 1</span>
+                <span class="q-tag">前払・保証金</span>
+                <span class="q-point">4点</span>
+            </div>
+            <div class="q-choices">
+                <span class="choice-item">ア．支払手数料</span>
+                <span class="choice-item">イ．前払金</span>
+                <span class="choice-item">ウ．支払家賃</span>
+                <span class="choice-item">エ．当座預金</span>
+                <span class="choice-item">オ．差入保証金</span>
+                <span class="choice-item">カ．受取手数料</span>
+            </div>
+            <p class="q-text">事務所の賃貸借契約を結び、家賃6か月分（1か月￥300,000）、手数料￥300,000、敷金￥600,000を、小切手を振り出して支払った。</p>
+            <div class="scroll-x">
+            <table class="answer-table answer-blank">
+                <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                <tbody><tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+</tbody>
+            </table>
+            </div>
+            <button type="button" class="reveal-btn" onclick="revealAnswer(1)">
+                <i class="fa-solid fa-eye"></i> 解答・解説を見る
+            </button>
+            <div class="answer-panel" id="ans1" style="display:none;">
+                <div class="scroll-x">
+                <table class="answer-table answer-correct">
+                    <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                    <tbody><tr><td>支払家賃（ウ）</td><td>1,800,000</td><td>当座預金（エ）</td><td>2,700,000</td></tr>
+<tr><td>支払手数料（ア）</td><td>300,000</td><td>—</td><td>—</td></tr>
+<tr><td>差入保証金（オ）</td><td>600,000</td><td>—</td><td>—</td></tr>
+</tbody>
+                </table>
+                </div>
+                <div class="q-explanation">家賃6か月分は「支払家賃」（300,000×6＝1,800,000）。仲介手数料は「支払手数料」。敷金は返還されるため費用ではなく「差入保証金」（資産）。小切手振出＝「当座預金」の減少。</div>
+                <div class="self-check-btns">
+                    <button type="button" class="self-ok" onclick="markOk(1)">
+                        <i class="fa-solid fa-circle-check"></i> 理解した
+                    </button>
+                    <button type="button" class="self-ng" onclick="markNg(1)">
+                        <i class="fa-solid fa-rotate-right"></i> もう一度確認
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="drill-card" id="q2">
+            <div class="drill-card-header">
+                <span class="q-badge">問 2</span>
+                <span class="q-tag">仮払金・旅費</span>
+                <span class="q-point">4点</span>
+            </div>
+            <div class="q-choices">
+                <span class="choice-item">ア．旅費交通費</span>
+                <span class="choice-item">イ．従業員立替金</span>
+                <span class="choice-item">ウ．現金</span>
+                <span class="choice-item">エ．仮受金</span>
+                <span class="choice-item">オ．仮払金</span>
+                <span class="choice-item">カ．前払金</span>
+            </div>
+            <p class="q-text">従業員が出張から帰社し、旅費交通費として使うよう手渡していた￥40,000のうち、残った￥9,800を従業員から現金で受け取った。</p>
+            <div class="scroll-x">
+            <table class="answer-table answer-blank">
+                <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                <tbody><tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+</tbody>
+            </table>
+            </div>
+            <button type="button" class="reveal-btn" onclick="revealAnswer(2)">
+                <i class="fa-solid fa-eye"></i> 解答・解説を見る
+            </button>
+            <div class="answer-panel" id="ans2" style="display:none;">
+                <div class="scroll-x">
+                <table class="answer-table answer-correct">
+                    <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                    <tbody><tr><td>現金（ウ）</td><td>9,800</td><td>仮払金（オ）</td><td>40,000</td></tr>
+<tr><td>旅費交通費（ア）</td><td>30,200</td><td>—</td><td>—</td></tr>
+</tbody>
+                </table>
+                </div>
+                <div class="q-explanation">出張前に渡した概算払い分「仮払金」40,000円を取り崩す（貸方）。確定した旅費30,200円を費用計上し、残額9,800円を現金で回収。30,200 ＝ 40,000 − 9,800。</div>
+                <div class="self-check-btns">
+                    <button type="button" class="self-ok" onclick="markOk(2)">
+                        <i class="fa-solid fa-circle-check"></i> 理解した
+                    </button>
+                    <button type="button" class="self-ng" onclick="markNg(2)">
+                        <i class="fa-solid fa-rotate-right"></i> もう一度確認
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="drill-card" id="q3">
+            <div class="drill-card-header">
+                <span class="q-badge">問 3</span>
+                <span class="q-tag">消費税・仮払消費税</span>
+                <span class="q-point">4点</span>
+            </div>
+            <div class="q-choices">
+                <span class="choice-item">ア．仕入</span>
+                <span class="choice-item">イ．仮受消費税</span>
+                <span class="choice-item">ウ．仮払消費税</span>
+                <span class="choice-item">エ．未払消費税</span>
+                <span class="choice-item">オ．売掛金</span>
+                <span class="choice-item">カ．買掛金</span>
+            </div>
+            <p class="q-text">商品￥620,000（本体価格）を仕入れ、代金は10％の消費税を含めて掛けとした。なお、消費税は税抜方式で処理する。</p>
+            <div class="scroll-x">
+            <table class="answer-table answer-blank">
+                <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                <tbody><tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+</tbody>
+            </table>
+            </div>
+            <button type="button" class="reveal-btn" onclick="revealAnswer(3)">
+                <i class="fa-solid fa-eye"></i> 解答・解説を見る
+            </button>
+            <div class="answer-panel" id="ans3" style="display:none;">
+                <div class="scroll-x">
+                <table class="answer-table answer-correct">
+                    <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                    <tbody><tr><td>仕入（ア）</td><td>620,000</td><td>買掛金（カ）</td><td>682,000</td></tr>
+<tr><td>仮払消費税（ウ）</td><td>62,000</td><td>—</td><td>—</td></tr>
+</tbody>
+                </table>
+                </div>
+                <div class="q-explanation">税抜方式：本体620,000を「仕入」、消費税（620,000×10%＝62,000）を「仮払消費税」に分けて計上。買掛金は消費税込みの682,000円。</div>
+                <div class="self-check-btns">
+                    <button type="button" class="self-ok" onclick="markOk(3)">
+                        <i class="fa-solid fa-circle-check"></i> 理解した
+                    </button>
+                    <button type="button" class="self-ng" onclick="markNg(3)">
+                        <i class="fa-solid fa-rotate-right"></i> もう一度確認
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="drill-card" id="q4">
+            <div class="drill-card-header">
+                <span class="q-badge">問 4</span>
+                <span class="q-tag">純資産・株式</span>
+                <span class="q-point">4点</span>
+            </div>
+            <div class="q-choices">
+                <span class="choice-item">ア．資本金</span>
+                <span class="choice-item">イ．普通預金</span>
+                <span class="choice-item">ウ．当座預金</span>
+                <span class="choice-item">エ．利益準備金</span>
+                <span class="choice-item">オ．広告宣伝費</span>
+                <span class="choice-item">カ．繰越利益剰余金</span>
+            </div>
+            <p class="q-text">A株式会社は増資を行い、株式3,500株を1株当たり￥200で発行し、株主からの払込金は普通預金口座に振り込まれた。</p>
+            <div class="scroll-x">
+            <table class="answer-table answer-blank">
+                <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                <tbody><tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+</tbody>
+            </table>
+            </div>
+            <button type="button" class="reveal-btn" onclick="revealAnswer(4)">
+                <i class="fa-solid fa-eye"></i> 解答・解説を見る
+            </button>
+            <div class="answer-panel" id="ans4" style="display:none;">
+                <div class="scroll-x">
+                <table class="answer-table answer-correct">
+                    <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                    <tbody><tr><td>普通預金（イ）</td><td>700,000</td><td>資本金（ア）</td><td>700,000</td></tr>
+</tbody>
+                </table>
+                </div>
+                <div class="q-explanation">発行価額全額（3,500株×200円＝700,000円）を「普通預金」（資産増加）と「資本金」（純資産増加）で処理。</div>
+                <div class="self-check-btns">
+                    <button type="button" class="self-ok" onclick="markOk(4)">
+                        <i class="fa-solid fa-circle-check"></i> 理解した
+                    </button>
+                    <button type="button" class="self-ng" onclick="markNg(4)">
+                        <i class="fa-solid fa-rotate-right"></i> もう一度確認
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="drill-card" id="q5">
+            <div class="drill-card-header">
+                <span class="q-badge">問 5</span>
+                <span class="q-tag">固定資産・修繕</span>
+                <span class="q-point">4点</span>
+            </div>
+            <div class="q-choices">
+                <span class="choice-item">ア．修繕費</span>
+                <span class="choice-item">イ．未収入金</span>
+                <span class="choice-item">ウ．資本金</span>
+                <span class="choice-item">エ．損益</span>
+                <span class="choice-item">オ．建物</span>
+                <span class="choice-item">カ．未払金</span>
+            </div>
+            <p class="q-text">営業の用に供している建物の改修と修繕を行い、代金￥5,500,000は月末に支払うこととした。代金のうち￥2,900,000は収益的支出に、残額は資本的支出に該当する。</p>
+            <div class="scroll-x">
+            <table class="answer-table answer-blank">
+                <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                <tbody><tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+</tbody>
+            </table>
+            </div>
+            <button type="button" class="reveal-btn" onclick="revealAnswer(5)">
+                <i class="fa-solid fa-eye"></i> 解答・解説を見る
+            </button>
+            <div class="answer-panel" id="ans5" style="display:none;">
+                <div class="scroll-x">
+                <table class="answer-table answer-correct">
+                    <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                    <tbody><tr><td>修繕費（ア）</td><td>2,900,000</td><td>未払金（カ）</td><td>5,500,000</td></tr>
+<tr><td>建物（オ）</td><td>2,600,000</td><td>—</td><td>—</td></tr>
+</tbody>
+                </table>
+                </div>
+                <div class="q-explanation">収益的支出（維持・修繕）は「修繕費」（費用）。資本的支出（価値向上）は「建物」（資産）に加算（5,500,000−2,900,000＝2,600,000）。月末支払い＝「未払金」。</div>
+                <div class="self-check-btns">
+                    <button type="button" class="self-ok" onclick="markOk(5)">
+                        <i class="fa-solid fa-circle-check"></i> 理解した
+                    </button>
+                    <button type="button" class="self-ng" onclick="markNg(5)">
+                        <i class="fa-solid fa-rotate-right"></i> もう一度確認
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="drill-card" id="q6">
+            <div class="drill-card-header">
+                <span class="q-badge">問 6</span>
+                <span class="q-tag">売上・受取手形</span>
+                <span class="q-point">4点</span>
+            </div>
+            <div class="q-choices">
+                <span class="choice-item">ア．現金</span>
+                <span class="choice-item">イ．受取手形</span>
+                <span class="choice-item">ウ．支払手形</span>
+                <span class="choice-item">エ．売上</span>
+                <span class="choice-item">オ．当座預金</span>
+                <span class="choice-item">カ．支払利息</span>
+            </div>
+            <p class="q-text">A株式会社に商品￥820,000を売り上げ、代金のうち￥100,000は現金で受け取り、残額は同社振出しの約束手形で受け取った。</p>
+            <div class="scroll-x">
+            <table class="answer-table answer-blank">
+                <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                <tbody><tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+</tbody>
+            </table>
+            </div>
+            <button type="button" class="reveal-btn" onclick="revealAnswer(6)">
+                <i class="fa-solid fa-eye"></i> 解答・解説を見る
+            </button>
+            <div class="answer-panel" id="ans6" style="display:none;">
+                <div class="scroll-x">
+                <table class="answer-table answer-correct">
+                    <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                    <tbody><tr><td>現金（ア）</td><td>100,000</td><td>売上（エ）</td><td>820,000</td></tr>
+<tr><td>受取手形（イ）</td><td>720,000</td><td>—</td><td>—</td></tr>
+</tbody>
+                </table>
+                </div>
+                <div class="q-explanation">売上820,000を貸方に。現金100,000とその他（820,000−100,000＝720,000）の約束手形「受取手形」を借方に分けて計上。</div>
+                <div class="self-check-btns">
+                    <button type="button" class="self-ok" onclick="markOk(6)">
+                        <i class="fa-solid fa-circle-check"></i> 理解した
+                    </button>
+                    <button type="button" class="self-ng" onclick="markNg(6)">
+                        <i class="fa-solid fa-rotate-right"></i> もう一度確認
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="drill-card" id="q7">
+            <div class="drill-card-header">
+                <span class="q-badge">問 7</span>
+                <span class="q-tag">給与・社会保険</span>
+                <span class="q-point">4点</span>
+            </div>
+            <div class="q-choices">
+                <span class="choice-item">ア．社会保険料預り金</span>
+                <span class="choice-item">イ．所得税預り金</span>
+                <span class="choice-item">ウ．住民税預り金</span>
+                <span class="choice-item">エ．従業員立替金</span>
+                <span class="choice-item">オ．法定福利費</span>
+                <span class="choice-item">カ．普通預金</span>
+            </div>
+            <p class="q-text">社会保険料について、すでに源泉徴収した従業員負担分￥55,000と当社負担分￥55,000の合計額を普通預金口座から納付した。</p>
+            <div class="scroll-x">
+            <table class="answer-table answer-blank">
+                <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                <tbody><tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+</tbody>
+            </table>
+            </div>
+            <button type="button" class="reveal-btn" onclick="revealAnswer(7)">
+                <i class="fa-solid fa-eye"></i> 解答・解説を見る
+            </button>
+            <div class="answer-panel" id="ans7" style="display:none;">
+                <div class="scroll-x">
+                <table class="answer-table answer-correct">
+                    <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                    <tbody><tr><td>社会保険料預り金（ア）</td><td>55,000</td><td>普通預金（カ）</td><td>110,000</td></tr>
+<tr><td>法定福利費（オ）</td><td>55,000</td><td>—</td><td>—</td></tr>
+</tbody>
+                </table>
+                </div>
+                <div class="q-explanation">従業員から預かっていた分（負債）を「社会保険料預り金」で取り崩し、会社負担分は「法定福利費」（費用）として計上。合計110,000円を普通預金から支払う。</div>
+                <div class="self-check-btns">
+                    <button type="button" class="self-ok" onclick="markOk(7)">
+                        <i class="fa-solid fa-circle-check"></i> 理解した
+                    </button>
+                    <button type="button" class="self-ng" onclick="markNg(7)">
+                        <i class="fa-solid fa-rotate-right"></i> もう一度確認
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="drill-card" id="q8">
+            <div class="drill-card-header">
+                <span class="q-badge">問 8</span>
+                <span class="q-tag">受取商品券</span>
+                <span class="q-point">4点</span>
+            </div>
+            <div class="q-choices">
+                <span class="choice-item">ア．受取商品券</span>
+                <span class="choice-item">イ．受取手数料</span>
+                <span class="choice-item">ウ．売掛金</span>
+                <span class="choice-item">エ．現金</span>
+                <span class="choice-item">オ．クレジット売掛金</span>
+                <span class="choice-item">カ．売上</span>
+            </div>
+            <p class="q-text">商品￥60,000を売り上げ、代金のうち￥20,000は現金で受け取り、残額は商品券で受け取った。</p>
+            <div class="scroll-x">
+            <table class="answer-table answer-blank">
+                <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                <tbody><tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+</tbody>
+            </table>
+            </div>
+            <button type="button" class="reveal-btn" onclick="revealAnswer(8)">
+                <i class="fa-solid fa-eye"></i> 解答・解説を見る
+            </button>
+            <div class="answer-panel" id="ans8" style="display:none;">
+                <div class="scroll-x">
+                <table class="answer-table answer-correct">
+                    <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                    <tbody><tr><td>現金（エ）</td><td>20,000</td><td>売上（カ）</td><td>60,000</td></tr>
+<tr><td>受取商品券（ア）</td><td>40,000</td><td>—</td><td>—</td></tr>
+</tbody>
+                </table>
+                </div>
+                <div class="q-explanation">他社発行の商品券受取は「受取商品券」（資産）。残額60,000−20,000＝40,000円。後日商品券発行元に換金請求できる。</div>
+                <div class="self-check-btns">
+                    <button type="button" class="self-ok" onclick="markOk(8)">
+                        <i class="fa-solid fa-circle-check"></i> 理解した
+                    </button>
+                    <button type="button" class="self-ng" onclick="markNg(8)">
+                        <i class="fa-solid fa-rotate-right"></i> もう一度確認
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="drill-card" id="q9">
+            <div class="drill-card-header">
+                <span class="q-badge">問 9</span>
+                <span class="q-tag">手形貸付金</span>
+                <span class="q-point">4点</span>
+            </div>
+            <div class="q-choices">
+                <span class="choice-item">ア．支払手形</span>
+                <span class="choice-item">イ．手形借入金</span>
+                <span class="choice-item">ウ．手形貸付金</span>
+                <span class="choice-item">エ．当座預金</span>
+                <span class="choice-item">オ．売上</span>
+                <span class="choice-item">カ．受取手形</span>
+            </div>
+            <p class="q-text">かねて約束手形を受け取ってA株式会社に貸し付けていた￥1,250,000の満期日になり、同額が当座預金口座に振り込まれたので、約束手形を同社に返却した。</p>
+            <div class="scroll-x">
+            <table class="answer-table answer-blank">
+                <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                <tbody><tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+</tbody>
+            </table>
+            </div>
+            <button type="button" class="reveal-btn" onclick="revealAnswer(9)">
+                <i class="fa-solid fa-eye"></i> 解答・解説を見る
+            </button>
+            <div class="answer-panel" id="ans9" style="display:none;">
+                <div class="scroll-x">
+                <table class="answer-table answer-correct">
+                    <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                    <tbody><tr><td>当座預金（エ）</td><td>1,250,000</td><td>手形貸付金（ウ）</td><td>1,250,000</td></tr>
+</tbody>
+                </table>
+                </div>
+                <div class="q-explanation">手形で行った貸付は「手形貸付金」（資産）。満期回収で当座預金が増加し、手形貸付金（資産）が消滅する。</div>
+                <div class="self-check-btns">
+                    <button type="button" class="self-ok" onclick="markOk(9)">
+                        <i class="fa-solid fa-circle-check"></i> 理解した
+                    </button>
+                    <button type="button" class="self-ng" onclick="markNg(9)">
+                        <i class="fa-solid fa-rotate-right"></i> もう一度確認
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="drill-card" id="q10">
+            <div class="drill-card-header">
+                <span class="q-badge">問 10</span>
+                <span class="q-tag">前払金</span>
+                <span class="q-point">4点</span>
+            </div>
+            <div class="q-choices">
+                <span class="choice-item">ア．前払金</span>
+                <span class="choice-item">イ．未払金</span>
+                <span class="choice-item">ウ．前受金</span>
+                <span class="choice-item">エ．仕入</span>
+                <span class="choice-item">オ．現金</span>
+                <span class="choice-item">カ．買掛金</span>
+            </div>
+            <p class="q-text">商品￥70,000を注文し、手付金として、￥30,000を現金で支払った。</p>
+            <div class="scroll-x">
+            <table class="answer-table answer-blank">
+                <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                <tbody><tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+</tbody>
+            </table>
+            </div>
+            <button type="button" class="reveal-btn" onclick="revealAnswer(10)">
+                <i class="fa-solid fa-eye"></i> 解答・解説を見る
+            </button>
+            <div class="answer-panel" id="ans10" style="display:none;">
+                <div class="scroll-x">
+                <table class="answer-table answer-correct">
+                    <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                    <tbody><tr><td>前払金（ア）</td><td>30,000</td><td>現金（オ）</td><td>30,000</td></tr>
+</tbody>
+                </table>
+                </div>
+                <div class="q-explanation">注文時に支払う手付金・内金は「前払金」（資産）。注文時点では商品はまだ引き渡されていないため「仕入」は使わない。商品受取時に「仕入／前払金」で精算。</div>
+                <div class="self-check-btns">
+                    <button type="button" class="self-ok" onclick="markOk(10)">
+                        <i class="fa-solid fa-circle-check"></i> 理解した
+                    </button>
+                    <button type="button" class="self-ng" onclick="markNg(10)">
+                        <i class="fa-solid fa-rotate-right"></i> もう一度確認
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="drill-card" id="q11">
+            <div class="drill-card-header">
+                <span class="q-badge">問 11</span>
+                <span class="q-tag">立替金・掛売上</span>
+                <span class="q-point">4点</span>
+            </div>
+            <div class="q-choices">
+                <span class="choice-item">ア．発送費</span>
+                <span class="choice-item">イ．売掛金</span>
+                <span class="choice-item">ウ．売上</span>
+                <span class="choice-item">エ．立替金</span>
+                <span class="choice-item">オ．現金</span>
+                <span class="choice-item">カ．買掛金</span>
+            </div>
+            <p class="q-text">A株式会社へ商品を売り上げ、商品代価￥200,000を掛けとした。また、A株式会社負担の発送費￥1,000を現金で支払い、後日請求することとした。立て替えた発送費は、立替金として分けて処理する。</p>
+            <div class="scroll-x">
+            <table class="answer-table answer-blank">
+                <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                <tbody><tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+</tbody>
+            </table>
+            </div>
+            <button type="button" class="reveal-btn" onclick="revealAnswer(11)">
+                <i class="fa-solid fa-eye"></i> 解答・解説を見る
+            </button>
+            <div class="answer-panel" id="ans11" style="display:none;">
+                <div class="scroll-x">
+                <table class="answer-table answer-correct">
+                    <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                    <tbody><tr><td>売掛金（イ）</td><td>200,000</td><td>売上（ウ）</td><td>200,000</td></tr>
+<tr><td>立替金（エ）</td><td>1,000</td><td>現金（オ）</td><td>1,000</td></tr>
+</tbody>
+                </table>
+                </div>
+                <div class="q-explanation">掛売上分は「売掛金/売上」。他社負担の費用を立て替えた分は「立替金」（資産）として別処理。将来請求時に「売掛金/立替金」で精算される。</div>
+                <div class="self-check-btns">
+                    <button type="button" class="self-ok" onclick="markOk(11)">
+                        <i class="fa-solid fa-circle-check"></i> 理解した
+                    </button>
+                    <button type="button" class="self-ng" onclick="markNg(11)">
+                        <i class="fa-solid fa-rotate-right"></i> もう一度確認
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="drill-card" id="q12">
+            <div class="drill-card-header">
+                <span class="q-badge">問 12</span>
+                <span class="q-tag">貸倒引当金</span>
+                <span class="q-point">4点</span>
+            </div>
+            <div class="q-choices">
+                <span class="choice-item">ア．売掛金</span>
+                <span class="choice-item">イ．支払手数料</span>
+                <span class="choice-item">ウ．償却債権取立益</span>
+                <span class="choice-item">エ．貸倒引当金</span>
+                <span class="choice-item">オ．貸倒引当金繰入</span>
+                <span class="choice-item">カ．貸倒損失</span>
+            </div>
+            <p class="q-text">得意先に対する売掛金（前期販売分）￥55,000が貸し倒れた。なお、貸倒引当金の残高は￥148,000である。</p>
+            <div class="scroll-x">
+            <table class="answer-table answer-blank">
+                <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                <tbody><tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+</tbody>
+            </table>
+            </div>
+            <button type="button" class="reveal-btn" onclick="revealAnswer(12)">
+                <i class="fa-solid fa-eye"></i> 解答・解説を見る
+            </button>
+            <div class="answer-panel" id="ans12" style="display:none;">
+                <div class="scroll-x">
+                <table class="answer-table answer-correct">
+                    <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                    <tbody><tr><td>貸倒引当金（エ）</td><td>55,000</td><td>売掛金（ア）</td><td>55,000</td></tr>
+</tbody>
+                </table>
+                </div>
+                <div class="q-explanation">前期発生売掛金の貸倒れは「貸倒引当金」を充当して消滅させる。残高148,000円＞貸倒額55,000円なので引当金で全額カバー可能。貸倒損失（カ）は当期発生分に使う。</div>
+                <div class="self-check-btns">
+                    <button type="button" class="self-ok" onclick="markOk(12)">
+                        <i class="fa-solid fa-circle-check"></i> 理解した
+                    </button>
+                    <button type="button" class="self-ng" onclick="markNg(12)">
+                        <i class="fa-solid fa-rotate-right"></i> もう一度確認
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="drill-card" id="q13">
+            <div class="drill-card-header">
+                <span class="q-badge">問 13</span>
+                <span class="q-tag">固定資産売却・減価償却</span>
+                <span class="q-point">4点</span>
+            </div>
+            <div class="q-choices">
+                <span class="choice-item">ア．未収入金</span>
+                <span class="choice-item">イ．普通預金</span>
+                <span class="choice-item">ウ．固定資産売却益</span>
+                <span class="choice-item">エ．備品</span>
+                <span class="choice-item">オ．固定資産売却損</span>
+                <span class="choice-item">カ．備品減価償却累計額</span>
+            </div>
+            <p class="q-text">当期首に、5年前の期首に取得した備品（取得原価￥1,800,000、耐用年数6年、残存価額ゼロ）を￥100,000で売却し、代金は月末に受け取ることとした。なお、この備品は定額法で減価償却を行い、間接法で記帳している。</p>
+            <div class="scroll-x">
+            <table class="answer-table answer-blank">
+                <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                <tbody><tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+</tbody>
+            </table>
+            </div>
+            <button type="button" class="reveal-btn" onclick="revealAnswer(13)">
+                <i class="fa-solid fa-eye"></i> 解答・解説を見る
+            </button>
+            <div class="answer-panel" id="ans13" style="display:none;">
+                <div class="scroll-x">
+                <table class="answer-table answer-correct">
+                    <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                    <tbody><tr><td>未収入金（ア）</td><td>100,000</td><td>備品（エ）</td><td>1,800,000</td></tr>
+<tr><td>備品減価償却累計額（カ）</td><td>1,500,000</td><td>—</td><td>—</td></tr>
+<tr><td>固定資産売却損（オ）</td><td>200,000</td><td>—</td><td>—</td></tr>
+</tbody>
+                </table>
+                </div>
+                <div class="q-explanation">累計減価償却額：1,800,000÷6年×5年＝1,500,000円。簿価：1,800,000−1,500,000＝300,000円。売却損：100,000−300,000＝▲200,000円（固定資産売却損）。代金未収＝「未収入金」。</div>
+                <div class="self-check-btns">
+                    <button type="button" class="self-ok" onclick="markOk(13)">
+                        <i class="fa-solid fa-circle-check"></i> 理解した
+                    </button>
+                    <button type="button" class="self-ng" onclick="markNg(13)">
+                        <i class="fa-solid fa-rotate-right"></i> もう一度確認
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="drill-card" id="q14">
+            <div class="drill-card-header">
+                <span class="q-badge">問 14</span>
+                <span class="q-tag">預金振替</span>
+                <span class="q-point">4点</span>
+            </div>
+            <div class="q-choices">
+                <span class="choice-item">ア．現金</span>
+                <span class="choice-item">イ．当座預金</span>
+                <span class="choice-item">ウ．損益</span>
+                <span class="choice-item">エ．普通預金</span>
+                <span class="choice-item">オ．受取利息</span>
+                <span class="choice-item">カ．支払利息</span>
+            </div>
+            <p class="q-text">普通預金口座から当座預金口座に￥5,000,000を振り替えた。</p>
+            <div class="scroll-x">
+            <table class="answer-table answer-blank">
+                <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                <tbody><tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+</tbody>
+            </table>
+            </div>
+            <button type="button" class="reveal-btn" onclick="revealAnswer(14)">
+                <i class="fa-solid fa-eye"></i> 解答・解説を見る
+            </button>
+            <div class="answer-panel" id="ans14" style="display:none;">
+                <div class="scroll-x">
+                <table class="answer-table answer-correct">
+                    <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                    <tbody><tr><td>当座預金（イ）</td><td>5,000,000</td><td>普通預金（エ）</td><td>5,000,000</td></tr>
+</tbody>
+                </table>
+                </div>
+                <div class="q-explanation">普通預金（資産）が減少（貸方）し、当座預金（資産）が増加（借方）する。単純な預金間振替のため、他の勘定は一切動かない。</div>
+                <div class="self-check-btns">
+                    <button type="button" class="self-ok" onclick="markOk(14)">
+                        <i class="fa-solid fa-circle-check"></i> 理解した
+                    </button>
+                    <button type="button" class="self-ng" onclick="markNg(14)">
+                        <i class="fa-solid fa-rotate-right"></i> もう一度確認
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="drill-card" id="q15">
+            <div class="drill-card-header">
+                <span class="q-badge">問 15</span>
+                <span class="q-tag">クレジット売掛金・支払手数料</span>
+                <span class="q-point">4点</span>
+            </div>
+            <div class="q-choices">
+                <span class="choice-item">ア．受取手数料</span>
+                <span class="choice-item">イ．売上</span>
+                <span class="choice-item">ウ．買掛金</span>
+                <span class="choice-item">エ．クレジット売掛金</span>
+                <span class="choice-item">オ．支払手数料</span>
+                <span class="choice-item">カ．現金</span>
+            </div>
+            <p class="q-text">一日分の売上の仕訳を行う。集計結果は次の売上集計表（合計￥30,600、うち￥10,600は現金決済、残額はクレジットカード決済）のとおりであった。クレジットカード決済額の3％を売上時に手数料として計上し、クレジットカード会社に対する債権から控除する。</p>
+            <div class="scroll-x">
+            <table class="answer-table answer-blank">
+                <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                <tbody><tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+<tr><td>？</td><td>？</td><td>？</td><td>？</td></tr>
+</tbody>
+            </table>
+            </div>
+            <button type="button" class="reveal-btn" onclick="revealAnswer(15)">
+                <i class="fa-solid fa-eye"></i> 解答・解説を見る
+            </button>
+            <div class="answer-panel" id="ans15" style="display:none;">
+                <div class="scroll-x">
+                <table class="answer-table answer-correct">
+                    <thead><tr><th>借方科目</th><th>借方金額</th><th>貸方科目</th><th>貸方金額</th></tr></thead>
+                    <tbody><tr><td>現金（カ）</td><td>10,600</td><td>売上（イ）</td><td>30,600</td></tr>
+<tr><td>クレジット売掛金（エ）</td><td>19,400</td><td>—</td><td>—</td></tr>
+<tr><td>支払手数料（オ）</td><td>600</td><td>—</td><td>—</td></tr>
+</tbody>
+                </table>
+                </div>
+                <div class="q-explanation">クレジット決済額：30,600−10,600＝20,000円。手数料：20,000×3%＝600円（費用）。クレジット売掛金：20,000−600＝19,400円。手数料控除後が「クレジット売掛金」となる点に注意。</div>
+                <div class="self-check-btns">
+                    <button type="button" class="self-ok" onclick="markOk(15)">
+                        <i class="fa-solid fa-circle-check"></i> 理解した
+                    </button>
+                    <button type="button" class="self-ng" onclick="markNg(15)">
+                        <i class="fa-solid fa-rotate-right"></i> もう一度確認
+                    </button>
+                </div>
+            </div>
+        </div>
+            <div class="stamp-section">
+                <button type="button" id="stamp-btn" disabled onclick="showStamp()">
+                    <i class="fa-solid fa-stamp"></i> DAY 11 コンプリート！🎉
+                </button>
+                <p id="stamp-hint">15問全問「理解した」を選んでから押せます</p>
+            </div>
+            <div class="stamp-overlay" id="stampOverlay" onclick="hideStamp()">
+                <div class="stamp-modal" onclick="event.stopPropagation()">
+                    <div class="sakura-confetti" id="sakuraConfetti"></div>
+                    <div class="stamp-mark">
+                        <div class="stamp-kanji">合格</div>
+                        <div class="stamp-sub">DAY 11 COMPLETE</div>
+                    </div>
+                    <h3 style="color:#1e293b;margin:16px 0 8px;font-size:1.4rem;">DAY 11 コンプリート！</h3>
+                    <p style="color:#64748b;font-size:0.95rem;line-height:1.7;margin-bottom:20px;">仕訳15問、全問クリア！勘定科目の選択と金額の感覚は本番でも必ず活きます。Day 12では第2問・第3問の演習と総まとめに挑みましょう！</p>
+                    <button type="button" class="tool-link-btn" style="background:var(--accent-green);color:#fff;border:none;padding:12px 24px;" onclick="hideStamp()">
+                        <i class="fa-solid fa-xmark"></i> 閉じる
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align:center;padding:3rem 0 2rem;display:flex;flex-direction:column;gap:1rem;align-items:center;">
+            <button type="button" class="tool-link-btn"
+                style="padding:1.2rem 4rem;font-size:1.25rem;background:linear-gradient(135deg,#34d399,#059669);color:#fff;border:none;box-shadow:0 10px 30px rgba(5,150,105,0.25);"
+                onclick="(async function(){try{const r=await fetch('./vol12-1.html',{method:'HEAD',cache:'no-store'});if(r.ok){window.location.href='./vol12-1.html';return;}}catch(e){}alert('Day 12は準備中です。もうしばらくお待ちください。');})()">
+                Day 12 総まとめ・第2問演習へ <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <a href="./vol10-2.html" class="tool-link-btn"
+                style="padding:1.2rem 4rem;font-size:1.25rem;background:#fff;color:#059669;border:2px solid var(--accent-green);text-decoration:none;">
+                <i class="fa-solid fa-arrow-left"></i> Day 10後半へ戻る
+            </a>
+            <button type="button" class="tool-link-btn"
+                style="padding:1.2rem 4rem;font-size:1.25rem;background:#fff;color:#4a4a4a;border:2px solid #e2e8f0;"
+                onclick="window.location.href='./index.html'">
+                <i class="fa-solid fa-house"></i> 学習記録をつけて Home へ戻る
+            </button>
+        </div>
+    </div>
+    <script>
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            const btn = document.querySelector(`.tab-btn[onclick*="openTab('${tabId}')"]`);
+            if (btn) btn.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        let drillOk = new Set();
+        const TOTAL = 15;
+
+        function revealAnswer(n) {
+            const panel = document.getElementById('ans' + n);
+            if (!panel) return;
+            panel.style.display = 'block';
+            panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            const btn = document.querySelector(`#q${n} .reveal-btn`);
+            if (btn) btn.style.display = 'none';
+        }
+
+        function markOk(n) {
+            drillOk.add(n);
+            const wrap = document.querySelector(`#q${n} .self-check-btns`);
+            if (wrap) wrap.innerHTML = '<span style="color:var(--accent-green);font-weight:700;font-size:1rem;">✅ 理解済み</span>';
+            updateScore();
+        }
+
+        function markNg(n) {
+            const panel = document.getElementById('ans' + n);
+            if (panel) panel.style.display = 'none';
+            const btn = document.querySelector(`#q${n} .reveal-btn`);
+            if (btn) btn.style.display = 'inline-flex';
+            const wrap = document.querySelector(`#q${n} .self-check-btns`);
+            if (wrap) wrap.innerHTML = `
+                <button type="button" class="self-ok" onclick="markOk(${n})"><i class="fa-solid fa-circle-check"></i> 理解した</button>
+                <button type="button" class="self-ng" onclick="markNg(${n})"><i class="fa-solid fa-rotate-right"></i> もう一度確認</button>`;
+            drillOk.delete(n);
+            updateScore();
+        }
+
+        function updateScore() {
+            const count = drillOk.size;
+            document.getElementById('drill-score').textContent = count;
+            document.getElementById('drill-score-bar').style.width = (count / TOTAL * 100) + '%';
+            if (count === TOTAL) {
+                document.getElementById('stamp-btn').removeAttribute('disabled');
+                document.getElementById('stamp-hint').textContent = '全15問理解済み！スタンプを押そう 🎉';
+            } else {
+                document.getElementById('stamp-btn').setAttribute('disabled', 'disabled');
+                document.getElementById('stamp-hint').textContent = '15問全問「理解した」を選んでから押せます';
+            }
+        }
+
+        function showStamp() {
+            document.getElementById('stampOverlay').classList.add('show');
+            const container = document.getElementById('sakuraConfetti');
+            container.innerHTML = '';
+            for (let i = 0; i < 24; i++) {
+                const p = document.createElement('span');
+                p.textContent = '🌸';
+                p.style.cssText = `position:absolute;left:${Math.random()*100}%;top:-30px;font-size:${0.8+Math.random()*1.2}rem;animation:sakuraFall ${2+Math.random()*3}s ${Math.random()*1.5}s ease-in forwards;`;
+                container.appendChild(p);
+            }
+        }
+        function hideStamp() {
+            document.getElementById('stampOverlay').classList.remove('show');
+        }
+    </script>
+</body>
+</html>
+<!-- cache-bust: 2026-05-26T18:00:00 -->
