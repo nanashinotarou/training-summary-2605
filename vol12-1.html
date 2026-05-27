@@ -151,6 +151,30 @@
         .btn-next{ background:var(--accent-green); color:#fff; border:none; box-shadow:0 10px 30px rgba(5,150,105,0.25); }
         .btn-next:hover{ opacity:0.92; transform:translateY(-1px); }
 
+        /* === 今日の目標・まとめ共通 === */
+        .goal-box{ background:var(--accent-light); border-left:5px solid var(--accent-green); border-radius:14px; padding:22px 24px; margin:20px 0; }
+        .goal-box h3{ color:#065f46; font-size:1.1rem; margin:0 0 8px; }
+        .goal-box p{ color:#134e4a; font-size:0.95rem; line-height:1.7; margin:0; }
+        .schedule-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0; }
+        .schedule-card{ border-radius:12px; padding:16px; }
+        .schedule-card.am{ background:#f0fdf4; border:1.5px solid #86efac; }
+        .schedule-card.pm{ background:#fffbeb; border:1.5px solid #fde68a; }
+        .schedule-card .sc-badge{ font-size:0.75rem; font-weight:900; margin-bottom:8px; display:inline-block; padding:2px 10px; border-radius:999px; }
+        .schedule-card.am .sc-badge{ background:var(--accent-green); color:#fff; }
+        .schedule-card.pm .sc-badge{ background:var(--accent-gold); color:#fff; }
+        .schedule-card h4{ font-size:0.95rem; font-weight:900; margin:0 0 6px; color:var(--text-main); }
+        .schedule-card p{ font-size:0.86rem; color:#475569; margin:0; line-height:1.6; }
+        .summary-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:16px 0 24px; }
+        .summary-card{ background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:18px; text-align:center; }
+        .summary-card .s-icon{ font-size:1.8rem; margin-bottom:10px; }
+        .summary-card h3{ font-size:0.9rem; font-weight:900; color:var(--accent-green); margin:0 0 8px; }
+        .summary-card p{ font-size:0.84rem; color:#475569; line-height:1.6; margin:0; }
+        .check-panel{ background:#fffbeb; border:1px solid #fde68a; border-left:5px solid var(--accent-gold); border-radius:14px; padding:20px 24px; margin:20px 0; }
+        .check-panel h3{ color:#b45309; margin:0 0 12px; font-size:1rem; }
+        .check-list{ padding-left:1.4rem; margin:0; }
+        .check-list li{ margin-bottom:10px; line-height:1.7; color:#44403c; font-size:0.92rem; }
+        @media (max-width:640px){ .schedule-grid,.summary-grid{ grid-template-columns:1fr; } }
+
         @media (max-width:768px){
             body{ padding:20px 10px; }
             .tab-content{ padding:22px 16px; }
@@ -169,12 +193,47 @@
         </header>
 
         <nav class="tabs">
-            <button class="tab-btn active" onclick="openTab('tab-1')">🤖 生成AIの使い方</button>
+            <button class="tab-btn active" onclick="openTab('tab-goal')"><i class="fa-solid fa-bullseye"></i> 今日の目標</button>
+            <button class="tab-btn" onclick="openTab('tab-1')">🤖 生成AIの使い方</button>
             <button class="tab-btn" onclick="openTab('tab-2')">📚 NotebookLM</button>
             <button class="tab-btn" onclick="openTab('tab-3')">🧪 小テスト自動生成</button>
+            <button class="tab-btn" onclick="openTab('tab-summary')"><i class="fa-solid fa-list-check"></i> まとめ</button>
         </nav>
 
-        <div id="tab-1" class="tab-content active">
+        <div id="tab-goal" class="tab-content active">
+            <div class="goal-box">
+                <h3><i class="fa-solid fa-graduation-cap"></i>「AIツールを武器に、最後の弱点をゼロにして試験に臨む」</h3>
+                <p>最終日の今日は、新しい知識を詰め込む日ではありません。これまでに学んだことを <strong>AIに整理・復習させ、苦手な論点だけを集中的につぶす</strong> 日です。前半でAI活用術をおさえ、後半の実習で総仕上げをして、万全の状態で試験に臨みましょう。</p>
+            </div>
+            <h2 style="font-size:1.2rem;border-left:5px solid var(--accent-gold);padding-left:14px;margin:24px 0 16px;">今日のスケジュール</h2>
+            <div class="schedule-grid">
+                <div class="schedule-card am">
+                    <span class="sc-badge">前半（本ページ）</span>
+                    <h4>AI活用術・復習効率化</h4>
+                    <p>✅ 生成AIの正しい使い方（NG例と推奨例）<br>✅ NotebookLMで弱点を効率的に復習<br>✅ ChatGPT+GASで小テストを自動生成</p>
+                </div>
+                <div class="schedule-card pm">
+                    <span class="sc-badge">後半（外部リンク）</span>
+                    <h4>実習：復習しよう</h4>
+                    <p>📝 DXコース 簿記実習アーカイブで<br>仕訳・帳簿・精算表を総仕上げ<br>→ 「まとめ」タブからアクセスできます</p>
+                </div>
+            </div>
+            <div class="check-panel">
+                <h3><i class="fa-solid fa-circle-question"></i> 今日終わるまでに確認したいこと</h3>
+                <ol class="check-list">
+                    <li>第1問（仕訳）で迷いやすい論点を1つ以上、AIに仮説検証の質問をしてみましたか？</li>
+                    <li>NotebookLMに今月の教材ソースを入れ、クイズ・フラッシュカードで苦手分野を確認しましたか？</li>
+                    <li>後半の実習アーカイブで、精算表・試算表を一度最初から通して解きましたか？</li>
+                </ol>
+            </div>
+            <div style="text-align:center;margin-top:28px;">
+                <button type="button" class="tool-link-btn" style="background:var(--accent-green);color:#fff;border:none;padding:12px 28px;border-radius:30px;font-weight:900;cursor:pointer;" onclick="openTab('tab-1')">
+                    <i class="fa-solid fa-arrow-right"></i> 前半①：生成AIの使い方へ
+                </button>
+            </div>
+        </div>
+
+        <div id="tab-1" class="tab-content">
             <div class="problem-card">
                 <div class="problem-header">
                     <span class="prob-badge">Section 1</span>
@@ -360,6 +419,44 @@
                     <div class="accordion-header"><span class="accordion-num">5</span> STEP 5: エラーが出た場合の対処</div>
                     <div class="accordion-body"><p>エラーログのテキストをそのままChatGPTに貼り付けて「このエラーを修正したコードを再出力してください」と依頼。2〜3回繰り返せば大抵解消。</p></div>
                 </div>
+            </div>
+        </div>
+
+        <div id="tab-summary" class="tab-content">
+            <h2 style="font-size:1.3rem;border-left:5px solid var(--accent-gold);padding-left:14px;margin:0 0 20px;">DAY 12前半 まとめ</h2>
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="s-icon">🤖</div>
+                    <h3>AI活用の方程式</h3>
+                    <p>「丸投げ」はNG。<br>自分の仮説を持って聞く「仮説検証型」が学力を上げる唯一の使い方。</p>
+                </div>
+                <div class="summary-card">
+                    <div class="s-icon">📚</div>
+                    <h3>NotebookLM 4ステップ</h3>
+                    <p>準備 → 全体把握 → 深掘り → 定着。ソースを絞って使うほど精度が上がる。</p>
+                </div>
+                <div class="summary-card">
+                    <div class="s-icon">🧪</div>
+                    <h3>ChatGPT+GAS</h3>
+                    <p>問題作成→GASコード生成→Formsに貼付→実行。エラーはログをそのまま貼れば直る。</p>
+                </div>
+            </div>
+            <div class="check-panel">
+                <h3><i class="fa-solid fa-clipboard-check"></i> セルフチェック</h3>
+                <ol class="check-list">
+                    <li>AIへの「仮説検証型」の質問と「丸投げ」の違いを、自分の言葉で説明できますか？</li>
+                    <li>NotebookLMで簿記3級のクイズを1問でも解いてみましたか？</li>
+                    <li>ChatGPT+GASの手順5ステップを、手順書なしで大筋を言えますか？</li>
+                </ol>
+            </div>
+            <div class="goal-box" style="margin-top:24px;">
+                <h3><i class="fa-solid fa-flag-checkered"></i> 後半：実習（復習しよう）へ進みましょう</h3>
+                <p>前半で学んだAI活用術を使いながら、仕訳・帳簿・精算表をもう一度通しで解いてください。今日が本番前の最後の実戦練習です。</p>
+            </div>
+            <div style="text-align:center;margin-top:24px;">
+                <a class="tool-link-btn btn-next" href="https://minaasa373-wq.github.io/dx-bookkeeping/" target="_blank" rel="noopener">
+                    <i class="fa-solid fa-graduation-cap"></i> Day 12後半：実習（復習しよう）へ →
+                </a>
             </div>
         </div>
 
