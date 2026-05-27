@@ -152,7 +152,13 @@ function checkQ21Done() {
   → `document.querySelector('#qN .reveal-btn')` は「採点する」ボタン（score-btn-row内）を先に拾う
   → 修正: `document.querySelectorAll('#qN .reveal-btn').forEach(b => { if (!b.closest('.score-btn-row')) ... })`
 - **負数入力**（仕入返品の△値）：`<input type="number">` に `min` 属性を付けないこと
-- **Cloudflare Pages のデプロイ**：このプロジェクトは GitHub 自動デプロイではなく `.deploy_tmp/` フォルダを手動アップロード
+- **Cloudflare Pages のデプロイ**：`git push` だけでは本番に反映されない。必ず以下を実行すること：
+  ```
+  copy index.html .deploy_tmp\  &&  copy vol*.html .deploy_tmp\
+  git add / commit / push origin master
+  npx wrangler pages deploy .deploy_tmp --project-name=training-summary-2605
+  ```
+  ダッシュボードからの手動アップロードは**緊急時のみ**。wrangler が標準。（2026-05-27 Cursor報告で確認）
 
 ---
 
