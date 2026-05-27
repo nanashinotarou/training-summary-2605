@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 12 後半 | 直前試験対策・本番攻略ノウハウ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body:#f0fdf4; --bg-card:rgba(255,255,255,0.85); --bg-card-solid:#fff;
+            --text-main:#1e293b; --text-sub:#64748b;
+            --accent-green:#059669; --accent-gold:#d97706; --accent-blue:#2563eb;
+            --accent-light:#d1fae5; --shadow-soft:0 10px 30px rgba(0,0,0,0.05);
+            --radius-large:24px;
+        }
+        * { box-sizing:border-box; margin:0; padding:0; }
+        body {
+            font-family:'Noto Sans JP',sans-serif; background:var(--bg-body);
+            background-image:radial-gradient(at 0% 0%,rgba(255,255,255,0.8) 0,transparent 50%),
+                radial-gradient(at 100% 100%,rgba(209,250,229,0.8) 0,transparent 50%);
+            background-attachment:fixed; color:var(--text-main);
+            min-height:100vh; display:flex; justify-content:center; align-items:flex-start;
+            padding:40px 20px;
+        }
+        .home-btn{
+            position:fixed; bottom:30px; right:30px; width:60px; height:60px;
+            background:var(--accent-green); color:#fff; border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            font-size:1.5rem; text-decoration:none; box-shadow:0 10px 25px rgba(5,150,105,0.4); z-index:1000;
+        }
+        .container{
+            width:100%; max-width:960px; background:var(--bg-card);
+            border:1px solid rgba(255,255,255,0.6); border-radius:var(--radius-large);
+            box-shadow:var(--shadow-soft); overflow:hidden;
+        }
+        .header{ padding:40px 40px 22px; border-bottom:2px solid var(--accent-light); text-align:center; }
+        .header-tag{
+            display:inline-block; background:var(--accent-green); color:#fff;
+            font-weight:900; padding:5px 14px; border-radius:999px; font-size:0.85rem; margin-bottom:14px;
+            font-family:'Roboto',sans-serif;
+        }
+        .header h1{ font-size:2rem; font-weight:900; color:var(--accent-green); margin-bottom:8px; }
+        .header-sub{ color:var(--text-sub); font-size:1rem; margin-bottom:14px; }
+        .progress-wrap{ max-width:560px; height:10px; background:#e2e8f0; border-radius:999px; margin:0 auto; overflow:hidden; }
+        .progress-bar{ width:100%; height:100%; background:linear-gradient(90deg,var(--accent-green),#34d399); border-radius:inherit; }
+
+        .tabs{ display:flex; padding:0 16px; background:rgba(255,255,255,0.5); border-bottom:1px solid #eee; overflow-x:auto; }
+        .tab-btn{
+            border:none; background:none; padding:18px 16px; font-size:0.95rem; font-weight:800;
+            color:var(--text-sub); cursor:pointer; position:relative; white-space:nowrap;
+        }
+        .tab-btn:hover,.tab-btn.active{ color:var(--accent-green); }
+        .tab-btn.active::after{ content:''; position:absolute; bottom:0; left:0; width:100%; height:3px; background:var(--accent-green); border-radius:3px 3px 0 0; }
+        .tab-content{ display:none; padding:32px 28px; background:var(--bg-card-solid); }
+        .tab-content.active{ display:block; }
+
+        .goal-box{ background:var(--accent-light); border-left:5px solid var(--accent-green); border-radius:14px; padding:22px 24px; margin:20px 0; }
+        .goal-box h3{ color:#065f46; font-size:1.1rem; margin:0 0 8px; }
+        .goal-box p{ color:#134e4a; font-size:0.95rem; line-height:1.7; margin:0; }
+        .schedule-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0; }
+        .schedule-card{ background:#fff; border:1px solid #e2e8f0; border-radius:14px; padding:18px; }
+        .schedule-card h3{ font-size:0.88rem; font-weight:900; margin:0 0 8px; color:var(--accent-green); }
+        .schedule-card ul{ padding-left:1.2rem; margin:0; font-size:0.85rem; color:#475569; line-height:1.8; }
+        .check-panel{ background:#fffbeb; border:1px solid #fde68a; border-left:5px solid var(--accent-gold); border-radius:14px; padding:20px 24px; margin:20px 0; }
+        .check-panel h3{ color:#b45309; margin:0 0 12px; font-size:1rem; }
+        .check-list{ padding-left:1.4rem; margin:0; }
+        .check-list li{ margin-bottom:10px; line-height:1.7; color:#44403c; font-size:0.92rem; }
+
+        .timeline-steps{ display:flex; flex-direction:column; gap:0; margin:20px 0; position:relative; }
+        .timeline-steps::before{ content:''; position:absolute; left:28px; top:0; bottom:0; width:3px; background:#e2e8f0; }
+        .timeline-step{ display:flex; align-items:flex-start; gap:16px; padding:16px 0; position:relative; }
+        .step-badge{ width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:0.78rem; color:#fff; flex-shrink:0; z-index:1; }
+        .timeline-step:nth-of-type(1) .step-badge{ background:var(--accent-green); }
+        .timeline-step:nth-of-type(2) .step-badge{ background:var(--accent-gold); }
+        .timeline-step:nth-of-type(3) .step-badge{ background:var(--accent-blue); }
+        .step-body{ flex:1; padding-top:8px; }
+        .step-body h3{ font-size:1.05rem; font-weight:900; margin:0 0 6px; color:var(--text-main); }
+        .step-body p{ font-size:0.88rem; color:#475569; line-height:1.7; margin:0; }
+        .step-time-badge{ display:inline-block; background:#f1f5f9; border-radius:20px; padding:3px 12px; font-size:0.82rem; font-weight:700; color:#64748b; margin-bottom:6px; }
+
+        .prompt-box{ background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:16px; margin:12px 0; position:relative; padding-top:40px; }
+        .prompt-box pre{ font-size:0.83rem; color:#334155; white-space:pre-wrap; line-height:1.7; margin:0; font-family:'Noto Sans JP',sans-serif; }
+        .prompt-copy-btn{ position:absolute; top:10px; right:10px; background:var(--accent-green); color:#fff; border:none; border-radius:8px; padding:5px 12px; font-size:0.78rem; font-weight:700; cursor:pointer; }
+        .prompt-copy-btn.copied{ background:#64748b; }
+
+        .accordion{ border:1px solid #e2e8f0; border-radius:14px; overflow:hidden; margin-bottom:12px; }
+        .accordion-header{ display:flex; align-items:center; justify-content:space-between; padding:16px 20px; background:#f8fafc; cursor:pointer; font-weight:700; font-size:0.95rem; gap:10px; border:none; width:100%; text-align:left; }
+        .accordion-header:hover{ background:var(--accent-light); }
+        .accordion-header .acc-icon{ transition:transform 0.3s; font-size:0.85rem; color:var(--text-sub); }
+        .accordion-body{ max-height:0; overflow:hidden; transition:max-height 0.35s ease; }
+        .accordion-body.open{ max-height:800px; }
+        .accordion-body-inner{ padding:16px 20px; font-size:0.9rem; line-height:1.75; color:#334155; }
+        .accordion-header.active .acc-icon{ transform:rotate(180deg); }
+        .acc-sub{ font-size:0.82rem; color:var(--accent-green); font-weight:700; margin-top:4px; }
+
+        .video-card{ border:1px solid #e2e8f0; border-radius:16px; overflow:hidden; background:#fff; box-shadow:0 10px 30px rgba(0,0,0,0.04); margin:16px 0; }
+        .vc-thumb{
+            width:100%; aspect-ratio:16/9; background-color:#000; background-size:cover; background-position:center;
+            position:relative; cursor:pointer;
+        }
+        .vc-thumb::before{ content:''; position:absolute; inset:0; background:rgba(0,0,0,0.12); transition:background 0.25s; pointer-events:none; }
+        .vc-thumb:hover::before{ background:rgba(0,0,0,0.18); }
+        .vc-thumb-play{
+            position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+            font-size:3rem; color:rgba(255,255,255,0.92); text-shadow:0 2px 10px rgba(0,0,0,0.4);
+            transition:transform 0.25s; pointer-events:none;
+        }
+        .vc-thumb:hover .vc-thumb-play{ transform:translate(-50%,-50%) scale(1.08); color:#ff0000; }
+        .vc-info{ padding:14px 16px; }
+        .vc-title{ font-weight:900; color:#111827; line-height:1.4; font-size:0.95rem; }
+        .vc-sub{ font-size:0.85rem; color:var(--text-sub); margin-top:4px; }
+
+        .summary-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:16px 0 24px; }
+        .summary-card{ background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:18px; text-align:center; }
+        .summary-card .s-icon{ font-size:1.8rem; margin-bottom:10px; }
+        .summary-card h3{ font-size:0.9rem; font-weight:900; color:var(--accent-green); margin:0 0 8px; }
+        .summary-card p{ font-size:0.84rem; color:#475569; line-height:1.6; margin:0; }
+
+        .tool-link-btn{
+            display:inline-flex; align-items:center; gap:10px; justify-content:center;
+            font-weight:900; border-radius:30px; cursor:pointer; font-size:0.98rem;
+            padding:1.1rem 2.4rem; text-decoration:none;
+        }
+
+        @media (max-width:640px){
+            .summary-grid,.schedule-grid{ grid-template-columns:1fr; }
+            .timeline-steps::before{ left:22px; }
+            .step-badge{ width:44px; height:44px; font-size:0.7rem; }
+            .header h1{ font-size:1.55rem; }
+            .tab-content{ padding:22px 16px; }
+        }
+        @media (max-width:768px){ body{ padding:20px 10px; } }
+    </style>
+</head>
+<body>
+    <a href="./index.html" class="home-btn" title="ホーム"><i class="fa-solid fa-house"></i></a>
+    <div class="container">
+        <header class="header">
+            <span class="header-tag">DAY 12（後半）</span>
+            <h1>直前試験対策・本番攻略ノウハウ</h1>
+            <p class="header-sub">解き順・時間配分・前日準備を整えて、本番で最大得点を取ろう</p>
+            <div class="progress-wrap"><div class="progress-bar"></div></div>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" onclick="openTab('tab-goal')"><i class="fa-solid fa-bullseye"></i> 今日の目標</button>
+            <button class="tab-btn" onclick="openTab('tab-strategy')">⏱ 解き順・時間配分</button>
+            <button class="tab-btn" onclick="openTab('tab-prep')">📅 試験前日の3か条</button>
+            <button class="tab-btn" onclick="openTab('tab-drill')">📚 実習（復習しよう）</button>
+            <button class="tab-btn" onclick="openTab('tab-summary')"><i class="fa-solid fa-list-check"></i> まとめ</button>
+        </nav>
+
+        <div id="tab-goal" class="tab-content active">
+            <h2 style="font-size:1.3rem; border-left:5px solid var(--accent-green); padding-left:14px; margin:0 0 20px;">
+                DAY 12 後半の目標
+            </h2>
+            <div class="goal-box">
+                <h3><i class="fa-solid fa-bullseye"></i> 本番で最大得点を取るための戦略を固める</h3>
+                <p>解き順・時間配分・試験前日のコンディション調整を学び、今日という日を最高の準備の日にしましょう。あとは実習でアーカイブ問題を解くだけです。</p>
+            </div>
+            <div class="schedule-grid">
+                <div class="schedule-card">
+                    <h3>⏱ 解き順・時間配分（前半）</h3>
+                    <ul>
+                        <li>第1問→第3問→第2問の推奨順序</li>
+                        <li>各問の目安時間（15分／25分／20分）</li>
+                        <li>タイムパフォーマンス最大化の考え方</li>
+                    </ul>
+                </div>
+                <div class="schedule-card">
+                    <h3>📅 前日の準備（後半）</h3>
+                    <ul>
+                        <li>動画：試験前日にやるべき3つのこと</li>
+                        <li>持ち物チェックリスト（インタラクティブ）</li>
+                        <li>実習：DXコース 簿記アーカイブで総仕上げ</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="check-panel">
+                <h3><i class="fa-solid fa-lightbulb"></i> 今日のゴール</h3>
+                <ol class="check-list">
+                    <li>試験当日の「解く順番」と「時間の使い方」を自分の言葉で説明できる。</li>
+                    <li>持ち物を確認して準備完了にする。</li>
+                    <li>アーカイブ問題で苦手分野を1つでも潰す。</li>
+                </ol>
+            </div>
+            <div style="text-align:center; margin-top:24px;">
+                <button type="button" class="tool-link-btn"
+                    style="background:var(--accent-green);color:#fff;border:none;padding:1.1rem 2.4rem;border-radius:30px;font-weight:900;cursor:pointer;font-size:0.98rem;"
+                    onclick="openTab('tab-strategy')">
+                    解き順・時間配分を確認する <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="tab-strategy" class="tab-content">
+            <h2 style="font-size:1.3rem; border-left:5px solid var(--accent-green); padding-left:14px; margin:0 0 20px;">
+                解き順・時間配分の黄金律
+            </h2>
+            <p style="font-size:0.92rem;color:#475569;line-height:1.7;margin-bottom:8px;">
+                簿記3級ネット試験は<strong>60分</strong>。出題順ではなく、得点効率の高い順に解きましょう。
+            </p>
+
+            <div class="timeline-steps">
+                <div class="timeline-step">
+                    <div class="step-badge">STEP 1</div>
+                    <div class="step-body">
+                        <span class="step-time-badge">目安 15分</span>
+                        <h3>第1問 仕訳</h3>
+                        <p>最初に取り組み安定得点を積む。1問1分ペースを意識し、迷った論点は印をつけて後回しに。</p>
+                    </div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-badge">STEP 2</div>
+                    <div class="step-body">
+                        <span class="step-time-badge">目安 25分</span>
+                        <h3>第3問 精算表</h3>
+                        <p>配点が高い。中盤に時間的余裕がある状態で挑む。決算整理の流れを崩さないことが最重要。</p>
+                    </div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-badge">STEP 3</div>
+                    <div class="step-body">
+                        <span class="step-time-badge">目安 20分</span>
+                        <h3>第2問 帳簿記入</h3>
+                        <p>難易度・形式のブレが大きいため最後に回す。商品有高帳・伝票・勘定記入など形式に応じて落ち着いて処理。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="goal-box">
+                <h3><i class="fa-solid fa-circle-info"></i> なぜこの順番なのか？</h3>
+                <p>
+                    【根拠】第2問は毎回出題形式が変わる（商品有高帳・伝票・勘定記入など）。
+                    確実に点が取れる第1問と、配点の大きい第3問を先に固め、
+                    残り時間で第2問を処理するのがタイムパフォーマンス最大化の鉄則。
+                </p>
+            </div>
+
+            <h3 style="font-size:1rem;font-weight:900;margin:24px 0 12px;color:var(--accent-green);">
+                <i class="fa-solid fa-robot"></i> 間違えた問題をAIで復習するプロンプト
+            </h3>
+            <div class="prompt-box">
+                <button type="button" class="prompt-copy-btn">コピー</button>
+                <pre>プロンプト①（AIへの仮説検証質問）:
+「この仕訳問題、〇〇という方針で解いたのですが、なぜこの考え方ではダメだったのか教えてください。正しい解法を思いつくためには何を理解する必要がありましたか？」</pre>
+            </div>
+            <div class="prompt-box">
+                <button type="button" class="prompt-copy-btn">コピー</button>
+                <pre>プロンプト②（類題作成）:
+「この仕訳問題の解法ポイント（借方・貸方の考え方）を含む別の類題を1問作成してください。その後、私が回答したら採点・解説してください。」</pre>
+            </div>
+
+            <div style="text-align:center; margin-top:24px;">
+                <button type="button" class="tool-link-btn"
+                    style="background:var(--accent-green);color:#fff;border:none;padding:1rem 2rem;border-radius:30px;font-weight:900;cursor:pointer;font-size:0.95rem;"
+                    onclick="openTab('tab-prep')">
+                    試験前日の3か条へ <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="tab-prep" class="tab-content">
+            <h2 style="font-size:1.3rem; border-left:5px solid var(--accent-gold); padding-left:14px; margin:0 0 20px;">
+                試験前日の3か条
+            </h2>
+
+            <!-- 動画5: いのうYouTube簿記大学（教材「井」チャンネル相当）Vy1VznzcnTI -->
+            <div class="video-card">
+                <div class="vc-thumb" data-video-id="Vy1VznzcnTI"
+                    style="background-image:url('https://img.youtube.com/vi/Vy1VznzcnTI/maxresdefault.jpg'), url('https://img.youtube.com/vi/Vy1VznzcnTI/hqdefault.jpg');">
+                    <i class="fa-brands fa-youtube vc-thumb-play"></i>
+                </div>
+                <div class="vc-info">
+                    <div class="vc-title">【日商簿記】試験前日に絶対にやるべき３つのこと！これで本番も安心！</div>
+                    <div class="vc-sub">いのうYouTube簿記大学 — 完璧を目指さない／苦手だけ絞る／早く寝る</div>
+                </div>
+            </div>
+
+            <div class="accordion">
+                <button type="button" class="accordion-header">
+                    <span>1. 完璧を目指さない<div class="acc-sub">「3割間違えても合格できる」</div></span>
+                    <i class="fa-solid fa-chevron-down acc-icon"></i>
+                </button>
+                <div class="accordion-body open">
+                    <div class="accordion-body-inner">
+                        70点合格の仕組み。P/L「当期純利益」やB/S「繰越利益剰余金」は
+                        全ての整理が揃わないと合算できず配点も1〜2点。それより1問3点で
+                        1分で解ける仕訳問題を死守する方がタイムパフォーマンスが圧倒的に高い。
+                    </div>
+                </div>
+            </div>
+            <div class="accordion">
+                <button type="button" class="accordion-header">
+                    <span>2. 苦手分野にピンポイントで絞る<div class="acc-sub">「全部復習はNG。自分の弱点だけを攻める」</div></span>
+                    <i class="fa-solid fa-chevron-down acc-icon"></i>
+                </button>
+                <div class="accordion-body">
+                    <div class="accordion-body-inner">
+                        前日に全範囲を復習すると知らない論点が見つかって焦る。
+                        精算表・財務諸表などの総合問題を1本復習すると、仕訳の復習も
+                        自動でついてくるため効率的。
+                    </div>
+                </div>
+            </div>
+            <div class="accordion">
+                <button type="button" class="accordion-header">
+                    <span>3. 体の調整日と割り切る<div class="acc-sub">「今日は早く寝る。それが最強の受験対策」</div></span>
+                    <i class="fa-solid fa-chevron-down acc-icon"></i>
+                </button>
+                <div class="accordion-body">
+                    <div class="accordion-body-inner">
+                        試験当日にベストな脳状態で臨むため前日は早めに切り上げる。
+                        どうしても不安なら早寝して当日朝早起きして確認するのが賢明。
+                    </div>
+                </div>
+            </div>
+
+            <div class="check-panel" style="margin-top:20px;">
+                <h3><i class="fa-solid fa-bag-shopping"></i> 持ち物チェックリスト</h3>
+                <p style="font-size:0.85rem;color:#64748b;margin-bottom:12px;">前日のうちに全部チェックしておこう</p>
+                <ul style="list-style:none;padding:0;">
+                    <li style="margin-bottom:10px;"><label style="cursor:pointer;display:flex;align-items:center;gap:10px;font-size:0.95rem;"><input type="checkbox"> 受験票</label></li>
+                    <li style="margin-bottom:10px;"><label style="cursor:pointer;display:flex;align-items:center;gap:10px;font-size:0.95rem;"><input type="checkbox"> 電卓</label></li>
+                    <li style="margin-bottom:10px;"><label style="cursor:pointer;display:flex;align-items:center;gap:10px;font-size:0.95rem;"><input type="checkbox"> 筆記用具（鉛筆・消しゴム）</label></li>
+                    <li style="margin-bottom:10px;"><label style="cursor:pointer;display:flex;align-items:center;gap:10px;font-size:0.95rem;"><input type="checkbox"> 身分証明書</label></li>
+                    <li style="margin-bottom:10px;"><label style="cursor:pointer;display:flex;align-items:center;gap:10px;font-size:0.95rem;"><input type="checkbox"> 時計</label></li>
+                    <li style="margin-bottom:10px;"><label style="cursor:pointer;display:flex;align-items:center;gap:10px;font-size:0.95rem;"><input type="checkbox"> 🧥 1枚羽織れる上着（会場の冷房対策）</label></li>
+                    <li style="margin-bottom:10px;"><label style="cursor:pointer;display:flex;align-items:center;gap:10px;font-size:0.95rem;"><input type="checkbox"> テキスト・過去問（移動中の直前確認用）</label></li>
+                </ul>
+            </div>
+
+            <div style="text-align:center; margin-top:24px;">
+                <button type="button" class="tool-link-btn"
+                    style="background:var(--accent-green);color:#fff;border:none;padding:1rem 2rem;border-radius:30px;font-weight:900;cursor:pointer;font-size:0.95rem;"
+                    onclick="openTab('tab-drill')">
+                    実習へ進む <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="tab-drill" class="tab-content">
+            <h2 style="font-size:1.3rem; border-left:5px solid var(--accent-blue); padding-left:14px; margin:0 0 20px;">
+                実習：DXコース 簿記アーカイブで総仕上げ
+            </h2>
+            <div class="goal-box" style="border-left-color:var(--accent-blue);background:#eff6ff;">
+                <h3><i class="fa-solid fa-book-open"></i> 実習の目的</h3>
+                <p>これまでDay 11で学んだ仕訳・帳簿・精算表の演習問題が揃った「DXコース 簿記実習アーカイブ」を使って、苦手な問題に絞って最終チェックをしましょう。</p>
+            </div>
+            <div class="check-panel" style="margin-top:20px;">
+                <h3><i class="fa-solid fa-clipboard-list"></i> 実習の進め方</h3>
+                <ol class="check-list">
+                    <li>アーカイブを開き、自分が苦手だと感じた問題（仕訳・帳簿・精算表のいずれか）を選ぶ。</li>
+                    <li>解いた後、間違えた問題はAIに「仮説検証型」で質問して弱点を潰す。</li>
+                    <li>余裕があれば過去問にも挑戦する。</li>
+                </ol>
+            </div>
+            <div style="text-align:center; margin-top:32px;">
+                <a href="https://minaasa373-wq.github.io/dx-bookkeeping/" target="_blank" rel="noopener"
+                    class="tool-link-btn"
+                    style="background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;border:none;padding:1.2rem 3rem;border-radius:30px;font-weight:900;cursor:pointer;font-size:1.05rem;text-decoration:none;display:inline-block;">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> DXコース 簿記実習アーカイブを開く
+                </a>
+                <p style="margin-top:12px;font-size:0.85rem;color:#64748b;">※ 外部サイトが開きます</p>
+            </div>
+            <div style="text-align:center; margin-top:24px;">
+                <button type="button" class="tool-link-btn"
+                    style="background:var(--accent-green);color:#fff;border:none;padding:1rem 2rem;border-radius:30px;font-weight:900;cursor:pointer;font-size:0.95rem;"
+                    onclick="openTab('tab-summary')">
+                    まとめを確認する <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="tab-summary" class="tab-content">
+            <h2 style="font-size:1.3rem; border-left:5px solid var(--accent-gold); padding-left:14px; margin:0 0 20px;">
+                DAY 12 まとめ ＆ 試験本番へ
+            </h2>
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="s-icon">⏱</div>
+                    <h3>解き順の黄金律</h3>
+                    <p>第1問（15分）→ 第3問（25分）→ 第2問（20分）。この順を体に刷り込んで本番へ。</p>
+                </div>
+                <div class="summary-card">
+                    <div class="s-icon">📅</div>
+                    <h3>前日の3か条</h3>
+                    <p>①完璧を目指さない ②苦手だけ絞る ③早く寝る。シンプルだが最強の準備。</p>
+                </div>
+                <div class="summary-card">
+                    <div class="s-icon">🏆</div>
+                    <h3>最後まで諦めない</h3>
+                    <p>直前まで目を通した仕訳・論点が本番で出ることは多い。1分1秒まで戦い抜こう。</p>
+                </div>
+            </div>
+            <div class="check-panel">
+                <h3><i class="fa-solid fa-clipboard-check"></i> 最終セルフチェック</h3>
+                <ol class="check-list">
+                    <li>解く順番（第1問→第3問→第2問）と各問の目安時間を覚えましたか？</li>
+                    <li>持ち物チェックリストは全部チェックしましたか？</li>
+                    <li>苦手分野を1つでも実習アーカイブで確認しましたか？</li>
+                </ol>
+            </div>
+            <div class="goal-box" style="margin-top:24px; border-left-color:var(--accent-gold); background:#fffbeb;">
+                <h3><i class="fa-solid fa-trophy"></i> あとは本番だけ！</h3>
+                <p>オンライン簿記3級試験（日商簿記CBT）にアクセスして、合格を手にしましょう。AI利用可です。全力を尽くせることを応援しています。</p>
+            </div>
+            <div style="text-align:center; margin-top:24px;">
+                <a href="https://nsboki-cbt.net-school.co.jp/" target="_blank" rel="noopener"
+                    class="tool-link-btn"
+                    style="background:linear-gradient(135deg,var(--accent-gold),#b45309);color:#fff;border:none;padding:1.2rem 3rem;border-radius:30px;font-weight:900;cursor:pointer;font-size:1.05rem;text-decoration:none;display:inline-block;">
+                    <i class="fa-solid fa-graduation-cap"></i> 日商簿記CBT 試験に挑む
+                </a>
+            </div>
+        </div>
+
+        <div style="text-align:center;padding:3rem 0 2rem;display:flex;flex-direction:column;gap:1rem;align-items:center;">
+            <a href="https://nsboki-cbt.net-school.co.jp/" target="_blank" rel="noopener" class="tool-link-btn"
+                style="padding:1.2rem 4rem;font-size:1.25rem;background:linear-gradient(135deg,var(--accent-gold),#b45309);color:#fff;border:none;text-decoration:none;">
+                <i class="fa-solid fa-graduation-cap"></i> 日商簿記CBT 試験に挑む
+            </a>
+            <a href="./vol12-1.html" class="tool-link-btn"
+                style="padding:1.2rem 4rem;font-size:1.25rem;background:#fff;color:#059669;border:2px solid var(--accent-green);text-decoration:none;">
+                <i class="fa-solid fa-arrow-left"></i> Day 12前半へ戻る
+            </a>
+            <button type="button" class="tool-link-btn"
+                style="padding:1.2rem 4rem;font-size:1.25rem;background:#fff;color:#4a4a4a;border:2px solid #e2e8f0;"
+                onclick="window.location.href='./index.html'">
+                <i class="fa-solid fa-house"></i> 学習記録をつけて Home へ戻る
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            const tab = document.getElementById(tabId);
+            if (tab) tab.classList.add('active');
+            const btn = document.querySelector(`.tab-btn[onclick*="openTab('${tabId}')"]`);
+            if (btn) btn.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function initFacadeVideos() {
+            document.querySelectorAll('.vc-thumb[data-video-id]').forEach(thumb => {
+                const videoId = thumb.dataset.videoId;
+                if (!videoId || videoId.includes('VIDEO_ID')) return;
+                thumb.addEventListener('click', function () {
+                    this.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
+                    this.style.backgroundImage = 'none';
+                    this.style.cursor = 'default';
+                }, { once: true });
+            });
+        }
+
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const body = header.nextElementSibling;
+                const isOpen = body.classList.contains('open');
+                document.querySelectorAll('.accordion-body').forEach(b => b.classList.remove('open'));
+                document.querySelectorAll('.accordion-header').forEach(h => h.classList.remove('active'));
+                if (!isOpen) { body.classList.add('open'); header.classList.add('active'); }
+            });
+        });
+
+        document.querySelectorAll('.prompt-copy-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const text = btn.closest('.prompt-box').querySelector('pre').textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    btn.textContent = 'コピー済み✓';
+                    btn.classList.add('copied');
+                    setTimeout(() => { btn.textContent = 'コピー'; btn.classList.remove('copied'); }, 2000);
+                });
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initFacadeVideos();
+            const firstHeader = document.querySelector('.accordion-header');
+            if (firstHeader) firstHeader.classList.add('active');
+        });
+    </script>
+</body>
+</html>
+<!-- cache-bust: 2026-05-27T21:00:00 -->
