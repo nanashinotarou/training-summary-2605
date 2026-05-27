@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Day 12 前半 | AIツールを活用した直前総仕上げ・復習法</title>
+    <title>Day 12 | AI活用・直前試験対策・本番攻略</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
@@ -180,55 +180,79 @@
             .tab-content{ padding:22px 16px; }
             .header h1{ font-size:1.55rem; }
         }
+
+        .timeline-steps { display:flex; flex-direction:column; gap:0; margin:20px 0; position:relative; }
+        .timeline-steps::before { content:''; position:absolute; left:28px; top:0; bottom:0; width:3px; background:#e2e8f0; }
+        .timeline-step { display:flex; align-items:flex-start; gap:16px; padding:16px 0; }
+        .step-badge { width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:0.72rem; color:#fff; flex-shrink:0; z-index:1; text-align:center; line-height:1.3; }
+        .timeline-step:nth-of-type(1) .step-badge { background:var(--accent-green); }
+        .timeline-step:nth-of-type(2) .step-badge { background:var(--accent-gold); }
+        .timeline-step:nth-of-type(3) .step-badge { background:var(--accent-blue); }
+        .step-body { flex:1; padding-top:8px; }
+        .step-time-badge { display:inline-block; background:#f1f5f9; border-radius:20px; padding:3px 12px; font-size:0.82rem; font-weight:700; color:#64748b; margin-bottom:6px; }
+        .prompt-box { background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:16px; margin:12px 0; position:relative; padding-top:40px; }
+        .prompt-box pre { font-size:0.83rem; white-space:pre-wrap; line-height:1.7; margin:0; font-family:'Noto Sans JP',sans-serif; }
+        .prompt-copy-btn { position:absolute; top:10px; right:10px; background:var(--accent-green); color:#fff; border:none; border-radius:8px; padding:5px 12px; font-size:0.78rem; font-weight:700; cursor:pointer; }
+        .accordion { border:1px solid #e2e8f0; border-radius:14px; overflow:hidden; margin-bottom:12px; }
+        .accordion-header { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; background:#f8fafc; cursor:pointer; font-weight:700; border:none; width:100%; text-align:left; }
+        .accordion-body { max-height:0; overflow:hidden; transition:max-height 0.35s ease; }
+        .accordion-body.open { max-height:800px; }
+        .accordion-body-inner { padding:16px 20px; font-size:0.9rem; line-height:1.75; }
+        .acc-sub { font-size:0.82rem; color:var(--accent-green); font-weight:700; margin-top:4px; display:block; }
+        @media (max-width:640px) { .timeline-steps::before { left:22px; } .step-badge { width:44px; height:44px; } }
+
     </style>
 </head>
 <body>
     <a href="./index.html" class="home-btn" title="ホーム"><i class="fa-solid fa-house"></i></a>
     <div class="container">
         <header class="header">
-            <span class="header-tag">DAY 12（前半）</span>
-            <h1>Day 12：AIツールを活用した直前総仕上げ・復習法</h1>
-            <p class="header-sub">Final Day — 合格へのラストスパート（12/12）</p>
+            <span class="header-tag">DAY 12</span>
+            <h1>直前総仕上げ・本番攻略ノウハウ</h1>
+            <p class="header-sub">AI活用・解き順・前日準備・実習 — 合格へのラストスパート（12/12）</p>
             <div class="progress-wrap"><div class="progress-bar"></div></div>
         </header>
 
         <nav class="tabs">
             <button class="tab-btn active" onclick="openTab('tab-goal')"><i class="fa-solid fa-bullseye"></i> 今日の目標</button>
-            <button class="tab-btn" onclick="openTab('tab-1')">🤖 生成AIの使い方</button>
+            <button class="tab-btn" onclick="openTab('tab-1')">🤖 生成AI活用</button>
             <button class="tab-btn" onclick="openTab('tab-2')">📚 NotebookLM</button>
             <button class="tab-btn" onclick="openTab('tab-3')">🧪 小テスト自動生成</button>
+            <button class="tab-btn" onclick="openTab('tab-4')">⏱ 解き順・時間配分</button>
+            <button class="tab-btn" onclick="openTab('tab-5')">📅 試験前日の3か条</button>
+            <button class="tab-btn" onclick="openTab('tab-6')">📝 実習（復習しよう）</button>
             <button class="tab-btn" onclick="openTab('tab-summary')"><i class="fa-solid fa-list-check"></i> まとめ</button>
         </nav>
 
         <div id="tab-goal" class="tab-content active">
             <div class="goal-box">
                 <h3><i class="fa-solid fa-graduation-cap"></i>「AIツールを武器に、最後の弱点をゼロにして試験に臨む」</h3>
-                <p>最終日の今日は、新しい知識を詰め込む日ではありません。これまでに学んだことを <strong>AIに整理・復習させ、苦手な論点だけを集中的につぶす</strong> 日です。前半でAI活用術をおさえ、後半の実習で総仕上げをして、万全の状態で試験に臨みましょう。</p>
+                <p>最終日の今日は、新しい知識を詰め込む日ではありません。AI活用術と本番攻略ノウハウを固め、実習で総仕上げして万全の状態で試験に臨みましょう。</p>
             </div>
             <h2 style="font-size:1.2rem;border-left:5px solid var(--accent-gold);padding-left:14px;margin:24px 0 16px;">今日のスケジュール</h2>
             <div class="schedule-grid">
                 <div class="schedule-card am">
-                    <span class="sc-badge">前半（本ページ）</span>
-                    <h4>AI活用術・復習効率化</h4>
-                    <p>✅ 生成AIの正しい使い方（NG例と推奨例）<br>✅ NotebookLMで弱点を効率的に復習<br>✅ ChatGPT+GASで小テストを自動生成</p>
+                    <span class="sc-badge">前半①</span>
+                    <h4>🤖 AI活用術</h4>
+                    <p>✅ 生成AIの正しい使い方（仮説検証型）<br>✅ NotebookLMで専用AI教師を作る<br>✅ GASでGoogle Forms小テスト自動生成</p>
                 </div>
                 <div class="schedule-card pm">
-                    <span class="sc-badge">後半（外部リンク）</span>
-                    <h4>実習：復習しよう</h4>
-                    <p>📝 DXコース 簿記実習アーカイブで<br>仕訳・帳簿・精算表を総仕上げ<br>→ 「まとめ」タブからアクセスできます</p>
+                    <span class="sc-badge">後半②</span>
+                    <h4>⏱ 試験攻略</h4>
+                    <p>✅ 解き順・時間配分の黄金律<br>✅ 試験前日の3か条（動画＋持ち物）<br>✅ 実習：DXコース 簿記アーカイブ</p>
                 </div>
             </div>
             <div class="check-panel">
                 <h3><i class="fa-solid fa-circle-question"></i> 今日終わるまでに確認したいこと</h3>
                 <ol class="check-list">
-                    <li>第1問（仕訳）で迷いやすい論点を1つ以上、AIに仮説検証の質問をしてみましたか？</li>
-                    <li>NotebookLMに今月の教材ソースを入れ、クイズ・フラッシュカードで苦手分野を確認しましたか？</li>
-                    <li>後半の実習アーカイブで、精算表・試算表を一度最初から通して解きましたか？</li>
+                    <li>AIへの「仮説検証型」の質問と「丸投げ」の違いを説明できますか？</li>
+                    <li>解く順番（第1問→第3問→第2問）と目安時間を覚えましたか？</li>
+                    <li>実習アーカイブで苦手分野を1つでも確認しましたか？</li>
                 </ol>
             </div>
             <div style="text-align:center;margin-top:28px;">
                 <button type="button" class="tool-link-btn" style="background:var(--accent-green);color:#fff;border:none;padding:12px 28px;border-radius:30px;font-weight:900;cursor:pointer;" onclick="openTab('tab-1')">
-                    <i class="fa-solid fa-arrow-right"></i> 前半①：生成AIの使い方へ
+                    <i class="fa-solid fa-arrow-right"></i> 生成AI活用へ
                 </button>
             </div>
         </div>
@@ -422,49 +446,240 @@
             </div>
         </div>
 
+        <div id="tab-4" class="tab-content">
+            <h2 style="font-size:1.3rem; border-left:5px solid var(--accent-green); padding-left:14px; margin:0 0 20px;">
+                解き順・時間配分の黄金律
+            </h2>
+            <p style="font-size:0.92rem;color:#475569;line-height:1.7;margin-bottom:8px;">
+                簿記3級ネット試験は<strong>60分</strong>。出題順ではなく、得点効率の高い順に解きましょう。
+            </p>
+
+            <div class="timeline-steps">
+                <div class="timeline-step">
+                    <div class="step-badge">STEP 1</div>
+                    <div class="step-body">
+                        <span class="step-time-badge">目安 15分</span>
+                        <h3>第1問 仕訳</h3>
+                        <p>最初に取り組み安定得点を積む。1問1分ペースを意識し、迷った論点は印をつけて後回しに。</p>
+                    </div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-badge">STEP 2</div>
+                    <div class="step-body">
+                        <span class="step-time-badge">目安 25分</span>
+                        <h3>第3問 精算表</h3>
+                        <p>配点が高い。中盤に時間的余裕がある状態で挑む。決算整理の流れを崩さないことが最重要。</p>
+                    </div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-badge">STEP 3</div>
+                    <div class="step-body">
+                        <span class="step-time-badge">目安 20分</span>
+                        <h3>第2問 帳簿記入</h3>
+                        <p>難易度・形式のブレが大きいため最後に回す。商品有高帳・伝票・勘定記入など形式に応じて落ち着いて処理。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="goal-box">
+                <h3><i class="fa-solid fa-circle-info"></i> なぜこの順番なのか？</h3>
+                <p>
+                    【根拠】第2問は毎回出題形式が変わる（商品有高帳・伝票・勘定記入など）。
+                    確実に点が取れる第1問と、配点の大きい第3問を先に固め、
+                    残り時間で第2問を処理するのがタイムパフォーマンス最大化の鉄則。
+                </p>
+            </div>
+
+            <h3 style="font-size:1rem;font-weight:900;margin:24px 0 12px;color:var(--accent-green);">
+                <i class="fa-solid fa-robot"></i> 間違えた問題をAIで復習するプロンプト
+            </h3>
+            <div class="prompt-box">
+                <button type="button" class="prompt-copy-btn">コピー</button>
+                <pre>プロンプト①（AIへの仮説検証質問）:
+「この仕訳問題、〇〇という方針で解いたのですが、なぜこの考え方ではダメだったのか教えてください。正しい解法を思いつくためには何を理解する必要がありましたか？」</pre>
+            </div>
+            <div class="prompt-box">
+                <button type="button" class="prompt-copy-btn">コピー</button>
+                <pre>プロンプト②（類題作成）:
+「この仕訳問題の解法ポイント（借方・貸方の考え方）を含む別の類題を1問作成してください。その後、私が回答したら採点・解説してください。」</pre>
+            </div>
+
+            <div style="text-align:center; margin-top:24px;">
+                <button type="button" class="tool-link-btn"
+                    style="background:var(--accent-green);color:#fff;border:none;padding:1rem 2rem;border-radius:30px;font-weight:900;cursor:pointer;font-size:0.95rem;"
+                    onclick="openTab('tab-5')">
+                    試験前日の3か条へ <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="tab-5" class="tab-content">
+            <h2 style="font-size:1.3rem; border-left:5px solid var(--accent-gold); padding-left:14px; margin:0 0 20px;">
+                試験前日の3か条
+            </h2>
+
+            <!-- 動画5: いのうYouTube簿記大学（教材「井」チャンネル相当）Vy1VznzcnTI -->
+            <div class="video-card">
+                <div class="vc-thumb" data-video-id="Vy1VznzcnTI"
+                    style="background-image:url('https://img.youtube.com/vi/Vy1VznzcnTI/maxresdefault.jpg'), url('https://img.youtube.com/vi/Vy1VznzcnTI/hqdefault.jpg');">
+                    <i class="fa-brands fa-youtube vc-thumb-play"></i>
+                </div>
+                <div class="vc-info">
+                    <div class="vc-title">【日商簿記】試験前日に絶対にやるべき３つのこと！これで本番も安心！</div>
+                    <div class="vc-sub">いのうYouTube簿記大学 — 完璧を目指さない／苦手だけ絞る／早く寝る</div>
+                </div>
+            </div>
+
+            <div class="accordion">
+                <button type="button" class="accordion-header">
+                    <span>1. 完璧を目指さない<div class="acc-sub">「3割間違えても合格できる」</div></span>
+                    <i class="fa-solid fa-chevron-down acc-icon"></i>
+                </button>
+                <div class="accordion-body open">
+                    <div class="accordion-body-inner">
+                        70点合格の仕組み。P/L「当期純利益」やB/S「繰越利益剰余金」は
+                        全ての整理が揃わないと合算できず配点も1〜2点。それより1問3点で
+                        1分で解ける仕訳問題を死守する方がタイムパフォーマンスが圧倒的に高い。
+                    </div>
+                </div>
+            </div>
+            <div class="accordion">
+                <button type="button" class="accordion-header">
+                    <span>2. 苦手分野にピンポイントで絞る<div class="acc-sub">「全部復習はNG。自分の弱点だけを攻める」</div></span>
+                    <i class="fa-solid fa-chevron-down acc-icon"></i>
+                </button>
+                <div class="accordion-body">
+                    <div class="accordion-body-inner">
+                        前日に全範囲を復習すると知らない論点が見つかって焦る。
+                        精算表・財務諸表などの総合問題を1本復習すると、仕訳の復習も
+                        自動でついてくるため効率的。
+                    </div>
+                </div>
+            </div>
+            <div class="accordion">
+                <button type="button" class="accordion-header">
+                    <span>3. 体の調整日と割り切る<div class="acc-sub">「今日は早く寝る。それが最強の受験対策」</div></span>
+                    <i class="fa-solid fa-chevron-down acc-icon"></i>
+                </button>
+                <div class="accordion-body">
+                    <div class="accordion-body-inner">
+                        試験当日にベストな脳状態で臨むため前日は早めに切り上げる。
+                        どうしても不安なら早寝して当日朝早起きして確認するのが賢明。
+                    </div>
+                </div>
+            </div>
+
+            <div class="check-panel" style="margin-top:20px;">
+                <h3><i class="fa-solid fa-bag-shopping"></i> 持ち物チェックリスト</h3>
+                <p style="font-size:0.85rem;color:#64748b;margin-bottom:12px;">前日のうちに全部チェックしておこう</p>
+                <ul style="list-style:none;padding:0;">
+                    <li style="margin-bottom:10px;"><label style="cursor:pointer;display:flex;align-items:center;gap:10px;font-size:0.95rem;"><input type="checkbox"> 受験票</label></li>
+                    <li style="margin-bottom:10px;"><label style="cursor:pointer;display:flex;align-items:center;gap:10px;font-size:0.95rem;"><input type="checkbox"> 電卓</label></li>
+                    <li style="margin-bottom:10px;"><label style="cursor:pointer;display:flex;align-items:center;gap:10px;font-size:0.95rem;"><input type="checkbox"> 筆記用具（鉛筆・消しゴム）</label></li>
+                    <li style="margin-bottom:10px;"><label style="cursor:pointer;display:flex;align-items:center;gap:10px;font-size:0.95rem;"><input type="checkbox"> 身分証明書</label></li>
+                    <li style="margin-bottom:10px;"><label style="cursor:pointer;display:flex;align-items:center;gap:10px;font-size:0.95rem;"><input type="checkbox"> 時計</label></li>
+                    <li style="margin-bottom:10px;"><label style="cursor:pointer;display:flex;align-items:center;gap:10px;font-size:0.95rem;"><input type="checkbox"> 🧥 1枚羽織れる上着（会場の冷房対策）</label></li>
+                    <li style="margin-bottom:10px;"><label style="cursor:pointer;display:flex;align-items:center;gap:10px;font-size:0.95rem;"><input type="checkbox"> テキスト・過去問（移動中の直前確認用）</label></li>
+                </ul>
+            </div>
+
+            <div style="text-align:center; margin-top:24px;">
+                <button type="button" class="tool-link-btn"
+                    style="background:var(--accent-green);color:#fff;border:none;padding:1rem 2rem;border-radius:30px;font-weight:900;cursor:pointer;font-size:0.95rem;"
+                    onclick="openTab('tab-6')">
+                    実習へ進む <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="tab-6" class="tab-content">
+            <h2 style="font-size:1.3rem; border-left:5px solid var(--accent-blue); padding-left:14px; margin:0 0 20px;">
+                実習：DXコース 簿記アーカイブで総仕上げ
+            </h2>
+            <div class="goal-box" style="border-left-color:var(--accent-blue);background:#eff6ff;">
+                <h3><i class="fa-solid fa-book-open"></i> 実習の目的</h3>
+                <p>これまでDay 11で学んだ仕訳・帳簿・精算表の演習問題が揃った「DXコース 簿記実習アーカイブ」を使って、苦手な問題に絞って最終チェックをしましょう。</p>
+            </div>
+            <div class="check-panel" style="margin-top:20px;">
+                <h3><i class="fa-solid fa-clipboard-list"></i> 実習の進め方</h3>
+                <ol class="check-list">
+                    <li>アーカイブを開き、自分が苦手だと感じた問題（仕訳・帳簿・精算表のいずれか）を選ぶ。</li>
+                    <li>解いた後、間違えた問題はAIに「仮説検証型」で質問して弱点を潰す。</li>
+                    <li>余裕があれば過去問にも挑戦する。</li>
+                </ol>
+            </div>
+            <div style="text-align:center; margin-top:32px;">
+                <a href="https://minaasa373-wq.github.io/dx-bookkeeping/" target="_blank" rel="noopener"
+                    class="tool-link-btn"
+                    style="background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;border:none;padding:1.2rem 3rem;border-radius:30px;font-weight:900;cursor:pointer;font-size:1.05rem;text-decoration:none;display:inline-block;">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> DXコース 簿記実習アーカイブを開く
+                </a>
+                <p style="margin-top:12px;font-size:0.85rem;color:#64748b;">※ 外部サイトが開きます</p>
+            </div>
+            <div style="text-align:center; margin-top:24px;">
+                <button type="button" class="tool-link-btn"
+                    style="background:var(--accent-green);color:#fff;border:none;padding:1rem 2rem;border-radius:30px;font-weight:900;cursor:pointer;font-size:0.95rem;"
+                    onclick="openTab('tab-summary')">
+                    まとめを確認する <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
         <div id="tab-summary" class="tab-content">
             <h2 style="font-size:1.3rem;border-left:5px solid var(--accent-gold);padding-left:14px;margin:0 0 20px;">DAY 12前半 まとめ</h2>
             <div class="summary-grid">
                 <div class="summary-card">
                     <div class="s-icon">🤖</div>
-                    <h3>AI活用の方程式</h3>
-                    <p>「丸投げ」はNG。<br>自分の仮説を持って聞く「仮説検証型」が学力を上げる唯一の使い方。</p>
+                    <h3>AI活用術</h3>
+                    <p>仮説検証型質問・NotebookLM 4ステップ・GASで小テスト自動化。丸投げはNG。</p>
                 </div>
                 <div class="summary-card">
-                    <div class="s-icon">📚</div>
-                    <h3>NotebookLM 4ステップ</h3>
-                    <p>準備 → 全体把握 → 深掘り → 定着。ソースを絞って使うほど精度が上がる。</p>
+                    <div class="s-icon">⏱</div>
+                    <h3>解き順の黄金律</h3>
+                    <p>第1問（15分）→ 第3問（25分）→ 第2問（20分）。この順を体に刷り込んで本番へ。</p>
                 </div>
                 <div class="summary-card">
-                    <div class="s-icon">🧪</div>
-                    <h3>ChatGPT+GAS</h3>
-                    <p>問題作成→GASコード生成→Formsに貼付→実行。エラーはログをそのまま貼れば直る。</p>
+                    <div class="s-icon">📅</div>
+                    <h3>前日の3か条</h3>
+                    <p>①完璧を目指さない ②苦手だけ絞る ③早く寝る。シンプルだが最強の準備。</p>
                 </div>
             </div>
             <div class="check-panel">
-                <h3><i class="fa-solid fa-clipboard-check"></i> セルフチェック</h3>
+                <h3><i class="fa-solid fa-clipboard-check"></i> 最終セルフチェック</h3>
                 <ol class="check-list">
-                    <li>AIへの「仮説検証型」の質問と「丸投げ」の違いを、自分の言葉で説明できますか？</li>
-                    <li>NotebookLMで簿記3級のクイズを1問でも解いてみましたか？</li>
-                    <li>ChatGPT+GASの手順5ステップを、手順書なしで大筋を言えますか？</li>
+                    <li>解く順番（第1問→第3問→第2問）と各問の目安時間を覚えましたか？</li>
+                    <li>持ち物チェックリストは全部チェックしましたか？</li>
+                    <li>苦手分野を1つでも実習アーカイブで確認しましたか？</li>
                 </ol>
             </div>
-            <div class="goal-box" style="margin-top:24px;">
-                <h3><i class="fa-solid fa-flag-checkered"></i> 後半：実習（復習しよう）へ進みましょう</h3>
-                <p>前半で学んだAI活用術を使いながら、仕訳・帳簿・精算表をもう一度通しで解いてください。今日が本番前の最後の実戦練習です。</p>
+            <div class="goal-box" style="margin-top:24px; border-left-color:var(--accent-gold); background:#fffbeb;">
+                <h3><i class="fa-solid fa-trophy"></i> あとは本番だけ！</h3>
+                <p>オンライン簿記3級試験（日商簿記CBT）にアクセスして、合格を手にしましょう。AI利用可です。全力を尽くせることを応援しています。</p>
             </div>
-            <div style="text-align:center;margin-top:24px;">
-                <a class="tool-link-btn btn-next" href="./vol12-2.html">
-                    <i class="fa-solid fa-graduation-cap"></i> Day 12後半：本番攻略ノウハウへ →
+            <div style="text-align:center; margin-top:24px;">
+                <a href="https://nsboki-cbt.net-school.co.jp/" target="_blank" rel="noopener"
+                    class="tool-link-btn"
+                    style="background:linear-gradient(135deg,var(--accent-gold),#b45309);color:#fff;border:none;padding:1.2rem 3rem;border-radius:30px;font-weight:900;cursor:pointer;font-size:1.05rem;text-decoration:none;display:inline-block;">
+                    <i class="fa-solid fa-graduation-cap"></i> 日商簿記CBT 試験に挑む
                 </a>
             </div>
         </div>
 
-        <div class="nav-row">
-            <a class="tool-link-btn btn-home" href="./index.html"><i class="fa-solid fa-arrow-left"></i> ホームに戻る</a>
-            <a class="tool-link-btn btn-next" href="./vol12-2.html"><i class="fa-solid fa-graduation-cap"></i> Day 12後半：本番攻略ノウハウへ →</a>
+        <div style="text-align:center;padding:3rem 0 2rem;display:flex;flex-direction:column;gap:1rem;align-items:center;">
+            <a href="https://nsboki-cbt.net-school.co.jp/" target="_blank" rel="noopener" class="tool-link-btn"
+                style="padding:1.2rem 4rem;font-size:1.25rem;background:linear-gradient(135deg,var(--accent-gold),#b45309);color:#fff;border:none;text-decoration:none;">
+                <i class="fa-solid fa-graduation-cap"></i> 日商簿記CBT 試験に挑む
+            </a>
+            <a href="./vol11-1.html" class="tool-link-btn"
+                style="padding:1.2rem 4rem;font-size:1.25rem;background:#fff;color:#059669;border:2px solid var(--accent-green);text-decoration:none;">
+                <i class="fa-solid fa-arrow-left"></i> Day 11へ戻る
+            </a>
+            <button type="button" class="tool-link-btn"
+                style="padding:1.2rem 4rem;font-size:1.25rem;background:#fff;color:#4a4a4a;border:2px solid #e2e8f0;"
+                onclick="window.location.href='./index.html'">
+                <i class="fa-solid fa-house"></i> 学習記録をつけて Home へ戻る
+            </button>
         </div>
-        <div style="text-align:center;color:var(--text-sub);font-size:0.85rem;padding:0 0 24px;">必要なところだけ繰り返し見て、最後の伸びを作りましょう。</div>
     </div>
 
     <script>
@@ -526,4 +741,4 @@
     </script>
 </body>
 </html>
-<!-- cache-bust: 2026-05-27T19:00:00 -->
+<!-- cache-bust: 2026-05-27T22:00:00 -->
